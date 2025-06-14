@@ -28,16 +28,16 @@ export function HomePage() {
             image: "https://images.unsplash.com/photo-1646340691161-521e588e9964?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      title: "Craft Beers",
-      image: "https://images.pexels.com/photos/1269025/pexels-photo-1269025.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      title: "Packaging",
+      image: "https://images.pexels.com/photos/25551694/pexels-photo-25551694/free-photo-of-paper-cups-and-bowls-with-forks-and-straws-on-table.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
       title: "Craft Spirits",
-      image: "https://images.pexels.com/photos/339696/pexels-photo-339696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      image: "https://images.pexels.com/photos/1283219/pexels-photo-1283219.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
     {
-      title: "Feijoa",
-      image: "https://images.unsplash.com/photo-1541857754-557a44522bec?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      title: "Meat",
+      image: "https://images.pexels.com/photos/12884545/pexels-photo-12884545.jpeg?auto=compress&cs=tinysrgb&w=600",
     },
   ];
 
@@ -136,7 +136,7 @@ export function HomePage() {
           }}
           mainTextStyle={{
             fontSize: "clamp(3rem, 8vw, 5rem)",
-            fontWeight: "600",
+            fontWeight: "700",
             gradient: "linear-gradient(90deg, var(--diced-hero-section-main-gradient-from), var(--diced-hero-section-main-gradient-to))",
           }}
           subMainTextStyle={{ 
