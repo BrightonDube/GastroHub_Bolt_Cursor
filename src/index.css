@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base colors */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  
+  --primary: 199 89% 48%;
+  --primary-foreground: 210 40% 98%;
+  
+  --secondary: 43 96% 58%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  
+  --radius: 0.5rem;
+
+  /* Neutral colors */
+  --neutral-50: 0 0% 98%;
+  --neutral-100: 0 0% 96%;
+  --neutral-200: 0 0% 90%;
+  --neutral-300: 0 0% 83%;
+  --neutral-400: 0 0% 64%;
+  --neutral-500: 0 0% 45%;
+  --neutral-600: 0 0% 32%;
+  --neutral-700: 0 0% 25%;
+  --neutral-800: 0 0% 15%;
+  --neutral-900: 0 0% 9%;
+  --neutral-950: 0 0% 4%;
+
+  /* Success colors */
+  --success-50: 142 76% 97%;
+  --success-100: 141 84% 93%;
+  --success-200: 141 79% 85%;
+  --success-300: 142 77% 73%;
+  --success-400: 142 69% 58%;
+  --success-500: 142 71% 45%;
+  --success-600: 142 76% 36%;
+  --success-700: 142 72% 29%;
+  --success-800: 143 64% 24%;
+  --success-900: 144 61% 20%;
+  --success-950: 145 80% 10%;
+
+  /* Warning colors */
+  --warning-50: 48 100% 96%;
+  --warning-100: 48 96% 89%;
+  --warning-200: 48 97% 77%;
+  --warning-300: 46 97% 65%;
+  --warning-400: 43 96% 56%;
+  --warning-500: 38 92% 50%;
+  --warning-600: 32 95% 44%;
+  --warning-700: 26 90% 37%;
+  --warning-800: 23 83% 31%;
+  --warning-900: 22 78% 26%;
+  --warning-950: 21 75% 15%;
+
+  /* Error colors */
+  --error-50: 0 86% 97%;
+  --error-100: 0 93% 94%;
+  --error-200: 0 96% 89%;
+  --error-300: 0 94% 82%;
+  --error-400: 0 91% 71%;
+  --error-500: 0 84% 60%;
+  --error-600: 0 72% 51%;
+  --error-700: 0 74% 42%;
+  --error-800: 0 70% 35%;
+  --error-900: 0 63% 31%;
+  --error-950: 0 75% 15%;
+
+  --diced-hero-section-top-text: #2c3e50;
+  --diced-hero-section-main-gradient-from: #0c4a6e;
+  --diced-hero-section-main-gradient-to: #0ea5e9;
+  --diced-hero-section-main-gradient-foreground: #0D3D56;
+  --diced-hero-section-separator: #0ea5e9;
+  --diced-hero-section-sub-text: #34495e;
+  --diced-hero-section-button-bg: #0D3D56;
+  --diced-hero-section-button-fg: #ffffff;
+  --diced-hero-section-button-hover-bg: #0ea5e9;
+  --diced-hero-section-button-hover-fg: #fff;
+}
+
+.dark {
+  /* Base colors */
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  
+  --primary: 199 89% 48%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  
+  --secondary: 43 96% 58%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+
+  /* Neutral colors - inverted for dark mode */
+  --neutral-50: 0 0% 9%;
+  --neutral-100: 0 0% 15%;
+  --neutral-200: 0 0% 25%;
+  --neutral-300: 0 0% 32%;
+  --neutral-400: 0 0% 45%;
+  --neutral-500: 0 0% 64%;
+  --neutral-600: 0 0% 83%;
+  --neutral-700: 0 0% 90%;
+  --neutral-800: 0 0% 96%;
+  --neutral-900: 0 0% 98%;
+  --neutral-950: 0 0% 100%;
+
+  /* Success colors - adjusted for dark mode */
+  --success-950: 142 76% 97%;
+  --success-900: 141 84% 93%;
+  --success-800: 141 79% 85%;
+  --success-700: 142 77% 73%;
+  --success-600: 142 69% 58%;
+  --success-500: 142 71% 45%;
+  --success-400: 142 76% 36%;
+  --success-300: 142 72% 29%;
+  --success-200: 143 64% 24%;
+  --success-100: 144 61% 20%;
+  --success-50: 145 80% 10%;
+
+  /* Warning colors - adjusted for dark mode */
+  --warning-950: 48 100% 96%;
+  --warning-900: 48 96% 89%;
+  --warning-800: 48 97% 77%;
+  --warning-700: 46 97% 65%;
+  --warning-600: 43 96% 56%;
+  --warning-500: 38 92% 50%;
+  --warning-400: 32 95% 44%;
+  --warning-300: 26 90% 37%;
+  --warning-200: 23 83% 31%;
+  --warning-100: 22 78% 26%;
+  --warning-50: 21 75% 15%;
+
+  /* Error colors - adjusted for dark mode */
+  --error-950: 0 86% 97%;
+  --error-900: 0 93% 94%;
+  --error-800: 0 96% 89%;
+  --error-700: 0 94% 82%;
+  --error-600: 0 91% 71%;
+  --error-500: 0 84% 60%;
+  --error-400: 0 72% 51%;
+  --error-300: 0 74% 42%;
+  --error-200: 0 70% 35%;
+  --error-100: 0 63% 31%;
+  --error-50: 0 75% 15%;
+
+  --diced-hero-section-top-text: #f7f7ff;
+  --diced-hero-section-main-gradient-from: #0c4a6e;
+  --diced-hero-section-main-gradient-to: #7dd3fc;
+  --diced-hero-section-main-gradient-foreground: #0D3D56;
+  --diced-hero-section-separator: #7dd3fc;
+  --diced-hero-section-sub-text: #f7f7ff;
+  --diced-hero-section-button-bg: #0ea5e9;
+  --diced-hero-section-button-fg: #0A0A0A;
+  --diced-hero-section-button-hover-bg: #0284c7;
+  --diced-hero-section-button-hover-fg: #FFFFFF;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
