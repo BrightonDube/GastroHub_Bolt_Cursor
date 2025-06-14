@@ -24,8 +24,8 @@ export function HomePage() {
 
   const heroSlides = [
     {
-      title: "Premium Wines",
-      image: "https://images.pexels.com/photos/2912108/pexels-photo-2912108.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      title: "Fruits and Vegetables",
+            image: "https://images.unsplash.com/photo-1646340691161-521e588e9964?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       title: "Craft Beers",
@@ -36,8 +36,8 @@ export function HomePage() {
       image: "https://images.pexels.com/photos/339696/pexels-photo-339696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     {
-      title: "Cocktail Ingredients",
-      image: "https://images.pexels.com/photos/602750/pexels-photo-602750.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      title: "Feijoa",
+      image: "https://images.unsplash.com/photo-1541857754-557a44522bec?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 
@@ -136,7 +136,7 @@ export function HomePage() {
           }}
           mainTextStyle={{
             fontSize: "clamp(3rem, 8vw, 5rem)",
-            fontWeight: "800",
+            fontWeight: "600",
             gradient: "linear-gradient(90deg, var(--diced-hero-section-main-gradient-from), var(--diced-hero-section-main-gradient-to))",
           }}
           subMainTextStyle={{ 

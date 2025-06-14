@@ -41,8 +41,8 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => vi.fn(),
     useParams: () => ({ id: 'test-id' }),
     useLocation: () => ({ pathname: '/test', state: {} }),
-    Link: ({ children, to, ...props }: any) => <a href={to} {...props}>{children}</a>,
-    Navigate: ({ to }: any) => <div data-testid="navigate" data-to={to} />,
+    Link: ({ children, to, ...props }: { children: React.ReactNode; to: string; [key: string]: unknown }) => <a href={to} {...props}>{children}</a>,
+    Navigate: ({ to }: { to: string }) => <div data-testid="navigate" data-to={to} />,
   };
 });
 
@@ -66,7 +66,7 @@ vi.mock('@tanstack/react-query', () => ({
     setQueryData: vi.fn(),
     getQueryData: vi.fn(),
   })),
-  QueryClientProvider: ({ children }: any) => children,
+  QueryClientProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 // Mock crypto.randomUUID
