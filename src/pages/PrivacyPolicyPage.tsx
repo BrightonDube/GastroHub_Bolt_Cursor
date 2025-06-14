@@ -57,7 +57,7 @@ export function PrivacyPolicyPage() {
       content: `Your information may be transferred to and processed in countries other than your country of residence. These countries may have different data protection laws than your country. When we transfer your information internationally, we implement appropriate safeguards to protect your information in accordance with applicable law.`
     },
     {
-      title: '9. Children's Privacy',
+      title: '9. Children\'s Privacy',
       icon: <Shield className="w-5 h-5" />,
       content: `Our platform is not intended for children under the age of 13, and we do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information promptly. If you believe we have collected information from a child under 13, please contact us immediately.`
     },

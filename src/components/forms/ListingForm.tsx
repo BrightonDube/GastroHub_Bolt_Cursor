@@ -7,7 +7,7 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { Upload, X, AlertCircle } from 'lucide-react';
 
 const listingSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(100, 'Name must be less than 100 characters'),
@@ -115,7 +115,7 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
     setImageUploading(true);
     try {
       // Simulate image upload - replace with actual upload logic
-      const uploadPromises = Array.from(files).map(async (file) => {
+      const uploadPromises = Array.from(files).map(async () => {
         // Here you would upload to Supabase storage
         return `https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400`;
       });
@@ -124,6 +124,7 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
       setImages(prev => [...prev, ...uploadedUrls]);
     } catch (error) {
       console.error('Error uploading images:', error);
+      // You might want to show an error message to the user here
     } finally {
       setImageUploading(false);
     }

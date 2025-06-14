@@ -68,10 +68,10 @@ describe('Input', () => {
   });
 
   it('should handle different input types', () => {
-    const types = ['text', 'email', 'password', 'number', 'tel', 'url'];
+    const types = ['text', 'email', 'password', 'number', 'tel', 'url'] as const;
     
     types.forEach(type => {
-      const { rerender } = render(<Input type={type as any} />);
+      const { rerender } = render(<Input type={type} />);
       const input = screen.getByRole(type === 'password' ? 'textbox' : type === 'number' ? 'spinbutton' : 'textbox');
       
       expect(input).toHaveAttribute('type', type);

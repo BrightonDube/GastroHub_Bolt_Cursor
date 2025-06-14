@@ -99,8 +99,9 @@ export function useAuth() {
       }
 
       return { data, error: null };
-    } catch (error: any) {
-      return { data: null, error: error.message };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { data: null, error: errorMessage };
     }
   };
 
@@ -113,8 +114,9 @@ export function useAuth() {
 
       if (error) throw error;
       return { data, error: null };
-    } catch (error: any) {
-      return { data: null, error: error.message };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { data: null, error: errorMessage };
     }
   };
 
@@ -129,8 +131,9 @@ export function useAuth() {
 
       if (error) throw error;
       return { data, error: null };
-    } catch (error: any) {
-      return { data: null, error: error.message };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { data: null, error: errorMessage };
     }
   };
 
@@ -140,8 +143,9 @@ export function useAuth() {
       if (error) throw error;
       setUser(null);
       return { error: null };
-    } catch (error: any) {
-      return { error: error.message };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { error: errorMessage };
     }
   };
 

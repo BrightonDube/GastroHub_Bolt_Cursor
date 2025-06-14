@@ -30,8 +30,27 @@ type UpdateFormData = z.infer<typeof updateSchema>;
 
 interface OrderUpdateFormProps {
   orderId?: string;
-  currentOrder?: any;
-  onUpdateComplete?: (result: any) => void;
+  currentOrder?: {
+    id: string;
+    status: string;
+    paymentStatus: string;
+    shippingAddress: {
+      street: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+    };
+  };
+  onUpdateComplete?: (result: {
+    success: boolean;
+    data?: {
+      orderId: string;
+      previousValue: string | Record<string, unknown>;
+      newValue: string | Record<string, unknown>;
+    };
+    error?: { message: string };
+  }) => void;
   onCancel?: () => void;
 }
 
@@ -42,7 +61,15 @@ export function OrderUpdateForm({
   onCancel 
 }: OrderUpdateFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [updateResult, setUpdateResult] = useState<any>(null);
+  const [updateResult, setUpdateResult] = useState<{
+    success: boolean;
+    data?: {
+      orderId: string;
+      previousValue: string | Record<string, unknown>;
+      newValue: string | Record<string, unknown>;
+    };
+    error?: { message: string };
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -189,8 +216,9 @@ export function OrderUpdateForm({
       } else {
         setError(result.error?.message || 'Failed to update order');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

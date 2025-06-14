@@ -117,7 +117,7 @@ export function Header() {
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 
-                      variant={getRoleColor(user.role) as any}
+                      variant={getRoleColor(user.role) as 'primary' | 'secondary' | 'success' | 'default'}
                       size="sm"
                     >
                       <span className="flex items-center space-x-1">

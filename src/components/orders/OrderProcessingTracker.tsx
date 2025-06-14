@@ -53,8 +53,9 @@ export function OrderProcessingTracker({
       } else {
         setError(result.error?.message || 'Processing failed');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(errorMessage);
     } finally {
       setIsProcessing(false);
     }
@@ -63,13 +64,13 @@ export function OrderProcessingTracker({
   const getStepStatus = (step: ProcessingStep) => {
     switch (step.status) {
       case 'completed':
-        return { color: 'success', icon: CheckCircle };
+        return { color: 'success' as const, icon: CheckCircle };
       case 'in_progress':
-        return { color: 'primary', icon: Loader2 };
+        return { color: 'primary' as const, icon: Loader2 };
       case 'failed':
-        return { color: 'error', icon: AlertCircle };
+        return { color: 'error' as const, icon: AlertCircle };
       default:
-        return { color: 'default', icon: Clock };
+        return { color: 'default' as const, icon: Clock };
     }
   };
 
@@ -217,7 +218,7 @@ export function OrderProcessingTracker({
                         <h3 className="text-sm font-medium text-neutral-900">
                           {step.stepName}
                         </h3>
-                        <Badge variant={color as any} size="sm" className="flex items-center space-x-1">
+                        <Badge variant={color as 'success' | 'primary' | 'error' | 'default'} size="sm" className="flex items-center space-x-1">
                           <StatusIcon className={`w-3 h-3 ${step.status === 'in_progress' ? 'animate-spin' : ''}`} />
                           <span>{step.status.replace('_', ' ')}</span>
                         </Badge>

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RegisterForm } from '../RegisterForm';
 import { useAuth } from '../../../hooks/useAuth';
@@ -13,7 +13,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => vi.fn(),
-    Link: ({ children, to }: any) => <a href={to}>{children}</a>,
+    Link: ({ children, to }: { children: React.ReactNode; to: string }) => <a href={to}>{children}</a>,
   };
 });
 

@@ -43,7 +43,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useSupplierListings('supplier-123'),
@@ -69,7 +69,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useSupplierListings('supplier-123'),
@@ -106,7 +106,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useCreateListing(),
@@ -134,7 +134,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useCreateListing(),
@@ -164,7 +164,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useUpdateListing(),
@@ -191,7 +191,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useUpdateListing(),
@@ -224,7 +224,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const startTime = Date.now();
       const { result } = renderHook(
@@ -251,7 +251,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useSupplierListings('supplier-123'),
@@ -272,7 +272,7 @@ describe('useListings hooks', () => {
             order: vi.fn().mockRejectedValue(new Error('Network timeout')),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useSupplierListings('supplier-123'),
@@ -295,7 +295,7 @@ describe('useListings hooks', () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       const { result } = renderHook(
         () => useCreateListing(),

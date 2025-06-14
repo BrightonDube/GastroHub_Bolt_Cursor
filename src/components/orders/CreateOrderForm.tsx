@@ -50,7 +50,17 @@ interface CreateOrderFormProps {
 
 export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderResult, setOrderResult] = useState<any>(null);
+  const [orderResult, setOrderResult] = useState<{
+    success: boolean;
+    data?: {
+      orderId: string;
+      orderNumber: string;
+      totalAmount: number;
+      estimatedDeliveryDate: string;
+      trackingNumber?: string;
+    };
+    error?: { message: string };
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -138,8 +148,9 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
       } else {
         setError(result.error?.message || 'Failed to create order');
       }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

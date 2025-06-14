@@ -1,3 +1,4 @@
+import React from 'react';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
@@ -41,7 +42,9 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => vi.fn(),
     useParams: () => ({ id: 'test-id' }),
     useLocation: () => ({ pathname: '/test', state: {} }),
-    Link: ({ children, to, ...props }: { children: React.ReactNode; to: string; [key: string]: unknown }) => <a href={to} {...props}>{children}</a>,
+    Link: ({ children, to, ...props }: { children: React.ReactNode; to: string; [key: string]: unknown }) => (
+      <a href={to} {...props}>{children}</a>
+    ),
     Navigate: ({ to }: { to: string }) => <div data-testid="navigate" data-to={to} />,
   };
 });
