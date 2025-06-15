@@ -77,7 +77,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ mode, productId }) => {
     return urls;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  import { toast } from 'sonner';
+
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -99,14 +101,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ mode, productId }) => {
       if (mode === 'create') {
         const { error } = await supabase.from('listings').insert([payload]);
         if (error) throw error;
+        toast.success('Product created successfully!');
         navigate('/dashboard/products');
       } else if (mode === 'edit' && productId) {
         const { error } = await supabase.from('listings').update(payload).eq('id', productId);
         if (error) throw error;
+        toast.success('Product updated successfully!');
         navigate('/dashboard/products');
       }
     } catch (err: any) {
       setError(err.message);
+      toast.error('Failed to save product: ' + err.message);
     } finally {
       setLoading(false);
     }

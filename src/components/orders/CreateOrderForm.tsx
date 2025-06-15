@@ -126,7 +126,9 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
     return subtotal + tax + shipping;
   };
 
-  const onSubmit = async (data: OrderFormData) => {
+  import { toast } from 'sonner';
+
+const onSubmit = async (data: OrderFormData) => {
     setIsSubmitting(true);
     setError(null);
 
@@ -144,13 +146,16 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
       
       if (result.success) {
         setOrderResult(result);
+        toast.success('Order placed successfully!');
         onOrderCreated?.(result.data!.orderId);
       } else {
         setError(result.error?.message || 'Failed to create order');
+        toast.error(result.error?.message || 'Failed to create order');
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       setError(errorMessage);
+    toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
