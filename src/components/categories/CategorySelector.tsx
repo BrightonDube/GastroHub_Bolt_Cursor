@@ -5,7 +5,6 @@ import { Plus, ChevronDown, ChevronRight } from 'lucide-react';
 export interface CategoryNode {
   id: string;
   name: string;
-  emoji?: string;
   parent_id?: string | null;
   children?: CategoryNode[];
   is_master?: boolean;
@@ -22,6 +21,17 @@ interface CategorySelectorProps {
   error?: string;
 }
 
+function sortCategories(nodes: CategoryNode[]): CategoryNode[] {
+  return nodes
+    .slice()
+    .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+    .map(node =>
+      node.children && node.children.length > 0
+        ? { ...node, children: sortCategories(node.children) }
+        : node
+    );
+}
+
 function renderTree(
   nodes: CategoryNode[],
   selected: string | null,
@@ -29,13 +39,14 @@ function renderTree(
   onAdd: (parentId: string | null) => void,
   level = 0
 ) {
+  const sorted = sortCategories(nodes);
   return (
     <ul className={level === 0 ? 'pl-0' : 'pl-4'}>
-      {nodes.map((node) => (
+      {sorted.map((node) => (
         <li key={node.id} className="mb-1">
           <div className={`flex items-center gap-2 ${selected === node.id ? 'font-bold text-primary-700 dark:text-primary-300' : ''}`}
                style={{ paddingLeft: level * 8 }}>
-            {node.emoji && <span>{node.emoji}</span>}
+
             <button
               type="button"
               className="text-left flex-1 focus:outline-none"
