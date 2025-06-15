@@ -8,7 +8,14 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-   <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <div
+      className="min-h-screen"
+      style={{
+        background: 'var(--background)',
+        color: 'var(--foreground)'
+      }}
+      data-theme={typeof window !== 'undefined' ? (localStorage.getItem('gastrohub-theme') || 'light') : 'light'}
+    >
       <Header />
       <div className="flex">
         <Sidebar />

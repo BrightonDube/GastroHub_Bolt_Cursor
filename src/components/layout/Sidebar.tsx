@@ -109,7 +109,13 @@ export function Sidebar() {
 
   return (
    <div className="hidden md:flex md:w-64 md:flex-col">
-     <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto bg-card border-r border-neutral-200 dark:border-neutral-800">
+     <div
+        className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto"
+        style={{
+          background: 'var(--card)',
+          borderRight: '1px solid var(--stroke)'
+        }}
+      >
         <div className="flex-grow flex flex-col">
           <nav className="flex-1 px-4 space-y-1">
             {navigationItems.map((item) => {
@@ -121,14 +127,16 @@ export function Sidebar() {
                   className={cn(
                     'group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200',
                     isActive
-                     ? 'bg-primary-50 text-primary-900 border-r-2 border-primary-900 dark:bg-primary-900/20 dark:text-primary-300 dark:border-primary-500'
-                     : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200'
+                      ? 'bg-var(--primary-50) text-var(--primary-900) border-r-2 border-var(--primary-900)'
+                      : 'text-var(--neutral-600) hover:bg-var(--neutral-50) hover:text-var(--neutral-900)'
                   )}
                 >
                   <item.icon
                     className={cn(
                       'mr-3 flex-shrink-0 h-5 w-5 transition-colors',
-                     isActive ? 'text-primary-900 dark:text-primary-400' : 'text-neutral-400 group-hover:text-neutral-600 dark:text-neutral-500 dark:group-hover:text-neutral-300'
+                      isActive
+                        ? 'text-var(--primary-900)'
+                        : 'text-var(--neutral-400) group-hover:text-var(--neutral-600)'
                     )}
                   />
                   {item.name}
