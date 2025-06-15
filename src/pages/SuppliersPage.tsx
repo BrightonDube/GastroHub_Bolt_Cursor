@@ -23,14 +23,22 @@ export function SuppliersPage() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
 
-  const categories = [
+  // Fetch categories from backend
+  import { useCategories } from '../hooks/useCategories';
+  const { data: categoriesData = [], isLoading: categoriesLoading } = useCategories();
+  function flattenCategories(nodes: any[]): { value: string; label: string }[] {
+    let arr: { value: string; label: string }[] = [];
+    for (const node of nodes) {
+      arr.push({ value: node.id, label: node.name });
+      if (node.children && node.children.length > 0) {
+        arr = arr.concat(flattenCategories(node.children));
+      }
+    }
+    return arr;
+  }
+  const categoryOptions = [
     { value: '', label: 'All Categories' },
-    { value: 'fresh-produce', label: 'Fresh Produce' },
-    { value: 'meat-poultry', label: 'Meat & Poultry' },
-    { value: 'seafood', label: 'Seafood' },
-    { value: 'dairy-eggs', label: 'Dairy & Eggs' },
-    { value: 'pantry-staples', label: 'Pantry Staples' },
-    { value: 'beverages', label: 'Beverages' },
+    ...flattenCategories(categoriesData)
   ];
 
   const locations = [

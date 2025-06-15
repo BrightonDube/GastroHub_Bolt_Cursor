@@ -15,37 +15,10 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 
+import { useSupplierDashboardStats } from '../../hooks/useDashboardStats';
+
 export function SupplierDashboard() {
-  const stats = [
-    {
-      title: 'Active Listings',
-      value: '156',
-      change: { value: 8, type: 'increase' as const },
-      icon: <Package className="w-6 h-6" />,
-      color: 'primary' as const,
-    },
-    {
-      title: 'Total Orders',
-      value: '89',
-      change: { value: 15, type: 'increase' as const },
-      icon: <ShoppingCart className="w-6 h-6" />,
-      color: 'secondary' as const,
-    },
-    {
-      title: 'Monthly Revenue',
-      value: '$28,750',
-      change: { value: 22, type: 'increase' as const },
-      icon: <DollarSign className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Growth Rate',
-      value: '12.5%',
-      change: { value: 3, type: 'increase' as const },
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: 'warning' as const,
-    },
-  ];
+  const { data: stats = [], isLoading: statsLoading } = useSupplierDashboardStats();
 
   const recentListings = [
     {

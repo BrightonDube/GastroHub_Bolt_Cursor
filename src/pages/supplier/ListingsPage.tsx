@@ -29,14 +29,23 @@ export function ListingsPage() {
   const { data: listings, isLoading, error } = useSupplierListings(user?.id || '');
   const toggleStatusMutation = useToggleListingStatus();
 
-  const categories = [
+  // Fetch categories from backend
+  import { useCategories } from '../../hooks/useCategories';
+  const { data: categoriesData = [], isLoading: categoriesLoading } = useCategories();
+  // Flatten categories for select filter
+  function flattenCategories(nodes: any[]): { value: string; label: string }[] {
+    let arr: { value: string; label: string }[] = [];
+    for (const node of nodes) {
+      arr.push({ value: node.id, label: node.name });
+      if (node.children && node.children.length > 0) {
+        arr = arr.concat(flattenCategories(node.children));
+      }
+    }
+    return arr;
+  }
+  const categoryOptions = [
     { value: '', label: 'All Categories' },
-    { value: 'Fresh Produce', label: 'Fresh Produce' },
-    { value: 'Meat & Poultry', label: 'Meat & Poultry' },
-    { value: 'Seafood', label: 'Seafood' },
-    { value: 'Dairy & Eggs', label: 'Dairy & Eggs' },
-    { value: 'Pantry Staples', label: 'Pantry Staples' },
-    { value: 'Beverages', label: 'Beverages' },
+    ...flattenCategories(categoriesData)
   ];
 
   const statusOptions = [

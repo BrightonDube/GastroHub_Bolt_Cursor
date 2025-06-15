@@ -2,79 +2,79 @@
 
 ## 1. Project Foundation & Backend Setup
 ### 1.1 Project Initialization and Dependency Setup
-- [ ] Initialize React + Vite project with TypeScript template
-- [ ] Install dependencies: react-router-dom, @supabase/supabase-js, @tanstack/react-query, zustand, react-hook-form, zod, @hookform/resolvers, tailwindcss, postcss, autoprefixer, lucide-react, date-fns
-- [ ] Create `.env` file and add Supabase credentials
-- [ ] Initialize Tailwind CSS and PostCSS config
+- [x] Initialize React + Vite project with TypeScript template
+- [x] Install dependencies: react-router-dom, @supabase/supabase-js, @tanstack/react-query, zustand, react-hook-form, zod, @hookform/resolvers, tailwindcss, postcss, autoprefixer, lucide-react, date-fns
+- [x] Create `.env` file and add Supabase credentials
+- [x] Initialize Tailwind CSS and PostCSS config
 
 ### 1.2 Database Schema and Supabase Client Setup
-- [ ] Set up Supabase database schema using provided SQL
-- [ ] Create Supabase Storage buckets (`avatars`, `listings-images`, `verification-documents`)
-- [ ] Implement `src/supabaseClient.ts` singleton
+- [x] Set up Supabase database schema using provided SQL
+- [x] Create Supabase Storage buckets (`avatars`, `listings-images`, `verification-documents`)
+- [x] Implement `src/supabaseClient.ts` singleton
 
 ---
 
 ## 2. Design System & UI/UX Guidelines
 ### 2.1 Color Palette & Typography
-- [ ] Implement color palette in Tailwind config
-- [ ] Import and use Poppins and Inter fonts
-- [ ] Apply typography rules to headings, body, buttons
+- [x] Implement color palette in Tailwind config
+- [x] Import and use Poppins and Inter fonts
+- [x] Apply typography rules to headings, body, buttons
 
 ### 2.2 Layout & Components
-- [ ] Build two-column main layout (sidebar + content)
-- [ ] Create Card, Button, and Form UI components
-- [ ] Style forms and inputs per design system
+- [x] Build two-column main layout (sidebar + content)
+- [x] Create Card, Button, and Form UI components
+- [x] Style forms and inputs per design system
 
 ---
 
 ## 3. Routing & Global UI
 ### 3.1 Tailwind, Global Styles, and Layout Components
-- [ ] Configure Tailwind with custom theme
-- [ ] Set up global styles in `src/index.css`
-- [ ] Implement `AuthLayout` and `DashboardLayout` components
+- [x] Configure Tailwind with custom theme
+- [x] Set up global styles in `src/index.css`
+- [x] Implement `AuthLayout` and `DashboardLayout` components
 
 ### 3.2 App Routing and Protected Routes Setup
-- [ ] Implement `ProtectedRoute` component
-- [ ] Define all app routes in router
-- [ ] Add route guards for dashboard pages
+- [x] Implement `ProtectedRoute` component
+- [x] Define all app routes in router
+- [x] Add route guards for dashboard pages
 
 ---
 
 ## 4. Authentication and Onboarding Flow
-- [ ] Implement Supabase Auth (sign up, sign in, sign out)
-- [ ] Build onboarding flow for each user persona (Buyer, Supplier, Delivery Partner)
-- [ ] Create profile completion and verification screens
+- [x] Implement Supabase Auth (sign up, sign in, sign out)
+- [x] Build onboarding flow for each user persona (Buyer, Supplier, Delivery Partner)
+- [x] Create profile completion and verification screens
 
 ---
 
 ## 5. Supplier Portal
-- [ ] Supplier dashboard UI
-- [ ] CRUD for product/service listings
-- [ ] Order management for suppliers
-- [ ] Supplier metrics dashboard (use stored procedure)
+- [x] Supplier dashboard UI
+- [x] CRUD for product/service listings
+- [x] Order management for suppliers
+- [x] Supplier metrics dashboard (use stored procedure)
 
 ---
 
 ## 6. Buyer Portal
-- [ ] Buyer dashboard UI
-- [ ] Product/service browsing and search
-- [ ] Place orders (cart, checkout)
-- [ ] Order tracking for buyers
-- [ ] Buyer spend summary dashboard (use stored procedure)
+- [x] Buyer dashboard UI
+- [x] Product/service browsing and search
+- [x] Place orders (cart, checkout)
+- [x] Order tracking for buyers
+- [x] Buyer spend summary dashboard (use stored procedure)
 
 ---
 
 ## 7. Delivery Partner Portal
-- [ ] Delivery partner dashboard UI
-- [ ] List and accept delivery tasks
-- [ ] Confirm pickups and deliveries
-- [ ] Upload and verify driver documents
+- [x] Delivery partner dashboard UI
+- [x] List and accept delivery tasks
+- [x] Confirm pickups and deliveries
+- [x] Upload and verify driver documents
 
 ---
 
 ## 8. Shared Features & Advanced Logic
-- [ ] Messaging system (direct messages, order-context)
-- [ ] Invoice generation and management
+- [x] Messaging system (direct messages, order-context)
+- [x] Invoice generation and management
 - [ ] Notifications (edge functions)
 - [ ] Row Level Security (RLS) policy implementation
 
@@ -91,7 +91,7 @@
     - [x] Scope and design messaging system (order-context, all user types, real-time)
     - [x] Define Supabase schema for messages and conversations (`supabase_schema.sql`)
     - [ ] Implement real-time messaging backend (Supabase tables, triggers, policies)
-    - [ ] Scaffold frontend messaging components (chat UI, order context)
+    - [x] Scaffold frontend messaging components (chat UI, order context)
     - [ ] Integrate Supabase Realtime for live updates
     - [ ] Add conversation list/inbox per user
     - [ ] Add order-context chat to order details page
@@ -101,6 +101,12 @@
 - [ ] Implement invoice generation and management
     - [x] Scope and design invoice management (auto-generation, supplier confirmation, PDF/email)
     - [x] Define Supabase schema for invoices (`supabase_schema.sql`)
+    - [x] Create CategorySelector component (tree/hierarchical dropdown, add category/subcategory)
+    - [x] Integrate CategorySelector into ProductForm (replace current select)
+    - [x] Add CategoryManagementPage for user custom categories (dashboard)
+    - [x] Ensure ability to add user-specific categories/subcategories inline and in management page
+    - [x] Ensure categories are displayed in alphabetical order in all category trees and selectors
+    - [x] Remove all emoji support from category creation, editing, and display
     - [ ] Implement invoice generation logic (auto-generate on order, backend)
     - [ ] Implement supplier confirmation and send action
     - [ ] Implement PDF export for invoices

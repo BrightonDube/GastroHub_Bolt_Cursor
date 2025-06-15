@@ -22,99 +22,27 @@ import {
 export function DashboardPage() {
   const { user } = useAuth();
 
-  const getBuyerStats = () => [
-    {
-      title: 'Total Orders',
-      value: '24',
-      change: { value: 12, type: 'increase' as const },
-      icon: <ShoppingCart className="w-6 h-6" />,
-      color: 'primary' as const,
-    },
-    {
-      title: 'Active Suppliers',
-      value: '8',
-      change: { value: 3, type: 'increase' as const },
-      icon: <Users className="w-6 h-6" />,
-      color: 'secondary' as const,
-    },
-    {
-      title: 'Monthly Spend',
-      value: '$12,450',
-      change: { value: -5, type: 'decrease' as const },
-      icon: <DollarSign className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Pending Orders',
-      value: '3',
-      icon: <Clock className="w-6 h-6" />,
-      color: 'warning' as const,
-    },
-  ];
+  // Fetch buyer dashboard stats from backend
+  import { useBuyerDashboardStats } from '../hooks/useDashboardStats';
+  const { data: buyerStats = [], isLoading: statsLoading } = useBuyerDashboardStats(user?.id);
 
-  const getSupplierStats = () => [
-    {
-      title: 'Active Listings',
-      value: '156',
-      change: { value: 8, type: 'increase' as const },
-      icon: <Package className="w-6 h-6" />,
-      color: 'primary' as const,
-    },
-    {
-      title: 'Total Orders',
-      value: '89',
-      change: { value: 15, type: 'increase' as const },
-      icon: <ShoppingCart className="w-6 h-6" />,
-      color: 'secondary' as const,
-    },
-    {
-      title: 'Monthly Revenue',
-      value: '$28,750',
-      change: { value: 22, type: 'increase' as const },
-      icon: <DollarSign className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Pending Orders',
-      value: '12',
-      icon: <Clock className="w-6 h-6" />,
-      color: 'warning' as const,
-    },
-  ];
 
-  const getDeliveryPartnerStats = () => [
-    {
-      title: 'Completed Deliveries',
-      value: '145',
-      change: { value: 18, type: 'increase' as const },
-      icon: <CheckCircle className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Active Deliveries',
-      value: '7',
-      icon: <Truck className="w-6 h-6" />,
-      color: 'primary' as const,
-    },
-    {
-      title: 'Monthly Earnings',
-      value: '$3,240',
-      change: { value: 12, type: 'increase' as const },
-      icon: <DollarSign className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Average Rating',
-      value: '4.9',
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: 'secondary' as const,
-    },
-  ];
+  // Fetch supplier dashboard stats from backend
+  import { useSupplierDashboardStats } from '../hooks/useDashboardStats';
+  const { data: supplierStats = [], isLoading: supplierStatsLoading } = useSupplierDashboardStats(user?.id);
+
+  // Fetch delivery partner dashboard stats from backend
+  import { useDeliveryPartnerDashboardStats } from '../hooks/useDashboardStats';
+  const { data: deliveryStats = [], isLoading: deliveryStatsLoading } = useDeliveryPartnerDashboardStats(user?.id);
+
+  // Fetch recent orders from backend
+  import { useRecentOrders } from '../hooks/useOrders';
+  const { data: recentOrders = [], isLoading: recentOrdersLoading } = useRecentOrders(user?.id);
 
   const getStats = () => {
     switch (user?.role) {
       case 'buyer':
-        return getBuyerStats();
+        return buyerStats;
       case 'supplier':
         return getSupplierStats();
       case 'delivery_partner':

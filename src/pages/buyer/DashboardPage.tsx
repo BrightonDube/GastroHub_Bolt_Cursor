@@ -16,35 +16,10 @@ import {
 } from 'lucide-react';
 
 export function BuyerDashboard() {
-  const stats = [
-    {
-      title: 'Total Orders',
-      value: '24',
-      change: { value: 12, type: 'increase' as const },
-      icon: <ShoppingCart className="w-6 h-6" />,
-      color: 'primary' as const,
-    },
-    {
-      title: 'Active Suppliers',
-      value: '8',
-      change: { value: 3, type: 'increase' as const },
-      icon: <Users className="w-6 h-6" />,
-      color: 'secondary' as const,
-    },
-    {
-      title: 'Monthly Spend',
-      value: '$12,450',
-      change: { value: -5, type: 'decrease' as const },
-      icon: <DollarSign className="w-6 h-6" />,
-      color: 'success' as const,
-    },
-    {
-      title: 'Pending Orders',
-      value: '3',
-      icon: <Clock className="w-6 h-6" />,
-      color: 'warning' as const,
-    },
-  ];
+  // Fetch buyer dashboard stats from backend
+  import { useBuyerDashboardStats } from '../../hooks/useDashboardStats';
+  const { data: stats = [], isLoading: statsLoading } = useBuyerDashboardStats();
+
 
   const favoriteSuppliers = [
     {

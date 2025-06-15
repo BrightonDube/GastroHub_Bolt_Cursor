@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
-import { CategorySelector, CategoryNode } from '../../components/categories/CategorySelector';
+import { useState } from 'react';
+import { CategoryNode } from '../../components/categories/CategorySelector';
 import { AddCategoryModal } from '../../components/categories/AddCategoryModal';
 import { EditCategoryModal } from '../../components/categories/EditCategoryModal';
 import { Button } from '../../components/ui/Button';
 
-// This would come from backend in real app
-const initialCategories: CategoryNode[] = [
-  {
-    id: 'food', name: 'Food & Beverage Supplies',
-    children: [
-      { id: 'produce', name: 'Fresh Produce', parent_id: 'food' },
-      { id: 'meat', name: 'Meat & Poultry', parent_id: 'food' },
-    ]
-  },
-];
+// Categories are now fetched from backend using hooks
+
+import { useCategories, useAddCategory, useEditCategory, useDeleteCategory } from '../../hooks/useCategories';
 
 export default function CategoryManagementPage() {
-  const [categories, setCategories] = useState<CategoryNode[]>(initialCategories);
+  const { data: categories = [], isLoading } = useCategories();
+  const addCategory = useAddCategory();
+  const editCategory = useEditCategory();
+  const deleteCategory = useDeleteCategory();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalParent, setModalParent] = useState<{ id: string; name: string } | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editCategory, setEditCategory] = useState<{ id: string; name: string; emoji?: string } | null>(null);
+  const [editCategoryState, setEditCategoryState] = useState<{ id: string; name: string } | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Only allow edit/delete for user-created (not master) categories
   function isUserCategory(cat: CategoryNode) {
-    return !cat.id.startsWith('food'); // adjust as needed for your master category logic
+    return !!cat.created_by;
   }
 
   const handleAddCategory = (parentId: string | null) => {
@@ -38,52 +34,52 @@ export default function CategoryManagementPage() {
     setModalOpen(true);
   };
 
-  const handleSubmitCategory = (data: { name: string; parent_id?: string | null }) => {
-    const newId = `${data.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
-    const newCategory: CategoryNode = {
-      id: newId,
-      name: data.name,
-      parent_id: data.parent_id || null,
-    };
-    if (data.parent_id) {
-      setCategories(sortCategories(addSubcategory(categories, data.parent_id, newCategory)));
-    } else {
-      setCategories(sortCategories([...categories, { ...newCategory, children: [] }]));
+  const handleSubmitCategory = async (data: { name: string; parent_id?: string | null }) => {
+    try {
+      await addCategory.mutateAsync(data);
+    } catch (e: any) {
+      setError(e.message);
     }
+    setModalOpen(false);
+    setModalParent(null);
   };
 
   const handleEditCategory = (cat: CategoryNode) => {
-    setEditCategory({ id: cat.id, name: cat.name });
+    setEditCategoryState({ id: cat.id, name: cat.name });
     setEditModalOpen(true);
   };
 
-  const handleSubmitEditCategory = (data: { name: string; emoji?: string }) => {
-    if (editCategory) {
-      setCategories(sortCategories(updateCategory(categories, editCategory.id, data)));
+  const handleSubmitEditCategory = async (data: { name: string }) => {
+    if (editCategoryState) {
+      try {
+        await editCategory.mutateAsync({ id: editCategoryState.id, name: data.name });
+      } catch (e: any) {
+        setError(e.message);
+      }
     }
     setEditModalOpen(false);
-    setEditCategory(null);
+    setEditCategoryState(null);
   };
 
   const handleDeleteCategory = (cat: CategoryNode) => {
     setDeleteConfirm({ id: cat.id, name: cat.name });
   };
 
-  const confirmDeleteCategory = () => {
+  const confirmDeleteCategory = async () => {
     if (deleteConfirm) {
-      setCategories(sortCategories(removeCategory(categories, deleteConfirm.id)));
+      try {
+        await deleteCategory.mutateAsync(deleteConfirm.id);
+      } catch (e: any) {
+        setError(e.message);
+      }
       setDeleteConfirm(null);
     }
   };
 
-  // Custom rendering for category tree with edit/delete buttons
   function sortCategories(nodes: CategoryNode[]): CategoryNode[] {
     return nodes
       .slice()
-      .sort((a, b) => {
-        // Compare case-insensitive (no emoji logic)
-        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-      })
+      .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
       .map(node =>
         node.children && node.children.length > 0
           ? { ...node, children: sortCategories(node.children) }
@@ -100,8 +96,8 @@ export default function CategoryManagementPage() {
             <span>{node.name}</span>
             {isUserCategory(node) && (
               <>
-                <Button size="xs" variant="ghost" onClick={() => handleEditCategory(node)}>Edit</Button>
-                <Button size="xs" variant="ghost" color="danger" onClick={() => handleDeleteCategory(node)}>Delete</Button>
+                <Button size="sm" variant="ghost" onClick={() => handleEditCategory(node)}>Edit</Button>
+                <Button size="sm" variant="ghost" color="danger" onClick={() => handleDeleteCategory(node)}>Delete</Button>
               </>
             )}
             {node.children && node.children.length > 0 && (
@@ -118,7 +114,8 @@ export default function CategoryManagementPage() {
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-6">Manage My Categories</h1>
-      {renderCategoryTree(categories)}
+      {error && <div className="text-error-600 text-sm mb-4">{error}</div>}
+      {isLoading ? <div>Loading...</div> : renderCategoryTree(categories)}
       <Button variant="outline" className="mt-4" onClick={() => handleAddCategory(null)}>Add Category</Button>
       <AddCategoryModal
         open={modalOpen}
@@ -130,7 +127,7 @@ export default function CategoryManagementPage() {
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         onSubmit={handleSubmitEditCategory}
-        category={editCategory}
+        category={editCategoryState}
       />
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">

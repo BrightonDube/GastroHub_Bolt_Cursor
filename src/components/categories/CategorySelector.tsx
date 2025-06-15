@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
-import { Plus, ChevronDown, ChevronRight } from 'lucide-react';
+import { Plus, ChevronDown } from 'lucide-react';
 
 export interface CategoryNode {
   id: string;
@@ -58,7 +58,7 @@ function renderTree(
               <ChevronDown className="w-4 h-4 ml-1" />
             )}
             {onAdd && (
-              <Button size="xs" variant="ghost" onClick={() => onAdd(node.id)}>
+              <Button size="sm" variant="ghost" onClick={() => onAdd(node.id)}>
                 <Plus className="w-3 h-3" />
               </Button>
             )}
