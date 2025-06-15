@@ -293,21 +293,20 @@ export function DashboardPage() {
                     <span className="text-sm text-neutral-600">Marketplace</span>
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-success-500 rounded-full"></div>
-                      <span className="text-xs text-success-600">Operational</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-neutral-600">Payments</span>
+                    <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Payments</span>
                     <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-success-500 rounded-full"></div>
-                      <span className="text-xs text-success-600">Operational</span>
+                      <div className="w-2 h-2" style={{ background: 'var(--success-500)' }}></div>
+                      <span className="text-xs" style={{ color: 'var(--success-600)' }}>Operational</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-neutral-600">Delivery Network</span>
+                    <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Delivery Network</span>
                     <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-success-500 rounded-full"></div>
-                      <span className="text-xs text-success-600">Operational</span>
+                      <div className="w-2 h-2" style={{ background: 'var(--success-500)' }}></div>
+                      <span className="text-xs" style={{ color: 'var(--success-600)' }}>Operational</span>
                     </div>
                   </div>
                 </div>

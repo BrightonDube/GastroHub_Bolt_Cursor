@@ -4,50 +4,64 @@ import { supabase } from '../lib/supabase';
 import { Profile, AuthUser } from '../types';
 
 export function useAuth() {
+  // DEBUG: useAuth initialized
+  console.log('[useAuth] Initialized');
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
+      console.log('[useAuth] getInitialSession called');
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('[useAuth] getSession result:', session);
       if (session?.user) {
         await fetchUserProfile(session.user);
       }
-      setLoading(false);
     };
 
+    console.log('[useAuth] Before getInitialSession');
     getInitialSession();
+    console.log('[useAuth] After getInitialSession');
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (session?.user) {
-          await fetchUserProfile(session.user);
-        } else {
-          setUser(null);
+        console.log('[useAuth] onAuthStateChange event:', event, 'session:', session);
+        try {
+          if (session?.user) {
+            await fetchUserProfile(session.user);
+          } else {
+            setUser(null);
+          }
+          setLoading(false);
+        } catch (error) {
+          console.error('[useAuth] Error in onAuthStateChange:', error);
         }
-        setLoading(false);
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => { console.log('[useAuth] Unsubscribing from auth state change'); subscription.unsubscribe(); };
   }, []);
 
   const fetchUserProfile = async (authUser: User) => {
+    console.log('[useAuth] fetchUserProfile called for', authUser);
     try {
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', authUser.id)
         .single();
+      console.log('[useAuth] fetchUserProfile profile:', profile, 'error:', error);
 
       if (error) {
+        console.error('[useAuth] Error fetching profile:', error);
         console.error('Error fetching profile:', error);
         return;
       }
 
       if (profile) {
+        console.log('[useAuth] Profile found:', profile);
         setUser({
           id: authUser.id,
           email: authUser.email!,
@@ -56,6 +70,7 @@ export function useAuth() {
         });
       }
     } catch (error) {
+    console.error('[useAuth] Error in fetchUserProfile:', error);
       console.error('Error in fetchUserProfile:', error);
     }
   };

@@ -79,23 +79,23 @@ export function TermsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <FileText className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               Terms of Service
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-[var(--primary-900)] mb-8 max-w-3xl mx-auto">
               Please read these terms carefully before using GastroHub
             </p>
-            <div className="flex items-center justify-center space-x-2 text-primary-200">
+            <div className="flex items-center justify-center space-x-2 text-[var(--primary-200)]">
               <Calendar className="w-5 h-5" />
               <span>Last updated: {lastUpdated}</span>
             </div>
@@ -127,10 +127,10 @@ export function TermsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none">
             <div className="mb-12">
-              <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">
+              <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-4">
                 Introduction
               </h2>
-              <p className="text-neutral-600 leading-relaxed">
+              <p className="text-[var(--muted-foreground)] leading-relaxed">
                 Welcome to GastroHub. These Terms of Service ("Terms") govern your use of our platform 
                 and services. GastroHub operates as a B2B marketplace connecting food industry professionals 
                 including buyers, suppliers, and delivery partners. By creating an account or using our 
@@ -141,10 +141,10 @@ export function TermsPage() {
             <div className="space-y-8">
               {sections.map((section, index) => (
                 <Card key={index} padding="lg" className="hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-4">
+                  <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
                     {section.title}
                   </h3>
-                  <p className="text-neutral-600 leading-relaxed">
+                  <p className="text-[var(--muted-foreground)] leading-relaxed">
                     {section.content}
                   </p>
                 </Card>
@@ -152,12 +152,12 @@ export function TermsPage() {
             </div>
 
             {/* Effective Date */}
-            <Card padding="lg" className="mt-12 bg-neutral-50">
+            <Card padding="lg" className="mt-12 bg-[var(--card-muted,#f9fafb)]">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                   Effective Date
                 </h3>
-                <p className="text-neutral-600">
+                <p className="text-[var(--muted-foreground)]">
                   These Terms of Service are effective as of {lastUpdated} and will remain in effect 
                   until modified or terminated in accordance with the terms herein.
                 </p>
@@ -167,13 +167,13 @@ export function TermsPage() {
             {/* Contact Information */}
             <Card padding="lg" className="mt-8 bg-primary-50">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
                   Questions About These Terms?
                 </h3>
-                <p className="text-neutral-600 mb-4">
+                <p className="text-[var(--muted-foreground)] mb-4">
                   If you have any questions about these Terms of Service, please don't hesitate to contact us.
                 </p>
-                <div className="space-y-2 text-sm text-neutral-600">
+                <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
                   <p><strong>Email:</strong> legal@gastrohub.com</p>
                   <p><strong>Address:</strong> GastroHub Legal Department</p>
                   <p>123 Market Street, Suite 400</p>
@@ -189,10 +189,10 @@ export function TermsPage() {
       <footer className="bg-neutral-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-secondary-400" />
+            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
             <span className="text-xl font-heading font-bold">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

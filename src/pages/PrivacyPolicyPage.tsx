@@ -88,23 +88,23 @@ export function PrivacyPolicyPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <Shield className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               Privacy Policy
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-[var(--primary-900)] mb-8 max-w-3xl mx-auto">
               Your privacy is important to us. Learn how we collect, use, and protect your information.
             </p>
-            <div className="flex items-center justify-center space-x-2 text-primary-200">
+            <div className="flex items-center justify-center space-x-2 text-[var(--primary-200)]">
               <Calendar className="w-5 h-5" />
               <span>Last updated: {lastUpdated}</span>
             </div>
@@ -135,10 +135,10 @@ export function PrivacyPolicyPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-4">
               Introduction
             </h2>
-            <p className="text-neutral-600 leading-relaxed">
+            <p className="text-[var(--muted-foreground)] leading-relaxed">
               GastroHub ("we," "our," or "us") respects your privacy and is committed to protecting your 
               personal information. This Privacy Policy describes how we collect, use, disclose, and 
               safeguard your information when you use our B2B marketplace platform. This policy applies 
@@ -148,18 +148,18 @@ export function PrivacyPolicyPage() {
 
           {/* Data Types We Collect */}
           <div className="mb-12">
-            <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-6">
+            <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-6">
               Types of Information We Collect
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {dataTypes.map((type, index) => (
                 <Card key={index} padding="lg" className="hover:shadow-md transition-shadow">
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">
                     {type.category}
                   </h3>
                   <ul className="space-y-2">
                     {type.examples.map((example, idx) => (
-                      <li key={idx} className="text-neutral-600 text-sm flex items-start">
+                      <li key={idx} className="text-[var(--muted-foreground)] text-sm flex items-start">
                         <span className="w-1.5 h-1.5 bg-primary-600 rounded-full mt-2 mr-2 flex-shrink-0"></span>
                         {example}
                       </li>
@@ -175,14 +175,14 @@ export function PrivacyPolicyPage() {
             {sections.map((section, index) => (
               <Card key={index} padding="lg" className="hover:shadow-md transition-shadow">
                 <div className="flex items-start space-x-3 mb-4">
-                  <div className="p-2 bg-primary-100 text-primary-600 rounded-lg">
+                  <div className="p-2 bg-primary-100 text-[var(--primary-600)] rounded-lg">
                     {section.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-neutral-900">
+                  <h3 className="text-xl font-semibold text-[var(--foreground)]">
                     {section.title}
                   </h3>
                 </div>
-                <p className="text-neutral-600 leading-relaxed">
+                <p className="text-[var(--muted-foreground)] leading-relaxed">
                   {section.content}
                 </p>
               </Card>
@@ -191,10 +191,10 @@ export function PrivacyPolicyPage() {
 
           {/* GDPR Rights */}
           <Card padding="lg" className="mt-12 bg-primary-50">
-            <h3 className="text-xl font-semibold text-neutral-900 mb-4">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
               Your Rights Under GDPR
             </h3>
-            <p className="text-neutral-600 mb-4">
+            <p className="text-[var(--muted-foreground)] mb-4">
               If you are located in the European Union, you have additional rights under the General 
               Data Protection Regulation (GDPR), including:
             </p>
@@ -231,16 +231,16 @@ export function PrivacyPolicyPage() {
           </Card>
 
           {/* Contact Information */}
-          <Card padding="lg" className="mt-8 bg-neutral-50">
+          <Card padding="lg" className="mt-8 bg-[var(--card-muted,#f9fafb)]">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
                 Contact Us About Privacy
               </h3>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-4">
                 If you have any questions about this Privacy Policy or our privacy practices, 
                 please contact our Data Protection Officer.
               </p>
-              <div className="space-y-2 text-sm text-neutral-600">
+              <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
                 <p><strong>Email:</strong> privacy@gastrohub.com</p>
                 <p><strong>Data Protection Officer:</strong> dpo@gastrohub.com</p>
                 <p><strong>Address:</strong> GastroHub Privacy Team</p>
@@ -256,10 +256,10 @@ export function PrivacyPolicyPage() {
       <footer className="bg-neutral-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-secondary-400" />
+            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
             <span className="text-xl font-heading font-bold">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

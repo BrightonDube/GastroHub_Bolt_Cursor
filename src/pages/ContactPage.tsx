@@ -100,17 +100,17 @@ export function ContactPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[var(--background)]">
         <Header />
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--primary-50)] via-[var(--background)] to-[var(--secondary-50)] py-12 px-4">
           <Card className="max-w-md w-full text-center" padding="lg">
-            <div className="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-8 h-8 text-success-600" />
+            <div className="w-16 h-16 bg-[var(--success-100)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-[var(--success-600)]" />
             </div>
-            <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+            <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
               Message Sent Successfully!
             </h2>
-            <p className="text-neutral-600 mb-6">
+            <p className="text-[var(--muted-foreground)] mb-6">
               Thank you for contacting us. We'll get back to you within 24 hours.
             </p>
             <Button onClick={() => setIsSubmitted(false)} className="w-full">
@@ -123,20 +123,20 @@ export function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
+      <section className="bg-gradient-to-br from-[var(--primary-900)] via-[var(--primary-800)] to-[var(--primary-900)] text-[var(--foreground)] py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <Headphones className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               Contact Us
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-[var(--muted-foreground)] mb-8 max-w-3xl mx-auto">
               We're here to help. Get in touch with our team for support, partnerships, or any questions.
             </p>
           </div>
@@ -144,13 +144,13 @@ export function ContactPage() {
       </section>
 
       {/* Contact Methods */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Get In Touch
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Choose the best way to reach us
             </p>
           </div>
@@ -158,19 +158,19 @@ export function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {contactMethods.map((method, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow" padding="lg">
-                <div className="inline-flex p-4 bg-primary-100 text-primary-600 rounded-2xl mb-4">
+                <div className="inline-flex p-4 bg-[var(--primary-50)] text-[var(--primary-600)] rounded-2xl mb-4">
                   {method.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
                   {method.title}
                 </h3>
-                <p className="text-neutral-600 mb-3">
+                <p className="text-[var(--muted-foreground)] mb-3">
                   {method.description}
                 </p>
-                <p className="font-semibold text-primary-900 mb-2">
+                <p className="font-semibold text-[var(--primary-900)] mb-2">
                   {method.contact}
                 </p>
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-[var(--muted-foreground)]">
                   {method.responseTime}
                 </p>
               </Card>
@@ -183,10 +183,10 @@ export function ContactPage() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Send Us a Message
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Fill out the form below and we'll get back to you soon
             </p>
           </div>
@@ -236,7 +236,7 @@ export function ContactPage() {
               />
 
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
                   Message
                 </label>
                 <textarea
@@ -244,7 +244,7 @@ export function ContactPage() {
                   onChange={(e) => handleInputChange('message', e.target.value)}
                   required
                   rows={6}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[var(--stroke)] text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
                   placeholder="Please provide details about your inquiry..."
                 />
               </div>
@@ -253,7 +253,7 @@ export function ContactPage() {
                 <input
                   type="checkbox"
                   id="newsletter"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
+                  className="h-4 w-4 text-[var(--primary-600)] focus:ring-primary-500 border-neutral-300 rounded"
                 />
                 <label htmlFor="newsletter" className="text-sm text-neutral-700">
                   I'd like to receive updates about GastroHub products and services
@@ -275,13 +275,13 @@ export function ContactPage() {
       </section>
 
       {/* Office Locations */}
-      <section className="py-20 bg-neutral-50">
+      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Our Offices
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Visit us at one of our global locations
             </p>
           </div>
@@ -290,23 +290,23 @@ export function ContactPage() {
             {offices.map((office, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow" padding="lg">
                 <div className="flex items-center space-x-3 mb-4">
-                  <MapPin className="w-6 h-6 text-primary-600" />
-                  <h3 className="text-xl font-semibold text-neutral-900">
+                  <MapPin className="w-6 h-6 text-[var(--primary-600)]" />
+                  <h3 className="text-xl font-semibold text-[var(--foreground)]">
                     {office.city}
                   </h3>
                 </div>
                 <div className="space-y-3">
                   <div>
                     <p className="text-sm font-medium text-neutral-700 mb-1">Address:</p>
-                    <p className="text-neutral-600 whitespace-pre-line">{office.address}</p>
+                    <p className="text-[var(--muted-foreground)] whitespace-pre-line">{office.address}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-neutral-700 mb-1">Phone:</p>
-                    <p className="text-neutral-600">{office.phone}</p>
+                    <p className="text-[var(--muted-foreground)]">{office.phone}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-neutral-700 mb-1">Email:</p>
-                    <p className="text-primary-600">{office.email}</p>
+                    <p className="text-[var(--primary-600)]">{office.email}</p>
                   </div>
                 </div>
               </Card>
@@ -319,40 +319,40 @@ export function ContactPage() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Quick answers to common questions
             </p>
           </div>
 
           <div className="space-y-6">
             <Card padding="lg">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                 How do I get started with GastroHub?
               </h3>
-              <p className="text-neutral-600">
+              <p className="text-[var(--muted-foreground)]">
                 Simply sign up for an account, complete your profile, and start browsing our marketplace. 
                 Our onboarding team will guide you through the process.
               </p>
             </Card>
 
             <Card padding="lg">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                 What are your payment terms?
               </h3>
-              <p className="text-neutral-600">
+              <p className="text-[var(--muted-foreground)]">
                 We offer flexible payment terms including net 30, credit card, and bank transfer options. 
                 Contact our sales team for custom payment arrangements.
               </p>
             </Card>
 
             <Card padding="lg">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                 Do you offer customer support?
               </h3>
-              <p className="text-neutral-600">
+              <p className="text-[var(--muted-foreground)]">
                 Yes! We provide 24/7 customer support via email, phone, and live chat. 
                 Our dedicated support team is here to help you succeed.
               </p>
@@ -360,7 +360,7 @@ export function ContactPage() {
           </div>
 
           <div className="text-center mt-12">
-            <p className="text-neutral-600 mb-4">
+            <p className="text-[var(--muted-foreground)] mb-4">
               Can't find what you're looking for?
             </p>
             <Button variant="outline">
@@ -375,10 +375,10 @@ export function ContactPage() {
       <footer className="bg-neutral-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-secondary-400" />
+            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
             <span className="text-xl font-heading font-bold">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

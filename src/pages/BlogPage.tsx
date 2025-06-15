@@ -134,14 +134,14 @@ export function BlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <BookOpen className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
@@ -155,12 +155,12 @@ export function BlogPage() {
       </section>
 
       {/* Search and Filters */}
-      <section className="py-12 bg-neutral-50">
+      <section className="py-12 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card padding="md">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="relative md:col-span-2">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--muted-foreground)] w-4 h-4" />
                 <Input
                   placeholder="Search articles..."
                   value={searchTerm}
@@ -182,7 +182,7 @@ export function BlogPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-2">
+            <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-2">
               Featured Article
             </h2>
             <div className="w-20 h-1 bg-primary-600 rounded"></div>
@@ -203,10 +203,10 @@ export function BlogPage() {
                 </div>
               </div>
               <div className="p-8">
-                <h3 className="text-2xl font-bold text-neutral-900 mb-4">
+                <h3 className="text-2xl font-bold text-[var(--foreground)] mb-4">
                   {featuredPost.title}
                 </h3>
-                <p className="text-neutral-600 mb-6">
+                <p className="text-[var(--muted-foreground)] mb-6">
                   {featuredPost.excerpt}
                 </p>
                 
@@ -244,16 +244,16 @@ export function BlogPage() {
       </section>
 
       {/* Blog Grid */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-2">
+              <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-2">
                 Latest Articles
               </h2>
               <div className="w-20 h-1 bg-primary-600 rounded"></div>
             </div>
-            <p className="text-neutral-600">
+            <p className="text-[var(--muted-foreground)]">
               Showing {blogPosts.length} articles
             </p>
           </div>
@@ -275,10 +275,10 @@ export function BlogPage() {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2 group-hover:text-[var(--primary-600)] transition-colors">
                     {post.title}
                   </h3>
-                  <p className="text-neutral-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-[var(--muted-foreground)] text-sm mb-4 line-clamp-3">
                     {post.excerpt}
                   </p>
                   
@@ -305,7 +305,7 @@ export function BlogPage() {
                     ))}
                   </div>
 
-                  <Button variant="ghost" size="sm" className="w-full group-hover:bg-primary-50">
+                  <Button variant="ghost" size="sm" className="w-full group-hover:bg-[var(--primary-50)]">
                     Read More
                     <ArrowRight className="w-3 h-3 ml-2" />
                   </Button>
@@ -328,13 +328,13 @@ export function BlogPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Popular Tags */}
             <Card padding="lg">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center">
                 <Tag className="w-5 h-5 mr-2" />
                 Popular Tags
               </h3>
               <div className="flex flex-wrap gap-2">
                 {popularTags.map((tag, index) => (
-                  <Badge key={index} variant="outline" className="cursor-pointer hover:bg-primary-50">
+                  <Badge key={index} variant="outline" className="cursor-pointer hover:bg-[var(--primary-50)]">
                     {tag}
                   </Badge>
                 ))}
@@ -342,11 +342,11 @@ export function BlogPage() {
             </Card>
 
             {/* Newsletter Signup */}
-            <Card padding="lg" className="bg-gradient-to-br from-primary-50 to-secondary-50">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+            <Card padding="lg" className="bg-gradient-to-br from-[var(--primary-50)] to-[var(--secondary-50)]">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
                 Stay Updated
               </h3>
-              <p className="text-neutral-600 mb-4 text-sm">
+              <p className="text-[var(--muted-foreground)] mb-4 text-sm">
                 Get the latest insights and industry news delivered to your inbox.
               </p>
               <div className="space-y-3">
@@ -359,18 +359,18 @@ export function BlogPage() {
 
             {/* Trending */}
             <Card padding="lg">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2" />
                 Trending This Week
               </h3>
               <div className="space-y-4">
                 {blogPosts.slice(0, 3).map((post, index) => (
                   <div key={post.id} className="flex items-start space-x-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-semibold">
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary-100 text-[var(--primary-600)] rounded-full flex items-center justify-center text-xs font-semibold">
                       {index + 1}
                     </span>
                     <div>
-                      <h4 className="text-sm font-medium text-neutral-900 mb-1 line-clamp-2">
+                      <h4 className="text-sm font-medium text-[var(--foreground)] mb-1 line-clamp-2">
                         {post.title}
                       </h4>
                       <p className="text-xs text-neutral-500">{post.readTime}</p>
@@ -384,13 +384,13 @@ export function BlogPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 text-white py-12">
+      <footer className="bg-[var(--background-dark,#18181b)] text-[var(--foreground,#fff)] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <ChefHat className="w-8 h-8 text-secondary-400" />
-            <span className="text-xl font-heading font-bold">GastroHub</span>
+            <span className="text-xl font-heading font-bold text-[var(--foreground)]">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

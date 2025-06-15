@@ -89,20 +89,20 @@ export function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
+      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-[var(--foreground,#fff)] py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <ChefHat className="w-12 h-12" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6 text-[var(--foreground)]">
               About GastroHub
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl mb-8 text-[var(--primary-100)] max-w-3xl mx-auto">
               We're revolutionizing the food industry by connecting buyers, suppliers, and delivery partners 
               in one powerful B2B marketplace.
             </p>
@@ -111,7 +111,7 @@ export function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -132,10 +132,10 @@ export function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-neutral-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-[var(--foreground)] mb-6">
                 Our Story
               </h2>
-              <div className="space-y-4 text-neutral-600">
+              <div className="space-y-4 text-[var(--muted-foreground)]">
                 <p>
                   GastroHub was born from a simple observation: the food industry was fragmented, 
                   with suppliers and buyers struggling to connect efficiently. Traditional procurement 
@@ -160,12 +160,12 @@ export function AboutPage() {
                 alt="Food marketplace"
                 className="rounded-2xl shadow-xl"
               />
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
+              <div className="absolute -bottom-6 -left-6 bg-[var(--background)] p-6 rounded-xl shadow-lg">
                 <div className="flex items-center space-x-3">
                   <Award className="w-8 h-8 text-secondary-400" />
                   <div>
                     <div className="font-semibold text-neutral-900">Industry Leader</div>
-                    <div className="text-sm text-neutral-600">Food Tech Innovation 2023</div>
+                    <div className="text-sm text-[var(--muted-foreground)]">Food Tech Innovation 2023</div>
                   </div>
                 </div>
               </div>
@@ -175,13 +175,13 @@ export function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-neutral-50">
+      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
               Our Values
             </h2>
-            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto text-[var(--muted-foreground)]">
               The principles that guide everything we do
             </p>
           </div>
@@ -208,10 +208,10 @@ export function AboutPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
               Meet Our Team
             </h2>
-            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto text-[var(--muted-foreground)]">
               The passionate people behind GastroHub
             </p>
           </div>
@@ -224,13 +224,13 @@ export function AboutPage() {
                   alt={member.name}
                   className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
                 />
-                <h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                <h3 className="text-lg font-semibold mb-1 text-[var(--foreground)]">
                   {member.name}
                 </h3>
-                <p className="text-primary-600 font-medium mb-3">
+                <p className="font-medium mb-3 text-[var(--primary-600)]">
                   {member.role}
                 </p>
-                <p className="text-sm text-neutral-600">
+                <p className="text-sm text-[var(--muted-foreground)]">
                   {member.bio}
                 </p>
               </Card>
@@ -240,10 +240,10 @@ export function AboutPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-neutral-50">
+      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
               What Our Users Say
             </h2>
           </div>
@@ -252,7 +252,7 @@ export function AboutPage() {
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="relative" padding="lg">
                 <Quote className="w-8 h-8 text-primary-200 mb-4" />
-                <blockquote className="text-lg text-neutral-700 mb-6 italic">
+                <blockquote className="text-lg mb-6 italic text-[var(--muted-foreground)]">
                   "{testimonial.quote}"
                 </blockquote>
                 <div className="flex items-center space-x-4">
@@ -263,7 +263,7 @@ export function AboutPage() {
                   />
                   <div>
                     <div className="font-semibold text-neutral-900">{testimonial.author}</div>
-                    <div className="text-sm text-neutral-600">{testimonial.role}</div>
+                    <div className="text-sm text-[var(--muted-foreground)]">{testimonial.role}</div>
                   </div>
                 </div>
               </Card>
@@ -273,19 +273,19 @@ export function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary-900 text-white">
+      <section className="py-20 bg-primary-900 text-[var(--foreground,#fff)]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
             Ready to Join Our Community?
           </h2>
-          <p className="text-xl text-primary-100 mb-8">
+          <p className="text-xl mb-8 text-[var(--primary-100)]">
             Whether you're a buyer, supplier, or delivery partner, we'd love to have you on board.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary">
               Get Started Today
             </Button>
-            <Button size="lg" variant="ghost" className="text-white border-white hover:bg-white hover:text-primary-900">
+            <Button size="lg" variant="ghost" className="text-[var(--foreground,#fff)] border-white hover:bg-[var(--background)] hover:text-primary-900">
               Contact Our Team
             </Button>
           </div>
@@ -293,13 +293,13 @@ export function AboutPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 text-white py-12">
+      <footer className="bg-neutral-900 text-[var(--foreground,#fff)] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <ChefHat className="w-8 h-8 text-secondary-400" />
-            <span className="text-xl font-heading font-bold">GastroHub</span>
+            <span className="text-xl font-heading font-bold text-[var(--foreground)]">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

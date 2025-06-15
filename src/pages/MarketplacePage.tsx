@@ -107,16 +107,16 @@ export function MarketplacePage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-heading font-bold text-neutral-900">
+          <h1 className="text-3xl font-heading font-bold" style={{ color: 'var(--foreground)' }}>
             Marketplace
           </h1>
-          <p className="text-neutral-600 mt-1">
+          <p className="mt-1" style={{ color: 'var(--muted-foreground, #6b7280)' }}>
             Discover quality food products from verified suppliers
           </p>
         </div>
 
         {/* Search and Filters */}
-        <Card padding="md">
+        <Card padding="md" style={{ backgroundColor: 'var(--card, #fff)' }}>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
@@ -125,24 +125,27 @@ export function MarketplacePage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
+                style={{ color: 'var(--foreground)' }}
               />
             </div>
             <Select
               options={categories}
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
+              style={{ color: 'var(--foreground)' }}
             />
             <Select
               options={sortOptions}
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              style={{ color: 'var(--foreground)' }}
             />
           </div>
           <div className="flex items-center justify-between mt-4">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm" style={{ color: 'var(--muted-foreground, #6b7280)' }}>
               Showing {mockProducts.length} products
             </p>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" style={{ color: 'var(--foreground)' }}>
               <Filter className="w-4 h-4 mr-2" />
               More Filters
             </Button>
@@ -152,7 +155,7 @@ export function MarketplacePage() {
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {mockProducts.map((product) => (
-            <Card key={product.id} className="group hover:shadow-lg transition-shadow" padding="none">
+            <Card key={product.id} className="group hover:shadow-lg transition-shadow" padding="none" style={{ backgroundColor: 'var(--card, #fff)' }}>
               <div className="relative">
                 <img
                   src={product.image}
@@ -161,40 +164,40 @@ export function MarketplacePage() {
                 />
                 {!product.inStock && (
                   <div className="absolute top-2 left-2">
-                    <Badge variant="error" size="sm">
+                    <Badge variant="error" size="sm" style={{ backgroundColor: 'var(--error, #dc2626)' }}>
                       Out of Stock
                     </Badge>
                   </div>
                 )}
                 <div className="absolute top-2 right-2">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center space-x-1">
-                    <Star className="w-3 h-3 text-secondary-400 fill-current" />
+                  <div style={{ background: 'var(--card, #fff)', opacity: 0.9, backdropFilter: 'blur(4px)', borderRadius: '9999px', padding: '2px 8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Star className="w-3 h-3" style={{ color: 'var(--secondary-400)' }} />
                     <span className="text-xs font-medium">{product.rating}</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-4">
-                <h3 className="font-semibold text-neutral-900 mb-1 line-clamp-2">
+                <h3 className="font-semibold mb-1 line-clamp-2" style={{ color: 'var(--foreground)' }}>
                   {product.name}
                 </h3>
-                <p className="text-sm text-neutral-600 mb-2">{product.supplier}</p>
+                <p className="text-sm mb-2" style={{ color: 'var(--muted-foreground, #6b7280)' }}>{product.supplier}</p>
                 
                 <div className="flex items-center space-x-2 mb-2">
-                  <MapPin className="w-3 h-3 text-neutral-400" />
-                  <span className="text-xs text-neutral-500">{product.location}</span>
+                  <MapPin className="w-3 h-3" style={{ color: 'var(--neutral-400)' }} />
+                  <span className="text-xs" style={{ color: 'var(--neutral-500)' }}>{product.location}</span>
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-lg font-bold text-primary-900">
+                  <span className="text-lg font-bold" style={{ color: 'var(--primary-900)' }}>
                     ${product.price.toFixed(2)}
                   </span>
-                  <span className="text-sm text-neutral-500">
+                  <span className="text-sm" style={{ color: 'var(--neutral-500)' }}>
                     per {product.unit}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-neutral-500 mb-4">
+                <div className="flex items-center justify-between text-xs mb-4" style={{ color: 'var(--neutral-500)' }}>
                   <div className="flex items-center space-x-1">
                     <Package className="w-3 h-3" />
                     <span>Min: {product.minOrder} {product.unit}s</span>
@@ -209,6 +212,7 @@ export function MarketplacePage() {
                   className="w-full"
                   disabled={!product.inStock}
                   size="sm"
+                  style={{ color: 'var(--foreground)' }}
                 >
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   {product.inStock ? 'Add to Cart' : 'Out of Stock'}

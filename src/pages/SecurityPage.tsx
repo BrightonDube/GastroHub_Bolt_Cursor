@@ -141,25 +141,26 @@ export function SecurityPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <Shield className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               Security & Trust
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-[var(--primary-900)] mb-8 max-w-3xl mx-auto">
               Your security is our top priority. Learn about our comprehensive security measures 
               and industry certifications.
             </p>
-            <div className="flex items-center justify-center space-x-6 text-primary-200">
+            <div className="flex items-center justify-center space-x-6 text-[var(--primary-200)]">
               <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-[var(--success-400)]" />
                 <CheckCircle className="w-5 h-5 text-success-400" />
                 <span>SOC 2 Certified</span>
               </div>
@@ -177,13 +178,13 @@ export function SecurityPage() {
       </section>
 
       {/* Security Features */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Enterprise-Grade Security
             </h2>
-            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto">
               We implement multiple layers of security to protect your data and ensure platform integrity
             </p>
           </div>
@@ -191,13 +192,13 @@ export function SecurityPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {securityFeatures.map((feature, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow" padding="lg">
-                <div className="inline-flex p-4 bg-primary-100 text-primary-600 rounded-2xl mb-4">
+                <div className="inline-flex p-4 bg-primary-100 text-[var(--primary-600)] rounded-2xl mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-neutral-900 mb-3">
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-neutral-600 mb-4">
+                <p className="text-[var(--muted-foreground)] mb-4">
                   {feature.description}
                 </p>
                 <Badge variant={getStatusColor(feature.status) as any}>
@@ -213,10 +214,10 @@ export function SecurityPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Industry Certifications
             </h2>
-            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto">
               Our security practices are validated by leading industry standards and certifications
             </p>
           </div>
@@ -227,10 +228,10 @@ export function SecurityPage() {
                 <div className="w-16 h-16 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                   {cert.name}
                 </h3>
-                <p className="text-sm text-neutral-600 mb-3">
+                <p className="text-sm text-[var(--muted-foreground)] mb-3">
                   {cert.description}
                 </p>
                 <div className="text-xs text-neutral-500">
@@ -244,13 +245,13 @@ export function SecurityPage() {
       </section>
 
       {/* Security Practices */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Security Practices
             </h2>
-            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto">
               Comprehensive security measures across all aspects of our platform
             </p>
           </div>
@@ -258,14 +259,14 @@ export function SecurityPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {securityPractices.map((section, index) => (
               <Card key={index} padding="lg" className="hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-neutral-900 mb-4">
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
                   {section.category}
                 </h3>
                 <ul className="space-y-3">
                   {section.practices.map((practice, idx) => (
                     <li key={idx} className="flex items-start space-x-3">
                       <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-neutral-600">{practice}</span>
+                      <span className="text-[var(--muted-foreground)]">{practice}</span>
                     </li>
                   ))}
                 </ul>
@@ -279,21 +280,21 @@ export function SecurityPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Transparency & Accountability
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               We believe in transparency about our security practices and incident response
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card padding="lg" className="text-center">
-              <FileText className="w-12 h-12 text-primary-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+              <FileText className="w-12 h-12 text-[var(--primary-600)] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">
                 Security Reports
               </h3>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-4">
                 Regular security assessment reports and audit findings
               </p>
               <Button variant="outline" size="sm">
@@ -302,11 +303,11 @@ export function SecurityPage() {
             </Card>
 
             <Card padding="lg" className="text-center">
-              <Globe className="w-12 h-12 text-primary-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+              <Globe className="w-12 h-12 text-[var(--primary-600)] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">
                 Status Page
               </h3>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-4">
                 Real-time platform status and incident notifications
               </p>
               <Button variant="outline" size="sm">
@@ -315,11 +316,11 @@ export function SecurityPage() {
             </Card>
 
             <Card padding="lg" className="text-center">
-              <Zap className="w-12 h-12 text-primary-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+              <Zap className="w-12 h-12 text-[var(--primary-600)] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">
                 Bug Bounty
               </h3>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-4">
                 Responsible disclosure program for security researchers
               </p>
               <Button variant="outline" size="sm">
@@ -331,40 +332,40 @@ export function SecurityPage() {
       </section>
 
       {/* Incident Response */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card padding="lg" className="bg-gradient-to-r from-primary-50 to-secondary-50">
             <div className="text-center">
               <AlertTriangle className="w-16 h-16 text-warning-600 mx-auto mb-6" />
-              <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">
+              <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-4">
                 Security Incident Response
               </h2>
-              <p className="text-neutral-600 mb-6 max-w-2xl mx-auto">
+              <p className="text-[var(--muted-foreground)] mb-6 max-w-2xl mx-auto">
                 In the unlikely event of a security incident, we have comprehensive response procedures 
                 to minimize impact and keep you informed throughout the process.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 bg-primary-100 text-[var(--primary-600)] rounded-full flex items-center justify-center mx-auto mb-3">
                     <Zap className="w-6 h-6" />
                   </div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Immediate Response</h3>
-                  <p className="text-sm text-neutral-600">Incident detected and contained within 1 hour</p>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Immediate Response</h3>
+                  <p className="text-sm text-[var(--muted-foreground)]">Incident detected and contained within 1 hour</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-warning-100 text-warning-600 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-6 h-6" />
                   </div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Customer Notification</h3>
-                  <p className="text-sm text-neutral-600">Affected users notified within 24 hours</p>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Customer Notification</h3>
+                  <p className="text-sm text-[var(--muted-foreground)]">Affected users notified within 24 hours</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FileText className="w-6 h-6" />
                   </div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Full Report</h3>
-                  <p className="text-sm text-neutral-600">Detailed incident report within 72 hours</p>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Full Report</h3>
+                  <p className="text-sm text-[var(--muted-foreground)]">Detailed incident report within 72 hours</p>
                 </div>
               </div>
 
@@ -387,13 +388,13 @@ export function SecurityPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card padding="lg" className="text-center">
-            <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-4">
               Contact Our Security Team
             </h2>
-            <p className="text-neutral-600 mb-6">
+            <p className="text-[var(--muted-foreground)] mb-6">
               Have questions about our security practices or need to report a security concern?
             </p>
-            <div className="space-y-2 text-sm text-neutral-600 mb-6">
+            <div className="space-y-2 text-sm text-[var(--muted-foreground)] mb-6">
               <p><strong>Security Team:</strong> security@gastrohub.com</p>
               <p><strong>Bug Bounty:</strong> security-research@gastrohub.com</p>
               <p><strong>Emergency:</strong> +1 (555) 123-SECURITY</p>
@@ -409,10 +410,10 @@ export function SecurityPage() {
       <footer className="bg-neutral-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-secondary-400" />
+            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
             <span className="text-xl font-heading font-bold">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

@@ -91,7 +91,7 @@ export function AnalyticsPage() {
   };
 
   const getChangeColor = (type: string) => {
-    return type === 'increase' ? 'text-success-600' : 'text-error-600';
+    return type === 'increase' ? 'var(--success-600)' : 'var(--error-600)';
   };
 
   return (
@@ -100,10 +100,10 @@ export function AnalyticsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-neutral-900">
+            <h1 className="text-3xl font-heading font-bold" style={{ color: 'var(--foreground)' }}>
               Analytics Dashboard
             </h1>
-            <p className="text-neutral-600 mt-1">
+            <p className="mt-1" style={{ color: 'var(--muted-foreground, #6b7280)' }}>
               Track your business performance and gain insights
             </p>
           </div>
@@ -113,11 +113,11 @@ export function AnalyticsPage() {
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
             />
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" style={{ borderColor: 'var(--stroke)', color: 'var(--foreground)' }}>
               <Filter className="w-4 h-4 mr-2" />
               Filters
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" style={{ borderColor: 'var(--stroke)', color: 'var(--foreground)' }}>
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
@@ -127,25 +127,23 @@ export function AnalyticsPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {kpiData.map((kpi, index) => (
-            <Card key={index} padding="md" className="hover:shadow-md transition-shadow">
+            <Card key={index} padding="md" style={{ backgroundColor: 'var(--card)', borderColor: 'var(--stroke)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-neutral-600">{kpi.title}</p>
-                  <p className="text-2xl font-bold text-neutral-900 mt-1">{kpi.value}</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{kpi.title}</p>
+                  <p className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>{kpi.value}</p>
                   <div className="flex items-center mt-2 space-x-1">
                     {getChangeIcon(kpi.change.type)}
-                    <span className={`text-sm font-medium ${getChangeColor(kpi.change.type)}`}>
+                    <span className={`text-sm font-medium` + (kpi.change.type === 'increase' ? ' text-success-600' : ' text-error-600')} style={{ color: getChangeColor(kpi.change.type) }}>
                       {kpi.change.value > 0 ? '+' : ''}{kpi.change.value}%
                     </span>
-                    <span className="text-sm text-neutral-500">vs last period</span>
+                    <span className="text-sm" style={{ color: 'var(--muted-foreground, #6b7280)' }}>vs last period</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-lg ${
-                  kpi.color === 'success' ? 'bg-success-100 text-success-600' :
+                <div className={`p-3 rounded-lg ${kpi.color === 'success' ? 'bg-success-100 text-success-600' :
                   kpi.color === 'primary' ? 'bg-primary-100 text-primary-600' :
                   kpi.color === 'warning' ? 'bg-warning-100 text-warning-600' :
-                  'bg-secondary-100 text-secondary-600'
-                }`}>
+                  'bg-secondary-100 text-secondary-600'}`} style={{ backgroundColor: 'var(--' + kpi.color + '-100)', color: 'var(--' + kpi.color + '-600)' }}>
                   {kpi.icon}
                 </div>
               </div>
@@ -156,12 +154,12 @@ export function AnalyticsPage() {
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Revenue Chart */}
-          <Card>
+          <Card style={{ backgroundColor: 'var(--card)', borderColor: 'var(--stroke)' }}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center space-x-2">
                   <LineChart className="w-5 h-5" />
-                  <span>Revenue Trend</span>
+                  <span style={{ color: 'var(--foreground)' }}>Revenue Trend</span>
                 </CardTitle>
                 <Select
                   options={metrics}
@@ -171,22 +169,22 @@ export function AnalyticsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="h-64 bg-neutral-50 rounded-lg flex items-center justify-center">
+              <div className="h-64" style={{ backgroundColor: 'var(--neutral-50)' }}>
                 <div className="text-center">
-                  <BarChart3 className="w-12 h-12 text-neutral-400 mx-auto mb-2" />
-                  <p className="text-neutral-500">Chart visualization would go here</p>
-                  <p className="text-sm text-neutral-400">Revenue trend over {timeRange}</p>
+                  <BarChart3 className="w-12 h-12" style={{ color: 'var(--neutral-400)' }} />
+                  <p style={{ color: 'var(--neutral-500)' }}>Chart visualization would go here</p>
+                  <p className="text-sm" style={{ color: 'var(--neutral-400)' }}>Revenue trend over {timeRange}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Customer Segments */}
-          <Card>
+          <Card style={{ backgroundColor: 'var(--card)', borderColor: 'var(--stroke)' }}>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <PieChart className="w-5 h-5" />
-                <span>Customer Segments</span>
+                <span style={{ color: 'var(--foreground)' }}>Customer Segments</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -194,20 +192,20 @@ export function AnalyticsPage() {
                 {customerSegments.map((segment, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className={`w-4 h-4 rounded-full ${segment.color}`} />
-                      <span className="text-sm font-medium text-neutral-900">{segment.segment}</span>
+                      <div className={`w-4 h-4 rounded-full ${segment.color}`} style={{ backgroundColor: 'var(--' + segment.color + ')' }} />
+                      <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{segment.segment}</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-neutral-900">{segment.percentage}%</p>
-                      <p className="text-xs text-neutral-500">{segment.value}</p>
+                      <p className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>{segment.percentage}%</p>
+                      <p className="text-xs" style={{ color: 'var(--neutral-500)' }}>{segment.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 h-32 bg-neutral-50 rounded-lg flex items-center justify-center">
+              <div className="mt-6 h-32" style={{ backgroundColor: 'var(--neutral-50)' }}>
                 <div className="text-center">
-                  <PieChart className="w-8 h-8 text-neutral-400 mx-auto mb-1" />
-                  <p className="text-sm text-neutral-500">Pie chart visualization</p>
+                  <PieChart className="w-8 h-8" style={{ color: 'var(--neutral-400)' }} />
+                  <p className="text-sm" style={{ color: 'var(--neutral-500)' }}>Pie chart visualization</p>
                 </div>
               </div>
             </CardContent>
@@ -215,45 +213,43 @@ export function AnalyticsPage() {
         </div>
 
         {/* Top Products */}
-        <Card>
+        <Card style={{ backgroundColor: 'var(--card)', borderColor: 'var(--stroke)' }}>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Target className="w-5 h-5" />
-              <span>Top Performing Products</span>
+              <span style={{ color: 'var(--foreground)' }}>Top Performing Products</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-neutral-200">
-                    <th className="text-left py-3 px-4 font-medium text-neutral-600">Product</th>
-                    <th className="text-left py-3 px-4 font-medium text-neutral-600">Sales</th>
-                    <th className="text-left py-3 px-4 font-medium text-neutral-600">Revenue</th>
-                    <th className="text-left py-3 px-4 font-medium text-neutral-600">Growth</th>
+                  <tr style={{ borderBottom: '1px solid var(--stroke)' }}>
+                    <th className="text-left py-3 px-4 font-medium" style={{ color: 'var(--foreground)' }}>Product</th>
+                    <th className="text-left py-3 px-4 font-medium" style={{ color: 'var(--foreground)' }}>Sales</th>
+                    <th className="text-left py-3 px-4 font-medium" style={{ color: 'var(--foreground)' }}>Revenue</th>
+                    <th className="text-left py-3 px-4 font-medium" style={{ color: 'var(--foreground)' }}>Growth</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topProducts.map((product, index) => (
-                    <tr key={index} className="border-b border-neutral-100 hover:bg-neutral-50">
+                    <tr key={index} style={{ borderBottom: '1px solid var(--neutral-100)' }}>
                       <td className="py-3 px-4">
-                        <span className="font-medium text-neutral-900">{product.name}</span>
+                        <span className="font-medium" style={{ color: 'var(--foreground)' }}>{product.name}</span>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="text-neutral-700">{product.sales}</span>
+                        <span style={{ color: 'var(--neutral-700)' }}>{product.sales}</span>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="font-semibold text-neutral-900">{product.revenue}</span>
+                        <span className="font-semibold" style={{ color: 'var(--foreground)' }}>{product.revenue}</span>
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center space-x-1">
                           {product.growth > 0 ? 
-                            <TrendingUp className="w-4 h-4 text-success-600" /> : 
-                            <TrendingDown className="w-4 h-4 text-error-600" />
+                            <TrendingUp className="w-4 h-4" style={{ color: 'var(--success-600)' }} /> : 
+                            <TrendingDown className="w-4 h-4" style={{ color: 'var(--error-600)' }} />
                           }
-                          <span className={`text-sm font-medium ${
-                            product.growth > 0 ? 'text-success-600' : 'text-error-600'
-                          }`}>
+                          <span className={`text-sm font-medium` + (product.growth > 0 ? ' text-success-600' : ' text-error-600')} style={{ color: product.growth > 0 ? 'var(--success-600)' : 'var(--error-600)' }}>
                             {product.growth > 0 ? '+' : ''}{product.growth}%
                           </span>
                         </div>
@@ -267,16 +263,18 @@ export function AnalyticsPage() {
         </Card>
 
         {/* Insights */}
-        <Card padding="lg" className="bg-gradient-to-r from-primary-50 to-secondary-50">
+        <Card padding="lg" style={{ background: 'linear-gradient(90deg, var(--primary-50), var(--secondary-50))' }}>
           <div className="text-center">
-            <h2 className="text-xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-xl font-heading font-bold mb-4" style={{ color: 'var(--foreground)' }}>
               Key Insights & Recommendations
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-success-100 text-success-600 rounded-full flex items-center justify-center mx-auto mb-3" style={{ backgroundColor: 'var(--success-100)', color: 'var(--success-600)' }}>
                   <TrendingUp className="w-6 h-6" />
                 </div>
+                <h3 className="font-semibold" style={{ color: 'var(--foreground)' }}>Revenue Growth</h3>
+                <p className="text-sm" style={{ color: 'var(--neutral-600)' }}>
                 <h3 className="font-semibold text-neutral-900 mb-2">Revenue Growth</h3>
                 <p className="text-sm text-neutral-600">
                   Your revenue has increased by 12.5% this month. Consider expanding your top-performing product lines.

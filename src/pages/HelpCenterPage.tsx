@@ -158,7 +158,7 @@ export function HelpCenterPage() {
   const getCategoryColor = (color: string) => {
     switch (color) {
       case 'primary':
-        return 'bg-primary-100 text-primary-600';
+        return 'bg-primary-100 text-[var(--primary-600)]';
       case 'secondary':
         return 'bg-secondary-100 text-secondary-600';
       case 'success':
@@ -168,37 +168,37 @@ export function HelpCenterPage() {
       case 'error':
         return 'bg-error-100 text-error-600';
       default:
-        return 'bg-neutral-100 text-neutral-600';
+        return 'bg-neutral-100 text-[var(--muted-foreground)]';
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--background)]">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-6">
+            <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <HelpCircle className="w-12 h-12" />
             </div>
             <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               Help Center
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-[var(--primary-900)] mb-8 max-w-3xl mx-auto">
               Find answers to your questions and get the help you need
             </p>
             
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[var(--muted-foreground)] w-5 h-5" />
                 <Input
                   placeholder="Search for help articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 py-4 text-lg bg-white/10 border-white/20 text-white placeholder-white/70"
+                  className="pl-12 py-4 text-lg bg-[var(--background)]/10 border-white/20 text-white placeholder-white/70"
                 />
               </div>
             </div>
@@ -207,13 +207,13 @@ export function HelpCenterPage() {
       </section>
 
       {/* Categories */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Browse by Category
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Find help articles organized by topic
             </p>
           </div>
@@ -227,12 +227,12 @@ export function HelpCenterPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      <h3 className="text-lg font-semibold text-[var(--foreground)] group-hover:text-[var(--primary-600)] transition-colors">
                         {category.title}
                       </h3>
-                      <ChevronRight className="w-5 h-5 text-neutral-400 group-hover:text-primary-600 transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary-600)] transition-colors" />
                     </div>
-                    <p className="text-neutral-600 text-sm mb-3">
+                    <p className="text-[var(--muted-foreground)] text-sm mb-3">
                       {category.description}
                     </p>
                     <Badge variant="secondary" size="sm">
@@ -251,7 +251,7 @@ export function HelpCenterPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-6">
+              <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-6">
                 Popular Articles
               </h2>
               <div className="space-y-4">
@@ -259,7 +259,7 @@ export function HelpCenterPage() {
                   <Card key={index} className="group hover:shadow-md transition-shadow cursor-pointer" padding="md">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <h3 className="text-lg font-medium text-neutral-900 group-hover:text-primary-600 transition-colors mb-2">
+                        <h3 className="text-lg font-medium text-[var(--foreground)] group-hover:text-[var(--primary-600)] transition-colors mb-2">
                           {article.title}
                         </h3>
                         <div className="flex items-center space-x-4 text-sm text-neutral-500">
@@ -268,12 +268,12 @@ export function HelpCenterPage() {
                           </Badge>
                           <span>{article.views} views</span>
                           <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-secondary-400 fill-current" />
+                            <Star className="w-4 h-4 text-[var(--secondary-400)] fill-current" />
                             <span>{article.rating}</span>
                           </div>
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-neutral-400 group-hover:text-primary-600 transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary-600)] transition-colors" />
                     </div>
                   </Card>
                 ))}
@@ -282,21 +282,21 @@ export function HelpCenterPage() {
 
             {/* Contact Options */}
             <div>
-              <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-6">
+              <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-6">
                 Need More Help?
               </h2>
               <div className="space-y-4">
                 {contactOptions.map((option, index) => (
                   <Card key={index} className="hover:shadow-md transition-shadow" padding="md">
                     <div className="flex items-start space-x-3">
-                      <div className="p-2 bg-primary-100 text-primary-600 rounded-lg">
+                      <div className="p-2 bg-primary-100 text-[var(--primary-600)] rounded-lg">
                         {option.icon}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-neutral-900 mb-1">
+                        <h3 className="font-semibold text-[var(--foreground)] mb-1">
                           {option.title}
                         </h3>
-                        <p className="text-sm text-neutral-600 mb-2">
+                        <p className="text-sm text-[var(--muted-foreground)] mb-2">
                           {option.description}
                         </p>
                         <p className="text-xs text-neutral-500 mb-3">
@@ -316,13 +316,13 @@ export function HelpCenterPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-neutral-600">
+            <p className="text-xl text-[var(--muted-foreground)]">
               Quick answers to common questions
             </p>
           </div>
@@ -332,9 +332,9 @@ export function HelpCenterPage() {
               <Card key={index} className="overflow-hidden" padding="none">
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-neutral-50 transition-colors"
+                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-[var(--card-muted,#f9fafb)] transition-colors"
                 >
-                  <h3 className="font-semibold text-neutral-900">
+                  <h3 className="font-semibold text-[var(--foreground)]">
                     {faq.question}
                   </h3>
                   {expandedFaq === index ? (
@@ -345,7 +345,7 @@ export function HelpCenterPage() {
                 </button>
                 {expandedFaq === index && (
                   <div className="px-6 pb-4">
-                    <p className="text-neutral-600">
+                    <p className="text-[var(--muted-foreground)]">
                       {faq.answer}
                     </p>
                   </div>
@@ -360,10 +360,10 @@ export function HelpCenterPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Card padding="lg" className="bg-gradient-to-r from-primary-50 to-secondary-50">
-            <h2 className="text-2xl font-heading font-bold text-neutral-900 mb-4">
+            <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-4">
               Still Need Help?
             </h2>
-            <p className="text-neutral-600 mb-6">
+            <p className="text-[var(--muted-foreground)] mb-6">
               Can't find what you're looking for? Our support team is here to help you succeed.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -384,10 +384,10 @@ export function HelpCenterPage() {
       <footer className="bg-neutral-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-secondary-400" />
+            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
             <span className="text-xl font-heading font-bold">GastroHub</span>
           </div>
-          <p className="text-neutral-400">
+          <p className="text-[var(--muted-foreground)]">
             © 2024 GastroHub. All rights reserved.
           </p>
         </div>

@@ -114,19 +114,19 @@ export function SuppliersPage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-heading font-bold text-neutral-900">
+          <h1 className="text-3xl font-heading font-bold text-[var(--foreground)]">
             Suppliers Directory
           </h1>
-          <p className="text-neutral-600 mt-1">
+          <p className="text-[var(--muted-foreground)] mt-1">
             Connect with verified food suppliers and build lasting partnerships
           </p>
         </div>
 
         {/* Search and Filters */}
-        <Card padding="md">
+        <Card padding="md" className="bg-[var(--background)]">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative md:col-span-2">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--muted-foreground)] w-4 h-4" />
               <Input
                 placeholder="Search suppliers by name, category, or location..."
                 value={searchTerm}
@@ -138,18 +138,20 @@ export function SuppliersPage() {
               options={categories}
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
+              className="text-[var(--foreground)]"
             />
             <Select
               options={locations}
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
+              className="text-[var(--foreground)]"
             />
           </div>
           <div className="flex items-center justify-between mt-4">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-[var(--muted-foreground)]">
               Showing {mockSuppliers.length} suppliers
             </p>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="text-[var(--foreground)]">
               <Filter className="w-4 h-4 mr-2" />
               Advanced Filters
             </Button>
@@ -159,7 +161,7 @@ export function SuppliersPage() {
         {/* Suppliers Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {mockSuppliers.map((supplier) => (
-            <Card key={supplier.id} className="group hover:shadow-lg transition-shadow" padding="lg">
+            <Card key={supplier.id} className="group hover:shadow-lg transition-shadow bg-[var(--background)]" padding="lg">
               <div className="flex items-start space-x-4">
                 <img
                   src={supplier.image}
@@ -171,17 +173,17 @@ export function SuppliersPage() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
-                        <h3 className="text-lg font-semibold text-neutral-900">
+                        <h3 className="text-lg font-semibold text-[var(--foreground)]">
                           {supplier.name}
                         </h3>
                         {supplier.verified && (
-                          <Badge variant="success" size="sm">
+                          <Badge variant="success" size="sm" className="text-[var(--foreground)]">
                             <Award className="w-3 h-3 mr-1" />
                             Verified
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-neutral-600 mb-2">
+                      <p className="text-sm text-[var(--muted-foreground)] mb-2">
                         {supplier.description}
                       </p>
                     </div>
@@ -189,29 +191,29 @@ export function SuppliersPage() {
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="flex items-center space-x-2">
-                      <Star className="w-4 h-4 text-secondary-400 fill-current" />
+                      <Star className="w-4 h-4 text-[var(--secondary-400)] fill-current" />
                       <span className="text-sm font-medium">{supplier.rating}</span>
-                      <span className="text-sm text-neutral-500">({supplier.reviews} reviews)</span>
+                      <span className="text-sm text-[var(--muted-foreground)]">({supplier.reviews} reviews)</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Package className="w-4 h-4 text-neutral-400" />
-                      <span className="text-sm text-neutral-600">{supplier.products} products</span>
+                      <Package className="w-4 h-4 text-[var(--muted-foreground)]" />
+                      <span className="text-sm text-[var(--muted-foreground)]">{supplier.products} products</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-neutral-400" />
-                      <span className="text-sm text-neutral-600">{supplier.location}</span>
+                      <MapPin className="w-4 h-4 text-[var(--muted-foreground)]" />
+                      <span className="text-sm text-[var(--muted-foreground)]">{supplier.location}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4 text-neutral-400" />
-                      <span className="text-sm text-neutral-600">Responds {supplier.responseTime}</span>
+                      <Clock className="w-4 h-4 text-[var(--muted-foreground)]" />
+                      <span className="text-sm text-[var(--muted-foreground)]">Responds {supplier.responseTime}</span>
                     </div>
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-xs text-neutral-500 mb-2">Specialties:</p>
+                    <p className="text-xs text-[var(--muted-foreground)] mb-2">Specialties:</p>
                     <div className="flex flex-wrap gap-1">
                       {supplier.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="secondary" size="sm">
+                        <Badge key={index} variant="secondary" size="sm" className="text-[var(--foreground)]">
                           {specialty}
                         </Badge>
                       ))}
@@ -219,12 +221,12 @@ export function SuppliersPage() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="text-xs text-neutral-500">
+                    <div className="text-xs text-[var(--muted-foreground)]">
                       <p>Est. {supplier.established}</p>
                       <p>{supplier.certifications.join(', ')}</p>
                     </div>
                     <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="text-[var(--foreground)]">
                         <Mail className="w-4 h-4 mr-1" />
                         Contact
                       </Button>

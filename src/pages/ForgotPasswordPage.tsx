@@ -26,23 +26,23 @@ export function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via bg-[var(--background)] to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-success-100 rounded-xl flex items-center justify-center mb-4">
               <CheckCircle className="w-8 h-8 text-success-600" />
             </div>
-            <h2 className="text-3xl font-heading font-bold text-neutral-900">
+            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)]">
               Check Your Email
             </h2>
-            <p className="mt-2 text-neutral-600">
+            <p className="mt-2 text-[var(--muted-foreground)]">
               We've sent a password reset link to {email}
             </p>
           </div>
 
           <Card padding="lg">
             <div className="text-center space-y-4">
-              <p className="text-neutral-600">
+              <p className="text-[var(--muted-foreground)]">
                 If you don't see the email in your inbox, please check your spam folder. 
                 The link will expire in 24 hours.
               </p>
@@ -73,16 +73,16 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via bg-[var(--background)] to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="mx-auto w-16 h-16 bg-primary-900 rounded-xl flex items-center justify-center mb-4">
-            <ChefHat className="w-8 h-8 text-white" />
+            <ChefHat className="w-8 h-8 text-[var(--background)]" />
           </div>
-          <h2 className="text-3xl font-heading font-bold text-neutral-900">
+          <h2 className="text-3xl font-heading font-bold text-[var(--foreground)]">
             Forgot Password?
           </h2>
-          <p className="mt-2 text-neutral-600">
+          <p className="mt-2 text-[var(--muted-foreground)]">
             Enter your email address and we'll send you a link to reset your password
           </p>
         </div>
@@ -90,13 +90,13 @@ export function ForgotPasswordPage() {
         <Card padding="lg">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg">
+              <div className="bg-[var(--card-muted,#f9fafb)] border border-[var(--border)] text-[var(--error)] px-4 py-3 rounded-lg">
                 {error}
               </div>
             )}
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--muted-foreground)] w-5 h-5" />
               <Input
                 type="email"
                 placeholder="Enter your email address"
@@ -132,9 +132,9 @@ export function ForgotPasswordPage() {
         </Card>
 
         <div className="text-center">
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-[var(--muted-foreground)]">
             Don't have an account?{' '}
-            <Link to="/register" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link to="/register" className="font-medium text-[var(--primary-600)] hover:text-[var(--primary-900)]">
               Sign up now
             </Link>
           </p>
