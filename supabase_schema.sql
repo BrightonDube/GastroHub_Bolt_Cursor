@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS messages (
     conversation_id uuid REFERENCES conversations(id) ON DELETE CASCADE,
     sender_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
     body text NOT NULL,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    read_at timestamptz DEFAULT NULL
 );
 
 -- Invoice Management

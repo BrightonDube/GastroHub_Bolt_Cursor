@@ -8,6 +8,7 @@ import { RegisterForm } from './components/auth/RegisterForm';
 import { DashboardPage } from './pages/DashboardPage';
 import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
 import { OrdersPage } from './pages/supplier/OrdersPage';
+import SupplierMessages from './pages/supplier/SupplierMessages';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
@@ -219,5 +220,15 @@ function App() {
     </ThemeProvider>
   );
 }
+
+            {/* Supplier Messages Route */}
+            <Route 
+              path="/supplier/messages" 
+              element={
+                <ProtectedRoute>
+                  <SupplierMessages />
+                </ProtectedRoute>
+              } 
+            />
 
 export default App;
