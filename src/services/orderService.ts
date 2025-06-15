@@ -82,7 +82,7 @@ export class OrderService {
       }));
 
       const { error: itemsError } = await supabase
-        .from('order_items')
+        
         .insert(orderItems);
 
       if (itemsError) throw itemsError;
@@ -430,7 +430,7 @@ export class OrderService {
     
     // Fetch all products in a single query to avoid N+1 problem
     const { data: products, error } = await supabase
-      .from('products')
+      
       .select('id, name, availability')
       .in('id', productIds);
 
@@ -521,7 +521,7 @@ export class OrderService {
     
     // Fetch all products in a single query to avoid N+1 problem
     const { data: products, error } = await supabase
-      .from('products')
+      
       .select('id, name, availability')
       .in('id', productIds);
 

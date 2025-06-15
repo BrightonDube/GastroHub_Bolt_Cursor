@@ -7,11 +7,12 @@ export function useSupplierOrders(supplierId: string, status?: OrderStatus) {
     queryKey: ['orders', 'supplier', supplierId, status],
     queryFn: async () => {
       let query = supabase
-        .from('orders')
+        
+        .from('order')
         .select(`
           *,
           buyer:buyer_id(id, email, first_name, last_name),
-          order_items(
+          orderitem:orderitem_id(
             *,
             product:product_id(id, name, price, unit)
           )
@@ -37,12 +38,13 @@ export function useOrder(orderId: string) {
     queryKey: ['order', orderId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('orders')
+        
+        .from('order')
         .select(`
           *,
           buyer:buyer_id(id, email, first_name, last_name, phone, address),
           supplier:supplier_id(id, email, first_name, last_name, business_name),
-          order_items(
+          orderitem:orderitem_id(
             *,
             product:product_id(id, name, price, unit, images)
           )
@@ -63,7 +65,7 @@ export function useUpdateOrderStatus() {
   return useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string; status: OrderStatus }) => {
       const { data, error } = await supabase
-        .from('orders')
+        
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', orderId)
         .select()

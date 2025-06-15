@@ -105,9 +105,19 @@ export function useAuth() {
             id: data.user.id,
             email: data.user.email!,
             full_name: userData.fullName,
-            role: userData.role,
-            business_name: userData.businessName,
             phone: userData.phone,
+            role: userData.role ?? 'buyer',
+            business_name: userData.businessName ?? null,
+            business_address: userData.businessAddress ?? null,
+            business_description: userData.businessDescription ?? null,
+            business_type: userData.businessType ?? null,
+            website_url: userData.websiteUrl ?? null,
+            registration_number: userData.registrationNumber ?? null,
+            tax_number: userData.taxNumber ?? null,
+            subscription_tier: 'free',
+            logo_url: null,
+            banking_details: null,
+            is_verified: false
           });
 
         if (profileError) throw profileError;

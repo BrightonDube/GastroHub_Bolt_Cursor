@@ -1,3 +1,40 @@
+-- User & Profile Tables
+CREATE TABLE IF NOT EXISTS users (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text NOT NULL UNIQUE,
+  full_name text,
+  phone text,
+  role text CHECK (role IN ('SUPPLIER', 'BUYER', 'DELIVERY_PARTNER')),
+  company_name text,
+  address text,
+  avatar text,
+  is_onboarded boolean DEFAULT false,
+  is_verified boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email text NOT NULL,
+  full_name text,
+  phone text,
+  role text DEFAULT 'buyer',
+  business_name text,
+  business_address text,
+  business_description text,
+  business_type text,
+  website_url text,
+  registration_number text,
+  tax_number text,
+  subscription_tier text DEFAULT 'free',
+  logo_url text,
+  banking_details jsonb,
+  is_verified boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
 -- Messaging System
 CREATE TABLE IF NOT EXISTS conversations (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

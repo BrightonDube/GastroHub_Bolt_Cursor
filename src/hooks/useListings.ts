@@ -7,7 +7,7 @@ export function useSupplierListings(supplierId: string) {
     queryKey: ['listings', 'supplier', supplierId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('products')
+        
         .select('*')
         .eq('supplier_id', supplierId)
         .order('created_at', { ascending: false });
@@ -24,7 +24,7 @@ export function useListing(listingId: string) {
     queryKey: ['listing', listingId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('products')
+        
         .select('*')
         .eq('id', listingId)
         .single();
@@ -42,7 +42,7 @@ export function useCreateListing() {
   return useMutation({
     mutationFn: async (listing: ListingInsert) => {
       const { data, error } = await supabase
-        .from('products')
+        
         .insert(listing)
         .select()
         .single();
@@ -62,7 +62,7 @@ export function useUpdateListing() {
   return useMutation({
     mutationFn: async ({ id, ...updates }: ListingUpdate & { id: string }) => {
       const { data, error } = await supabase
-        .from('products')
+        
         .update(updates)
         .eq('id', id)
         .select()
@@ -84,7 +84,7 @@ export function useToggleListingStatus() {
   return useMutation({
     mutationFn: async ({ id, availability }: { id: string; availability: string }) => {
       const { data, error } = await supabase
-        .from('products')
+        
         .update({ availability })
         .eq('id', id)
         .select()

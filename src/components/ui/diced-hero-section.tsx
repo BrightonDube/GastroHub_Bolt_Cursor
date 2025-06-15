@@ -278,6 +278,30 @@ export const DicedHeroSection: React.FC<DicedHeroSectionProps> = ({
                 onClick={() => onGridImageClick && onGridImageClick(index)}
                 onMouseEnter={() => onGridImageHover && onGridImageHover(index)}
               />
+              {index === 1 && (
+                <a
+                  href="https://bolt.new/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 2,
+                    display: 'block',
+                  }}
+                  className="block transition-all duration-300 hover:shadow-2xl"
+                  aria-label="Built with Bolt.new"
+                >
+                  <img
+                    src="https://storage.bolt.army/white_circle_360x360.png"
+                    alt="Built with Bolt.new badge"
+                    className="w-20 h-20 md:w-28 md:h-28 rounded-full shadow-lg bolt-badge bolt-badge-intro"
+                    onAnimationEnd={e => e.currentTarget.classList.add('animated')}
+                  />
+                </a>
+              )}
             </div>
           ))}
         </div>

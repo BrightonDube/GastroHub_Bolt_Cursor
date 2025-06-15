@@ -1,12 +1,12 @@
 // Service for invoice backend logic: auto-generation, status changes, PDF, and email (stubbed)
 import { supabase } from '../supabaseClient';
 
-export async function autoGenerateInvoice(orderId: string, supplierId: string, buyerId: string) {
+export async function autoGenerateInvoice(order_id: string, supplier_id: string, buyer_id: string) {
   // Insert invoice with status 'draft' for new order
   return supabase.from('invoices').insert({
-    order_id: orderId,
-    supplier_id: supplierId,
-    buyer_id: buyerId,
+    order_id: order_id,
+    supplier_id: supplier_id,
+    buyer_id: buyer_id,
     status: 'draft',
   });
 }
