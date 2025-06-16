@@ -19,38 +19,17 @@ import {
   Users
 } from 'lucide-react';
 
+
+
+
 export function DashboardPage() {
   const { user } = useAuth();
 
-  // Fetch buyer dashboard stats from backend
-  import { useBuyerDashboardStats } from '../hooks/useDashboardStats';
-  const { data: buyerStats = [], isLoading: statsLoading } = useBuyerDashboardStats(user?.id);
+  
 
+  
 
-  // Fetch supplier dashboard stats from backend
-  import { useSupplierDashboardStats } from '../hooks/useDashboardStats';
-  const { data: supplierStats = [], isLoading: supplierStatsLoading } = useSupplierDashboardStats(user?.id);
-
-  // Fetch delivery partner dashboard stats from backend
-  import { useDeliveryPartnerDashboardStats } from '../hooks/useDashboardStats';
-  const { data: deliveryStats = [], isLoading: deliveryStatsLoading } = useDeliveryPartnerDashboardStats(user?.id);
-
-  // Fetch recent orders from backend
-  import { useRecentOrders } from '../hooks/useOrders';
-  const { data: recentOrders = [], isLoading: recentOrdersLoading } = useRecentOrders(user?.id);
-
-  const getStats = () => {
-    switch (user?.role) {
-      case 'buyer':
-        return buyerStats;
-      case 'supplier':
-        return getSupplierStats();
-      case 'delivery_partner':
-        return getDeliveryPartnerStats();
-      default:
-        return [];
-    }
-  };
+  
 
   const getWelcomeMessage = () => {
     const timeOfDay = new Date().getHours() < 12 ? 'morning' : 
@@ -83,33 +62,6 @@ export function DashboardPage() {
         return [];
     }
   };
-
-  const recentOrders = [
-    {
-      id: 'ORD-001',
-      supplier: 'Fresh Valley Farms',
-      items: 'Organic Tomatoes, Fresh Basil',
-      amount: '$145.00',
-      status: 'delivered',
-      date: '2024-01-15',
-    },
-    {
-      id: 'ORD-002',
-      supplier: 'Ocean Breeze Seafood',
-      items: 'Fresh Salmon, Shrimp',
-      amount: '$320.00',
-      status: 'in_transit',
-      date: '2024-01-14',
-    },
-    {
-      id: 'ORD-003',
-      supplier: 'Golden Grain Co.',
-      items: 'Premium Flour, Yeast',
-      amount: '$89.50',
-      status: 'preparing',
-      date: '2024-01-13',
-    },
-  ];
 
   const getStatusColor = (status: string) => {
     switch (status) {

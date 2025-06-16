@@ -126,8 +126,6 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
     return subtotal + tax + shipping;
   };
 
-  import { toast } from 'sonner';
-
 const onSubmit = async (data: OrderFormData) => {
     setIsSubmitting(true);
     setError(null);
