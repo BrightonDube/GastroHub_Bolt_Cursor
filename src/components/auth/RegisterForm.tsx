@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
@@ -44,7 +44,7 @@ export function RegisterForm() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { signUp, signInWithGoogle } = useAuth();
+  const { signUp, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
   const roleOptions = [

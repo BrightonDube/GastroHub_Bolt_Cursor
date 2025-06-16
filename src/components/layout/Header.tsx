@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 export function Header() {
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {

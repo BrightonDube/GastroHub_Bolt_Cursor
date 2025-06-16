@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { ShoppingCart, Package, Truck, CheckCircle } from 'lucide-react';
@@ -52,7 +52,7 @@ export function RoleSelectionPage() {
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   const handleContinue = async () => {
     if (!selectedRole || !user) return;

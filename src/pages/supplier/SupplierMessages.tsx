@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { ConversationList } from '../../components/messaging/ConversationList';
 import { ChatModal } from '../../components/messaging/ChatModal';
 
 const SupplierMessages: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);
 

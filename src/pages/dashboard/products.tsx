@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSupplierListings } from '../../hooks/useListings';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 
 const ProductsPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const supplierId = user?.id || '';
   const { data: products = [], isLoading, error } = useSupplierListings(supplierId);
   const [deletingId, setDeletingId] = useState<string | null>(null);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { useSupplierOrders } from '../../hooks/useOrders';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { Button } from '../../components/ui/Button';
@@ -31,7 +31,7 @@ const orderTabs = [
 ];
 
 export function OrdersPage() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [activeTab, setActiveTab] = useState<OrderStatus | ''>('');
   const [sortBy, setSortBy] = useState<'date' | 'amount' | 'status'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');

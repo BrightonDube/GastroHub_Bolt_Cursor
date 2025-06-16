@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { CategorySelector, CategoryNode } from '../categories/CategorySelector';
 
@@ -28,7 +28,7 @@ import { useCategories } from '../../hooks/useCategories';
 
 const ProductForm: React.FC<ProductFormProps> = ({ mode, productId }) => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [form, setForm] = useState(initialState);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);

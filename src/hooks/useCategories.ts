@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
-import { useAuth } from './useAuth';
+import { useAuthContext } from '../App';
 import { CategoryNode } from '../components/categories/CategorySelector';
 
 // Fetch master categories from 'categories' table

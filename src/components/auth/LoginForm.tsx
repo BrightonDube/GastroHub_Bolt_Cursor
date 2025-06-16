@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { ChefHat, Mail, Lock, Chrome } from 'lucide-react';
@@ -36,7 +36,7 @@ export function LoginForm() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { signIn, signInWithGoogle } = useAuth();
+  const { signIn, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

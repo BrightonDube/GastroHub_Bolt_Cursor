@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { cn } from '../../utils/cn';
 import {
   LayoutDashboard,
@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export function Sidebar() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const location = useLocation();
 
   if (!user) return null;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { useSupplierListings, useToggleListingStatus } from '../../hooks/useListings';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { Button } from '../../components/ui/Button';
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export function ListingsPage() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');

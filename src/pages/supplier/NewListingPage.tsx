@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { useCreateListing } from '../../hooks/useListings';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { ListingForm } from '../../components/forms/ListingForm';
@@ -9,7 +9,7 @@ import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function NewListingPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const createListingMutation = useCreateListing();
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);

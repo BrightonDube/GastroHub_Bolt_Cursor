@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
+import { AuthUser } from './types';
 import { Toaster } from 'sonner';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth } from './hooks/useAuth';
-import React, { createContext, useContext } from 'react';
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
@@ -27,9 +27,18 @@ const queryClient = new QueryClient({
 });
 
 // Auth context to avoid multiple useAuth calls
-const AuthContext = createContext(null);
+interface AuthContextType {
+  user: AuthUser | null;
+  loading: boolean;
+  signUp: (email: string, password: string, userData: { fullName: string; role: 'buyer' | 'supplier' | 'delivery_partner'; businessName?: string; phone?: string; }) => Promise<{ data: any; error: string | null }>;
+  signIn: (email: string, password: string) => Promise<{ data: any; error: string | null }>;
+  signInWithGoogle: () => Promise<{ data: any; error: string | null }>;
+  signOut: () => Promise<{ error: string | null }>;
+}
 
-function useAuthContext() {
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function useAuthContext() {
   const context = useContext(AuthContext);
   if (!context) throw new Error('AuthContext not found');
   return context;
@@ -82,8 +91,8 @@ function App() {
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-        <Router>
-          <Routes>
+          <Router>
+            <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route 
@@ -231,15 +240,6 @@ function App() {
             />
 
             {/* Catch all - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Router>
-      </QueryClientProvider>
-    </ThemeProvider>
-  );
-}
-
-            {/* Supplier Messages Route */}
             <Route 
               path="/supplier/messages" 
               element={
@@ -248,5 +248,13 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
+  );
+}
 
 export default App;
