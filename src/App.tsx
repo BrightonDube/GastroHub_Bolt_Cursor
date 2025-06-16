@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth } from './hooks/useAuth';
+import React, { createContext, useContext } from 'react';
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
@@ -25,8 +26,22 @@ const queryClient = new QueryClient({
   },
 });
 
+// Auth context to avoid multiple useAuth calls
+const AuthContext = createContext(null);
+
+function useAuthContext() {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('AuthContext not found');
+  return context;
+}
+
+function AuthProvider({ children }: { children: React.ReactNode }) {
+  const auth = useAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
 
   if (loading) {
     return (
@@ -44,7 +59,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
 
   if (loading) {
     return (
@@ -66,6 +81,7 @@ function App() {
     <ThemeProvider>
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
+        <AuthProvider>
         <Router>
           <Routes>
             {/* Public Routes */}
