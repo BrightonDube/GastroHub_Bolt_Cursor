@@ -6,7 +6,7 @@ import { CategoryNode } from '../components/categories/CategorySelector';
 // Fetch master categories from 'categories' table
 async function fetchMasterCategories(): Promise<CategoryNode[]> {
   const { data, error } = await supabase
-    .from('categories')
+    .from('category')
     .select('*')
     .is('parent_id', null);
   if (error) throw error;
@@ -23,7 +23,7 @@ async function fetchMasterCategories(): Promise<CategoryNode[]> {
 
 async function fetchCategoryChildren(parentId: string): Promise<CategoryNode[]> {
   const { data, error } = await supabase
-    .from('categories')
+    .from('category')
     .select('*')
     .eq('parent_id', parentId);
   if (error) throw error;
@@ -64,7 +64,7 @@ async function fetchUserCategoryChildren(userId: string, parentId: string): Prom
 export function useCategories() {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['categories', user?.id],
+    queryKey: ['category', user?.id],
     queryFn: async () => {
       const [master, userCats] = await Promise.all([
         fetchMasterCategories(),
@@ -97,7 +97,7 @@ export function useAddCategory() {
       return result;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['category', user?.id] });
     },
   });
 }
@@ -119,7 +119,7 @@ export function useEditCategory() {
       return result;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['category', user?.id] });
     },
   });
 }
@@ -140,7 +140,7 @@ export function useDeleteCategory() {
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['category', user?.id] });
     },
   });
 }

@@ -1,24 +1,185 @@
 -- ============================================
--- CLEAN SEEDING DATA WITHOUT EMOJIS
+-- COMPREHENSIVE SEED DATA FOR ALL TABLES
 -- ============================================
 
--- Clear existing data first
-DELETE FROM categories;
-DELETE FROM subscription_plans;
+-- WARNING: This script assumes a fresh DB. Remove DELETEs if running on production data!
+-- Clear existing data (order matters for FKs)
+DELETE FROM order_tracking;
+DELETE FROM "OrderItem";
+DELETE FROM "Order";
 DELETE FROM delivery_zones;
 DELETE FROM inventory;
 DELETE FROM "Listing";
-DELETE FROM "Order";
+DELETE FROM categories;
+DELETE FROM custom_categories;
+DELETE FROM favorites;
+DELETE FROM business_hours;
+DELETE FROM cart_items;
+DELETE FROM conversations;
+DELETE FROM conversation_participants;
+DELETE FROM messages;
+DELETE FROM notifications;
+DELETE FROM payment_methods;
+DELETE FROM reviews;
+DELETE FROM invoices;
+DELETE FROM profiles;
+DELETE FROM subscription_plans;
 
--- Insert subscription plans
+-- 1. Insert subscription plans
 INSERT INTO subscription_plans (name, description, price_monthly, price_yearly, features, max_listings, max_orders_per_month, commission_rate) VALUES
 ('Free', 'Basic plan for getting started', 0, 0, '["Basic listing", "Standard support", "Up to 5 listings"]', 5, 10, 0.10),
 ('Pro', 'Professional plan for growing businesses', 29.99, 299.99, '["Unlimited listings", "Priority support", "Analytics dashboard", "Advanced messaging"]', NULL, 100, 0.05),
 ('Enterprise', 'Enterprise plan for large operations', 99.99, 999.99, '["Everything in Pro", "Custom integrations", "Dedicated support", "White-label options"]', NULL, NULL, 0.03)
 ON CONFLICT DO NOTHING;
 
--- Insert main categories without emojis
-INSERT INTO categories (name, description, icon_name) VALUES
+-- 2. Insert 10 suppliers into profiles
+INSERT INTO profiles (
+  id, email, full_name, role, business_name, business_address, business_type, business_description,
+  website_url, registration_number, tax_number, subscription_tier, logo_url, banking_details,
+  is_verified, created_at, updated_at
+) VALUES
+  ('11111111-1111-1111-1111-111111111111', 'supplier1@example.com', 'Supplier One', 'supplier', 'Supplier One Pty', '123 Main St', 'Food', 'Quality food supplier', 'https://supplier1.com', 'REG001', 'TAX001', 'Pro', 'https://logo.com/1.png', 'Bank 1', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('22222222-2222-2222-2222-222222222222', 'supplier2@example.com', 'Supplier Two', 'supplier', 'Supplier Two Pty', '234 Main St', 'Beverage', 'Drinks and more', 'https://supplier2.com', 'REG002', 'TAX002', 'Pro', 'https://logo.com/2.png', 'Bank 2', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('33333333-3333-3333-3333-333333333333', 'supplier3@example.com', 'Supplier Three', 'supplier', 'Supplier Three Pty', '345 Main St', 'Bakery', 'Fresh bread daily', 'https://supplier3.com', 'REG003', 'TAX003', 'Pro', 'https://logo.com/3.png', 'Bank 3', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('44444444-4444-4444-4444-444444444444', 'supplier4@example.com', 'Supplier Four', 'supplier', 'Supplier Four Pty', '456 Main St', 'Produce', 'Organic produce', 'https://supplier4.com', 'REG004', 'TAX004', 'Pro', 'https://logo.com/4.png', 'Bank 4', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('55555555-5555-5555-5555-555555555555', 'supplier5@example.com', 'Supplier Five', 'supplier', 'Supplier Five Pty', '567 Main St', 'Dairy', 'Dairy products', 'https://supplier5.com', 'REG005', 'TAX005', 'Pro', 'https://logo.com/5.png', 'Bank 5', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('66666666-6666-6666-6666-666666666666', 'supplier6@example.com', 'Supplier Six', 'supplier', 'Supplier Six Pty', '678 Main St', 'Meat', 'Meat supplier', 'https://supplier6.com', 'REG006', 'TAX006', 'Pro', 'https://logo.com/6.png', 'Bank 6', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('77777777-7777-7777-7777-777777777777', 'supplier7@example.com', 'Supplier Seven', 'supplier', 'Supplier Seven Pty', '789 Main St', 'Seafood', 'Seafood supplier', 'https://supplier7.com', 'REG007', 'TAX007', 'Pro', 'https://logo.com/7.png', 'Bank 7', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('88888888-8888-8888-8888-888888888888', 'supplier8@example.com', 'Supplier Eight', 'supplier', 'Supplier Eight Pty', '890 Main St', 'Snacks', 'Snack foods', 'https://supplier8.com', 'REG008', 'TAX008', 'Pro', 'https://logo.com/8.png', 'Bank 8', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('99999999-9999-9999-9999-999999999999', 'supplier9@example.com', 'Supplier Nine', 'supplier', 'Supplier Nine Pty', '901 Main St', 'Frozen', 'Frozen foods', 'https://supplier9.com', 'REG009', 'TAX009', 'Pro', 'https://logo.com/9.png', 'Bank 9', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'supplier10@example.com', 'Supplier Ten', 'supplier', 'Supplier Ten Pty', '999 Main St', 'Bakery', 'Fresh bread daily', 'https://supplier10.com', 'REG010', 'TAX010', 'Pro', 'https://logo.com/10.png', 'Bank 10', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 3. Insert 3 buyers into profiles
+INSERT INTO profiles (
+  id, email, full_name, role, created_at, updated_at
+) VALUES
+  ('b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer1@example.com', 'Buyer One', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('b2222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer2@example.com', 'Buyer Two', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('b3333333-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer3@example.com', 'Buyer Three', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 4. Insert categories
+INSERT INTO categories (name, description, icon_name, is_active, created_at, updated_at) VALUES
+  ('Fresh Produce', 'Fruits, vegetables, herbs and fresh organic produce', 'leaf', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Meat & Seafood', 'Fresh meat, poultry, fish and seafood products', 'fish', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Dairy & Eggs', 'Milk, cheese, yogurt, eggs and dairy products', 'milk', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Beverages', 'Alcoholic and non-alcoholic drinks', 'wine', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Dry Goods', 'Grains, pasta, flour, sugar and pantry staples', 'wheat', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Kitchen Equipment', 'Cooking equipment, utensils, and kitchen tools', 'chef-hat', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Cleaning Supplies', 'Cleaning products, sanitizers, and hygiene supplies', 'spray-can', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Paper Products', 'Napkins, containers, packaging materials', 'package', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Frozen Foods', 'Frozen vegetables, meats, and prepared foods', 'snowflake', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('Spices & Condiments', 'Seasonings, sauces, and flavor enhancers', 'pepper', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT DO NOTHING;
+
+
+-- 5. Insert listings for each supplier
+INSERT INTO "Listing" (
+  id, supplierId, name, description, category, price, unit, minOrder, maxOrder, images, isActive, createdAt, updatedAt
+) VALUES
+  ('l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'Organic Tomatoes', 'Fresh organic tomatoes', 'Fresh Produce', 4.50, 'lb', 5, 50, ARRAY['tomatoes1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'Fresh Salmon', 'Wild-caught salmon', 'Meat & Seafood', 18.99, 'lb', 2, 20, ARRAY['salmon1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('l3333333-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '33333333-3333-3333-3333-333333333333', 'Farm Eggs', 'Free-range eggs', 'Dairy & Eggs', 5.50, 'dozen', 1, 20, ARRAY['eggs1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 6. Insert delivery zones for suppliers
+INSERT INTO delivery_zones (
+  id, supplier_id, zone_name, base_delivery_fee, free_delivery_threshold, max_delivery_distance, estimated_delivery_hours, cities, postal_codes, is_active, created_at, updated_at
+) VALUES
+  ('dz111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'City Center', 5.00, 100.00, 10, 2, ARRAY['Downtown'], ARRAY['10001'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('dz222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'Suburban', 8.50, 150.00, 20, 4, ARRAY['Suburbs'], ARRAY['10101'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 7. Insert inventory
+INSERT INTO inventory (
+  id, supplier_id, listing_id, product_name, description, category_id, current_stock, minimum_stock, unit_price, unit_type, is_available, created_at, updated_at
+) VALUES
+  ('inv11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Organic Tomatoes', 'Fresh organic tomatoes', 'c1111111-cccc-cccc-cccc-cccccccccccc', 150, 25, 4.50, 'lb', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('inv22222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Fresh Salmon', 'Wild-caught salmon', 'c2222222-cccc-cccc-cccc-cccccccccccc', 45, 10, 18.99, 'lb', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 8. Insert orders
+INSERT INTO "Order" (
+  id, buyerId, supplierId, totalAmount, deliveryAddress, deliveryNotes, status, createdAt, updatedAt
+) VALUES
+  ('o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 127.50, '123 Restaurant Ave', 'Please deliver to back entrance', 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('o2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b2222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '22222222-2222-2222-2222-222222222222', 89.25, '456 Cafe Street', 'Call upon arrival', 'APPROVED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 9. Insert order items
+INSERT INTO orderitem (
+  id, orderId, listingId, quantity, price, createdAt
+) VALUES
+  ('oi111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, 4.50, CURRENT_TIMESTAMP),
+  ('oi222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, 18.99, CURRENT_TIMESTAMP);
+
+-- 10. Insert business hours for suppliers
+INSERT INTO business_hours (
+  id, user_id, day_of_week, open_time, close_time, is_closed, created_at, updated_at
+) VALUES
+  ('bh111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 1, '08:00', '17:00', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('bh222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 1, '08:00', '17:00', false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 11. Insert cart items for buyers
+INSERT INTO cart_items (
+  id, user_id, listing_id, quantity, created_at, updated_at
+) VALUES
+  ('ci111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 12. Insert custom categories for suppliers
+INSERT INTO custom_categories (
+  id, user_id, name, description, parent_id, icon_name, is_active, created_at, updated_at
+) VALUES
+  ('cc111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'Specialty Produce', 'Unique produce', NULL, 'star', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 13. Insert favorites for buyers
+INSERT INTO favorites (
+  id, user_id, target_type, target_id, created_at
+) VALUES
+  ('fav11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'listing', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', CURRENT_TIMESTAMP);
+
+-- 14. Insert invoices
+INSERT INTO invoices (
+  id, order_id, supplier_id, buyer_id, status, pdf_url, sent_at, created_at, updated_at
+) VALUES
+  ('inv11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'SENT', 'https://pdf.com/inv1.pdf', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 15. Insert messages and conversations
+INSERT INTO conversations (
+  id, order_id, created_at, updated_at
+) VALUES
+  ('conv1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO conversation_participants (
+  conversation_id, user_id
+) VALUES
+  ('conv1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+  ('conv1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111');
+INSERT INTO messages (
+  id, conversation_id, sender_id, body, created_at
+) VALUES
+  ('msg11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'conv1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Hello, when will my order arrive?', CURRENT_TIMESTAMP);
+
+-- 16. Insert notifications
+INSERT INTO notifications (
+  id, user_id, type, title, message, data, is_read, created_at
+) VALUES
+  ('notif111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'order', 'Order Update', 'Your order has shipped!', '{}', false, CURRENT_TIMESTAMP);
+
+-- 17. Insert order tracking
+INSERT INTO order_tracking (
+  id, order_id, status, message, location, updated_by, estimated_delivery, created_at
+) VALUES
+  ('track111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'IN_TRANSIT', 'On the way', 'Warehouse', '11111111-1111-1111-1111-111111111111', CURRENT_TIMESTAMP + interval '2 hours', CURRENT_TIMESTAMP);
+
+-- 18. Insert payment methods for buyers
+INSERT INTO payment_methods (
+  id, user_id, type, provider, last_four, expiry_month, expiry_year, is_default, is_active, metadata, created_at, updated_at
+) VALUES
+  ('pay11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'card', 'visa', '4242', 12, 2026, true, true, '{}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 19. Insert reviews
+INSERT INTO reviews (
+  id, reviewer_id, reviewee_id, rating, comment, created_at
+) VALUES
+  ('rev11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 5, 'Great supplier!', CURRENT_TIMESTAMP);
+
+-- COMMIT
+COMMIT;
 ('Fresh Produce', 'Fruits, vegetables, herbs and fresh organic produce', 'leaf'),
 ('Meat & Seafood', 'Fresh meat, poultry, fish and seafood products', 'fish'),
 ('Dairy & Eggs', 'Milk, cheese, yogurt, eggs and dairy products', 'milk'),

@@ -2,19 +2,19 @@ import { Database } from './database';
 
 // Database table types
 export type Profile = Database['public']['Tables']['profiles']['Row'];
-export type Listing = Database['public']['Tables']['listings']['Row'];
+export type Listing = Database['public']['Tables']['listing']['Row'];
 export type Order = Database['public']['Tables']['orders']['Row'];
 export type DeliveryTask = Database['public']['Tables']['delivery_tasks']['Row'];
 
 // Insert types
 export type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
-export type ListingInsert = Database['public']['Tables']['listings']['Insert'];
+export type ListingInsert = Database['public']['Tables']['listing']['Insert'];
 export type OrderInsert = Database['public']['Tables']['orders']['Insert'];
 export type DeliveryTaskInsert = Database['public']['Tables']['delivery_tasks']['Insert'];
 
 // Update types
 export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
-export type ListingUpdate = Database['public']['Tables']['listings']['Update'];
+export type ListingUpdate = Database['public']['Tables']['listing']['Update'];
 export type OrderUpdate = Database['public']['Tables']['orders']['Update'];
 export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_tasks']['Update'];
 
