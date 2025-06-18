@@ -8,6 +8,8 @@ import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { DashboardPage } from './pages/DashboardPage';
+import LogoutPage from './pages/LogoutPage';
+import CallbackPage from './pages/auth/CallbackPage';
 import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
 import { OrdersPage } from './pages/supplier/OrdersPage';
 import SupplierMessages from './pages/supplier/SupplierMessages';
@@ -44,9 +46,11 @@ export function useAuthContext() {
   return context;
 }
 
+import { useAuth } from './hooks/useAuth';
+
 function AuthProvider({ children }: { children: React.ReactNode }) {
   // useAuth is only used here to provide context value
-  const auth = require('./hooks/useAuth').useAuth();
+  const auth = useAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
@@ -103,6 +107,14 @@ function App() {
                   <LoginForm />
                 </PublicRoute>
               } 
+            />
+            <Route 
+              path="/auth/logout" 
+              element={<LogoutPage />} 
+            />
+            <Route 
+              path="/auth/callback" 
+              element={<CallbackPage />} 
             />
             <Route 
               path="/register" 

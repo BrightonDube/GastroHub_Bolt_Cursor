@@ -224,8 +224,14 @@ export function useAuth() {
 
   const signOut = async () => {
     try {
+      // 1. Supabase sign out
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      // 2. Clear all auth tokens from localStorage/sessionStorage
+      localStorage.removeItem('supabase.auth.token');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      sessionStorage.clear();
       setUser(null);
       return { error: null };
     } catch (error: unknown) {
@@ -233,6 +239,8 @@ export function useAuth() {
       return { error: errorMessage };
     }
   };
+
+  // signIn returns error if credentials are invalid or there is a problem. Navigation is handled by the LoginForm.
 
   return {
     user,

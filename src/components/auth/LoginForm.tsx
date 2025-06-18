@@ -43,27 +43,29 @@ export function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+    console.log('[LoginForm] Attempting login for', email);
     const { error } = await signIn(email, password);
-    
     if (error) {
+      console.error('[LoginForm] Login failed:', error);
       setError(error);
     } else {
+      console.log('[LoginForm] Login successful, redirecting to /dashboard');
       navigate('/dashboard');
     }
-    
     setLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     setError('');
-
+    console.log('[LoginForm] Attempting Google login');
     const { error } = await signInWithGoogle();
-    
     if (error) {
+      console.error('[LoginForm] Google login failed:', error);
       setError(error);
       setGoogleLoading(false);
+    } else {
+      console.log('[LoginForm] Google login initiated, user will be redirected');
     }
     // Note: Don't set loading to false here as the user will be redirected
   };

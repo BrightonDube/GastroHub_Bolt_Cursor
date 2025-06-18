@@ -61,6 +61,7 @@ GastroHub enables buyers to discover suppliers, place and track orders, manage i
 |-- /auth
 |   |-- /auth/login
 |   |-- /auth/signup
+|   |-- /auth/logout
 |-- /buyer
 |   |-- /buyer/dashboard
 |-- /invoices
@@ -149,6 +150,15 @@ graph TD;
 ```
 
 ---
+
+## Authentication & Logging
+
+- **Login and Logout Logging:**
+  - The login and logout processes are now instrumented with detailed logging.
+  - All login attempts, successes, and failures are logged to the browser console for easier debugging.
+  - Logout actions (including Supabase sign-out and clearing of tokens) are logged step-by-step.
+  - After a successful logout, users are redirected to the home page (`/`).
+  - To view these logs, open your browser's developer tools (F12 or right-click → Inspect → Console tab) during authentication actions.
 
 ## Getting Started
 
