@@ -62,7 +62,7 @@ async function fetchUserCategoryChildren(userId: string, parentId: string): Prom
 }
 
 export function useCategories() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   return useQuery({
     queryKey: ['category', user?.id],
     queryFn: async () => {
@@ -79,7 +79,7 @@ export function useCategories() {
 
 export function useAddCategory() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   return useMutation({
     mutationFn: async (data: { name: string; parent_id?: string | null }) => {
       if (!user) throw new Error('Not authenticated');
@@ -104,7 +104,7 @@ export function useAddCategory() {
 
 export function useEditCategory() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   return useMutation({
     mutationFn: async (data: { id: string; name: string }) => {
       if (!user) throw new Error('Not authenticated');
@@ -126,7 +126,7 @@ export function useEditCategory() {
 
 export function useDeleteCategory() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   return useMutation({
     mutationFn: async (id: string) => {
       if (!user) throw new Error('Not authenticated');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthContext } from '../App';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -22,8 +22,42 @@ import {
 
 
 
+function getStats() {
+  // TODO: Replace with real data fetching (e.g., from Supabase or backend API)
+  return [
+    {
+      title: 'Total Orders',
+      value: '1,250',
+      change: { value: 5, type: 'increase' },
+      icon: <ShoppingCart className="w-6 h-6" />,
+      color: 'primary',
+    },
+    {
+      title: 'Active Listings',
+      value: '87',
+      change: { value: -2, type: 'decrease' },
+      icon: <Package className="w-6 h-6" />,
+      color: 'secondary',
+    },
+    {
+      title: 'Total Revenue',
+      value: '$42,000',
+      change: { value: 12, type: 'increase' },
+      icon: <DollarSign className="w-6 h-6" />,
+      color: 'success',
+    },
+    {
+      title: 'Completed Deliveries',
+      value: '1,100',
+      change: { value: 3, type: 'increase' },
+      icon: <Truck className="w-6 h-6" />,
+      color: 'warning',
+    },
+  ];
+}
+
 export function DashboardPage() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   
 

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ConversationList } from './ConversationList';
 import { ChatModal } from './ChatModal';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { supabase } from '../../lib/supabase';
 
 export const MessagingPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const router = useRouter();
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);

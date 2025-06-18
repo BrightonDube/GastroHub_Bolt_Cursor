@@ -3,7 +3,7 @@ import { AuthUser } from './types';
 import { Toaster } from 'sonner';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAuth } from './hooks/useAuth';
+// import { useAuth } from './hooks/useAuth'; // Only used inside AuthProvider
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
@@ -45,7 +45,8 @@ export function useAuthContext() {
 }
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const auth = useAuth();
+  // useAuth is only used here to provide context value
+  const auth = require('./hooks/useAuth').useAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
