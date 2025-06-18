@@ -66,20 +66,20 @@ export function SupplierDashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-neutral-900">
+            <h1 className="text-3xl font-heading font-bold text-foreground">
               Supplier Dashboard
             </h1>
-            <p className="text-neutral-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Manage your listings and track your business performance.
             </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 md:mt-0">
             <Button variant="outline" size="sm">
-              <Eye className="w-4 h-4 mr-2" />
+              <Eye className="w-6 h-6 text-primary-600 mr-2" />
               View Analytics
             </Button>
             <Button variant="primary" size="sm">
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-6 h-6 text-primary-600 mr-2" />
               Add Listing
             </Button>
           </div>
@@ -98,27 +98,27 @@ export function SupplierDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {recentListings.map((listing) => (
-                  <div key={listing.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                  <div key={listing.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-semibold text-neutral-900">{listing.name}</span>
+                        <span className="font-semibold text-foreground">{listing.name}</span>
                         <Badge variant={getStatusColor(listing.status) as any} size="sm">
                           {listing.status.replace('_', ' ')}
                         </Badge>
                       </div>
-                      <p className="text-sm text-neutral-600 mb-1">{listing.category}</p>
-                      <p className="text-xs text-neutral-500">{listing.orders} orders this month</p>
+                      <p className="text-sm text-muted-foreground mb-1">{listing.category}</p>
+                      <p className="text-xs text-muted-foreground">{listing.orders} orders this month</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-neutral-900">{listing.price}</p>
+                      <p className="font-semibold text-foreground">{listing.price}</p>
                       <Button variant="ghost" size="sm">
-                        <Edit className="w-4 h-4" />
+                        <Edit className="w-6 h-6 text-primary-600" />
                       </Button>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-neutral-200">
+              <div className="mt-4 pt-4 border-t border-border">
                 <Button variant="ghost" className="w-full">
                   View All Listings
                 </Button>
@@ -134,19 +134,19 @@ export function SupplierDashboard() {
             <CardContent>
               <div className="grid grid-cols-1 gap-3">
                 <Button variant="outline" className="justify-start h-12">
-                  <Plus className="w-4 h-4 mr-3" />
+                  <Plus className="w-6 h-6 text-primary-600 mr-3" />
                   Create New Listing
                 </Button>
                 <Button variant="outline" className="justify-start h-12">
-                  <Package className="w-4 h-4 mr-3" />
+                  <Package className="w-6 h-6 text-primary-600 mr-3" />
                   Manage Inventory
                 </Button>
                 <Button variant="outline" className="justify-start h-12">
-                  <ShoppingCart className="w-4 h-4 mr-3" />
+                  <ShoppingCart className="w-6 h-6 text-primary-600 mr-3" />
                   View Orders
                 </Button>
                 <Button variant="outline" className="justify-start h-12">
-                  <TrendingUp className="w-4 h-4 mr-3" />
+                  <TrendingUp className="w-6 h-6 text-primary-600 mr-3" />
                   Analytics & Reports
                 </Button>
               </div>

@@ -15,9 +15,10 @@ import {
   Star
 } from 'lucide-react';
 
+import { useBuyerDashboardStats } from '../../hooks/useDashboardStats';
+
 export function BuyerDashboard() {
   // Fetch buyer dashboard stats from backend
-  import { useBuyerDashboardStats } from '../../hooks/useDashboardStats';
   const { data: stats = [], isLoading: statsLoading } = useBuyerDashboardStats();
 
 
@@ -96,20 +97,20 @@ export function BuyerDashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-neutral-900">
+            <h1 className="text-3xl font-heading font-bold text-foreground">
               Buyer Dashboard
             </h1>
-            <p className="text-neutral-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Discover suppliers and manage your orders.
             </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 md:mt-0">
             <Button variant="outline" size="sm">
-              <Search className="w-4 h-4 mr-2" />
+              <Search className="w-6 h-6 text-primary-600 mr-2" />
               Browse Marketplace
             </Button>
             <Button variant="primary" size="sm">
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-6 h-6 text-primary-600 mr-2" />
               New Order
             </Button>
           </div>
@@ -128,25 +129,25 @@ export function BuyerDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                  <div key={order.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-semibold text-neutral-900">{order.id}</span>
+                        <span className="font-semibold text-foreground">{order.id}</span>
                         <Badge variant={getStatusColor(order.status) as any} size="sm">
                           {order.status.replace('_', ' ')}
                         </Badge>
                       </div>
-                      <p className="text-sm text-neutral-600 mb-1">{order.supplier}</p>
-                      <p className="text-xs text-neutral-500">{order.items}</p>
+                      <p className="text-sm text-muted-foreground mb-1">{order.supplier}</p>
+                      <p className="text-xs text-muted-foreground">{order.items}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-neutral-900">{order.amount}</p>
-                      <p className="text-xs text-neutral-500">{order.date}</p>
+                      <p className="font-semibold text-foreground">{order.amount}</p>
+                      <p className="text-xs text-muted-foreground">{order.date}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-neutral-200">
+              <div className="mt-4 pt-4 border-t border-border">
                 <Button variant="ghost" className="w-full">
                   View All Orders
                 </Button>
@@ -162,27 +163,27 @@ export function BuyerDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {favoriteSuppliers.map((supplier) => (
-                  <div key={supplier.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                  <div key={supplier.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-semibold text-neutral-900">{supplier.name}</span>
+                        <span className="font-semibold text-foreground">{supplier.name}</span>
                         <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 text-secondary-400 fill-current" />
-                          <span className="text-sm text-neutral-600">{supplier.rating}</span>
+                          <Star className="w-6 h-6 text-primary-600 text-secondary-400 fill-current" />
+                          <span className="text-sm text-muted-foreground">{supplier.rating}</span>
                         </div>
                       </div>
-                      <p className="text-sm text-neutral-600 mb-1">{supplier.category}</p>
-                      <p className="text-xs text-neutral-500">{supplier.orders} orders • Last: {supplier.lastOrder}</p>
+                      <p className="text-sm text-muted-foreground mb-1">{supplier.category}</p>
+                      <p className="text-xs text-muted-foreground">{supplier.orders} orders • Last: {supplier.lastOrder}</p>
                     </div>
                     <div className="text-right">
                       <Button variant="ghost" size="sm">
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-6 h-6 text-primary-600" />
                       </Button>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-neutral-200">
+              <div className="mt-4 pt-4 border-t border-border">
                 <Button variant="ghost" className="w-full">
                   Find More Suppliers
                 </Button>

@@ -101,7 +101,7 @@ export default function CategoryManagementPage() {
               </>
             )}
             {node.children && node.children.length > 0 && (
-              <div className="ml-4 border-l border-neutral-300 dark:border-neutral-700 pl-2">
+              <div className="ml-4 border-l border-border dark:border-border pl-2">
                 {renderCategoryTree(node.children, level + 1)}
               </div>
             )}
@@ -113,10 +113,10 @@ export default function CategoryManagementPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">Manage My Categories</h1>
+      <h1 className="text-2xl font-heading font-bold mb-6 text-foreground">Manage My Categories</h1>
       {error && <div className="text-error-600 text-sm mb-4">{error}</div>}
       {isLoading ? <div>Loading...</div> : renderCategoryTree(categories)}
-      <Button variant="outline" className="mt-4" onClick={() => handleAddCategory(null)}>Add Category</Button>
+      <Button variant="outline" className="mt-4 text-foreground" onClick={() => handleAddCategory(null)}>Add Category</Button>
       <AddCategoryModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -131,8 +131,8 @@ export default function CategoryManagementPage() {
       />
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-lg p-6 w-full max-w-sm relative">
-            <h2 className="text-xl font-bold mb-4">Delete Category</h2>
+          <div className="bg-card dark:bg-background rounded-xl shadow-lg p-6 w-full max-w-sm relative">
+            <h2 className="text-xl font-heading font-bold mb-4">Delete Category</h2>
             <p>Are you sure you want to delete <span className="font-semibold">{deleteConfirm.name}</span> and all its subcategories?</p>
             <div className="flex gap-2 mt-6">
               <Button variant="danger" onClick={confirmDeleteCategory}>Delete</Button>

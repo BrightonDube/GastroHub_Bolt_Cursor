@@ -141,3 +141,49 @@
 ---
 
 *For each item, further subtasks can be added as needed for your workflow or team. Expand this file as the project evolves.*
+
+---
+
+## 12. Dashboard UI/UX & Feature Improvements
+
+> **Note:** This section tracks ongoing improvements to dashboard features and styling. Expand and check off items as implemented.
+
+### 12.1 Styling & Consistency
+- [ ] Unify dashboard color palette with landing page
+- [ ] Standardize typography (headings, body, buttons)
+- [ ] Refactor dashboard widgets into modern, consistent cards
+- [ ] Implement responsive grid layout for dashboard widgets
+- [ ] Match button styles to landing page
+- [ ] Style navigation/sidebar for consistency
+- [ ] Add animated transitions (cards, modals, hover)
+- [ ] Use unified icon set across app
+
+### 12.2 Dashboard Feature Enhancements
+- [ ] Allow users to customize dashboard widgets (add, remove, rearrange)
+- [ ] Add quick stats overview cards (orders, revenue, etc.)
+- [ ] Display recent activity feed/timeline
+- [ ] Integrate interactive charts (sales, product performance)
+- [ ] Add user task/reminder system
+- [ ] Show announcements/news banner
+- [ ] Add profile/account quick access dropdown
+- [ ] Implement dark mode toggle
+- [ ] Provide onboarding/help widget
+
+### 12.3 Advanced/Future Features
+- [ ] Real-time dashboard updates (websockets/polling)
+- [ ] Role-based dashboard views
+- [ ] Custom report generation (PDF/CSV)
+- [ ] Integrations status and quick setup
+- [ ] Accessibility improvements (keyboard, screen-reader)
+- [ ] Performance optimizations for dashboard
+
+### 12.4 Implementation Steps
+- [ ] Extract design tokens from landing page
+- [ ] Refactor dashboard layout and cards
+- [ ] Standardize typography and buttons
+- [ ] Enhance navigation/sidebar
+- [ ] Add/upgrade widgets and features
+- [ ] Test responsiveness and accessibility
+- [ ] Collect user feedback for further improvements
+
+---

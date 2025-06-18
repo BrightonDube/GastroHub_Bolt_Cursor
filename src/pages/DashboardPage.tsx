@@ -29,28 +29,28 @@ function getStats() {
       title: 'Total Orders',
       value: '1,250',
       change: { value: 5, type: 'increase' },
-      icon: <ShoppingCart className="w-6 h-6" />,
+      icon: <ShoppingCart className="w-6 h-6 text-primary-600" />,
       color: 'primary',
     },
     {
       title: 'Active Listings',
       value: '87',
       change: { value: -2, type: 'decrease' },
-      icon: <Package className="w-6 h-6" />,
+      icon: <Package className="w-6 h-6 text-primary-600" />,
       color: 'secondary',
     },
     {
       title: 'Total Revenue',
       value: '$42,000',
       change: { value: 12, type: 'increase' },
-      icon: <DollarSign className="w-6 h-6" />,
+      icon: <DollarSign className="w-6 h-6 text-primary-600" />,
       color: 'success',
     },
     {
       title: 'Completed Deliveries',
       value: '1,100',
       change: { value: 3, type: 'increase' },
-      icon: <Truck className="w-6 h-6" />,
+      icon: <Truck className="w-6 h-6 text-primary-600" />,
       color: 'warning',
     },
   ];
@@ -76,21 +76,21 @@ export function DashboardPage() {
     switch (user?.role) {
       case 'buyer':
         return [
-          { label: 'Browse Marketplace', href: '/marketplace', icon: <ShoppingCart className="w-4 h-4" /> },
-          { label: 'View Orders', href: '/orders', icon: <Eye className="w-4 h-4" /> },
-          { label: 'Find Suppliers', href: '/suppliers', icon: <Users className="w-4 h-4" /> },
+          { label: 'Browse Marketplace', href: '/marketplace', icon: <ShoppingCart className="w-4 h-4 text-primary-600" /> },
+          { label: 'View Orders', href: '/orders', icon: <Eye className="w-4 h-4 text-primary-600" /> },
+          { label: 'Find Suppliers', href: '/suppliers', icon: <Users className="w-4 h-4 text-primary-600" /> },
         ];
       case 'supplier':
         return [
-          { label: 'Add New Listing', href: '/add-listing', icon: <Plus className="w-4 h-4" /> },
-          { label: 'Manage Listings', href: '/my-listings', icon: <Package className="w-4 h-4" /> },
-          { label: 'View Analytics', href: '/analytics', icon: <TrendingUp className="w-4 h-4" /> },
+          { label: 'Add New Listing', href: '/add-listing', icon: <Plus className="w-4 h-4 text-primary-600" /> },
+          { label: 'Manage Listings', href: '/my-listings', icon: <Package className="w-4 h-4 text-primary-600" /> },
+          { label: 'View Analytics', href: '/analytics', icon: <TrendingUp className="w-4 h-4 text-primary-600" /> },
         ];
       case 'delivery_partner':
         return [
-          { label: 'Available Deliveries', href: '/deliveries/available', icon: <Package className="w-4 h-4" /> },
-          { label: 'My Deliveries', href: '/deliveries', icon: <Truck className="w-4 h-4" /> },
-          { label: 'View Earnings', href: '/earnings', icon: <DollarSign className="w-4 h-4" /> },
+          { label: 'Available Deliveries', href: '/deliveries/available', icon: <Package className="w-4 h-4 text-primary-600" /> },
+          { label: 'My Deliveries', href: '/deliveries', icon: <Truck className="w-4 h-4 text-primary-600" /> },
+          { label: 'View Earnings', href: '/earnings', icon: <DollarSign className="w-4 h-4 text-primary-600" /> },
         ];
       default:
         return [];
@@ -118,10 +118,10 @@ export function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-neutral-900">
+            <h1 className="text-3xl font-heading font-bold text-foreground">
               {getWelcomeMessage()}
             </h1>
-            <p className="text-neutral-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Here's what's happening with your {user?.role?.replace('_', ' ')} account today.
             </p>
           </div>
@@ -131,6 +131,7 @@ export function DashboardPage() {
                 key={index}
                 variant={index === 0 ? 'primary' : 'outline'}
                 size="sm"
+                className="transition-all duration-200"
                 onClick={() => window.location.href = action.href}
               >
                 {action.icon}
@@ -153,7 +154,7 @@ export function DashboardPage() {
             <CardContent>
               <div className="space-y-4">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                  <div key={order.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <span className="font-semibold text-neutral-900">{order.id}</span>
@@ -162,11 +163,11 @@ export function DashboardPage() {
                         </Badge>
                       </div>
                       <p className="text-sm text-neutral-600 mb-1">{order.supplier}</p>
-                      <p className="text-xs text-neutral-500">{order.items}</p>
+                      <p className="text-xs text-muted-foreground">{order.items}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-neutral-900">{order.amount}</p>
-                      <p className="text-xs text-neutral-500">{order.date}</p>
+                      <p className="text-xs text-muted-foreground">{order.date}</p>
                     </div>
                   </div>
                 ))}

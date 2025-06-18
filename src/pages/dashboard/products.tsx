@@ -26,29 +26,29 @@ const ProductsPage: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto py-10 px-4">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">My Products</h1>
+        <h1 className="text-3xl font-heading font-bold">My Products</h1>
         <Link to="/dashboard/products/new">
           <Button variant="primary">Add New Product</Button>
         </Link>
       </div>
       {isLoading && <div>Loading...</div>}
-      {error && <div className="text-red-500">{error.message}</div>}
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+      {error && <div className="text-error-600">{error.message}</div>}
+      <div className="bg-card dark:bg-background rounded-xl shadow overflow-x-auto">
+        <table className="min-w-full divide-y divide-border dark:divide-border">
           <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Stock Quantity</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">Price</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">Stock Quantity</th>
               <th className="px-6 py-3" />
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
+          <tbody className="bg-card dark:bg-background divide-y divide-border dark:divide-border">
             {products.map((product: any) => (
               <tr key={product.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{product.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">${product.price}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{product.stock_quantity}</td>
+                <td className="px-6 py-4 text-foreground whitespace-nowrap">{product.name}</td>
+                <td className="px-6 py-4 text-foreground whitespace-nowrap">${product.price}</td>
+                <td className="px-6 py-4 text-foreground whitespace-nowrap">{product.stock_quantity}</td>
                 <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                   <Link to={`/dashboard/products/${product.id}/edit`}>
                     <Button size="sm" variant="secondary">Edit</Button>
@@ -59,7 +59,7 @@ const ProductsPage: React.FC = () => {
             ))}
             {products.length === 0 && !isLoading && (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-gray-400">No products found.</td>
+                <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">No products found.</td>
               </tr>
             )}
           </tbody>
