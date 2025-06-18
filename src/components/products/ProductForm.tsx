@@ -36,7 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ mode, productId }) => {
 
   useEffect(() => {
     if (mode === 'edit' && productId) {
-      supabase.from('listings').select('*').eq('id', productId).single().then(({ data, error }) => {
+      supabase.from('listing').select('*').eq('id', productId).single().then(({ data, error }) => {
         if (data) setForm({
           title: data.title || '',
           description: data.description || '',
@@ -99,12 +99,12 @@ const handleSubmit = async (e: React.FormEvent) => {
         supplier_id: user?.id || '',
       };
       if (mode === 'create') {
-        const { error } = await supabase.from('listings').insert([payload]);
+        const { error } = await supabase.from('listing').insert([payload]);
         if (error) throw error;
         toast.success('Product created successfully!');
         navigate('/dashboard/products');
       } else if (mode === 'edit' && productId) {
-        const { error } = await supabase.from('listings').update(payload).eq('id', productId);
+        const { error } = await supabase.from('listing').update(payload).eq('id', productId);
         if (error) throw error;
         toast.success('Product updated successfully!');
         navigate('/dashboard/products');

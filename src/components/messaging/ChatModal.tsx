@@ -54,7 +54,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ conversationId, onClose, c
           .filter((msg: any) => msg.sender_id !== currentUserId && !msg.read_at)
           .map((msg: any) => msg.id);
         if (unreadIds.length > 0) {
-          await supabase.from('messages')
+          await supabase.from('message')
             .update({ read_at: new Date().toISOString() })
             .in('id', unreadIds);
         }
@@ -94,7 +94,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ conversationId, onClose, c
 
   const handleSend = async () => {
     if (!newMessage.trim() || !conversationId) return;
-    const { error } = await supabase.from('messages').insert({
+    const { error } = await supabase.from('message').insert({
       conversation_id: conversationId,
       sender_id: currentUserId,
       body: newMessage.trim(),
@@ -127,7 +127,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({ conversationId, onClose, c
       if (error) throw error;
       const { publicUrl } = supabase.storage.from('chat-files').getPublicUrl(data.path).data;
       // Send as message (body contains URL)
-      await supabase.from('messages').insert({
+      await supabase.from('message').insert({
         conversation_id: conversationId,
         sender_id: currentUserId,
         body: publicUrl,

@@ -26,7 +26,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ currentUserI
       setLoading(true);
       // 1. Get all conversation IDs for this user
       const { data: parts, error } = await supabase
-        .from('conversation_participants')
+        .from('conversation_participant')
         .select('conversation_id')
         .eq('user_id', currentUserId);
       if (error) return setLoading(false);
@@ -38,7 +38,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ currentUserI
       }
       // 2. Get conversation details (include archived)
       const { data: convos } = await supabase
-        .from('conversations')
+        .from('conversation')
         .select('id, created_at, updated_at, archived')
         .in('id', ids)
         .order('updated_at', { ascending: false });

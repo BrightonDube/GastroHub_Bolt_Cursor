@@ -9,7 +9,7 @@ const ContactSupplierButton: React.FC<{ productId: string }> = ({ productId }) =
   const router = useRouter();
   // Fetch product info to get supplierId
   const { data: product } = useQuery(['product', productId], async () => {
-    const { data } = await supabase.from('listings').select('*').eq('id', productId).single();
+    const { data } = await supabase.from('listing').select('*').eq('id', productId).single();
     return data;
   });
   if (!product) return null;

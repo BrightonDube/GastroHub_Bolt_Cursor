@@ -17,9 +17,9 @@ const ProductsPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     setDeletingId(id);
-    const { error } = await supabase.from('listings').delete().eq('id', id);
+    const { error } = await supabase.from('listing').delete().eq('id', id);
     setDeletingId(null);
-    if (!error) queryClient.invalidateQueries({ queryKey: ['listings', 'supplier', supplierId] });
+    if (!error) queryClient.invalidateQueries({ queryKey: ['listing', 'supplier', supplierId] });
     else alert(error.message);
   };
 

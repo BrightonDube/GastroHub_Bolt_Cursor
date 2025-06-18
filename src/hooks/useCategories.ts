@@ -34,7 +34,7 @@ async function fetchCategoryChildren(parentId: string): Promise<CategoryNode[]> 
 // Fetch user custom categories from 'custom_categories' table
 async function fetchUserCategories(userId: string): Promise<CategoryNode[]> {
   const { data, error } = await supabase
-    .from('custom_categories')
+    .from('custom_category')
     .select('*')
     .eq('created_by', userId)
     .is('parent_id', null);
@@ -52,7 +52,7 @@ async function fetchUserCategories(userId: string): Promise<CategoryNode[]> {
 
 async function fetchUserCategoryChildren(userId: string, parentId: string): Promise<CategoryNode[]> {
   const { data, error } = await supabase
-    .from('custom_categories')
+    .from('custom_category')
     .select('*')
     .eq('created_by', userId)
     .eq('parent_id', parentId);
@@ -89,7 +89,7 @@ export function useAddCategory() {
         created_by: user.id,
       };
       const { data: result, error } = await supabase
-        .from('custom_categories')
+        .from('custom_category')
         .insert([insertData])
         .select()
         .single();
@@ -109,7 +109,7 @@ export function useEditCategory() {
     mutationFn: async (data: { id: string; name: string }) => {
       if (!user) throw new Error('Not authenticated');
       const { data: result, error } = await supabase
-        .from('custom_categories')
+        .from('custom_category')
         .update({ name: data.name })
         .eq('id', data.id)
         .eq('created_by', user.id)
@@ -132,7 +132,7 @@ export function useDeleteCategory() {
       if (!user) throw new Error('Not authenticated');
       // Delete category and all its children recursively (handled by RLS/cascade in DB)
       const { error } = await supabase
-        .from('custom_categories')
+        .from('custom_category')
         .delete()
         .eq('id', id)
         .eq('created_by', user.id);

@@ -17,18 +17,18 @@ export const MessagingPage: React.FC = () => {
       if (!user || !supplierId || !productId) return;
       // 1. Check for existing conversation between user and supplier for this product
       const { data: convParts } = await supabase
-        .from('conversation_participants')
+        .from('conversation_participant')
         .select('conversation_id')
         .eq('user_id', user.id);
       if (!convParts || convParts.length === 0) {
         // No conversations at all, create
         const { data: newConv, error: convErr } = await supabase
-          .from('conversations')
+          .from('conversation')
           .insert({})
           .select('*')
           .single();
         if (newConv) {
-          await supabase.from('conversation_participants').insert([
+          await supabase.from('conversation_participant').insert([
             { conversation_id: newConv.id, user_id: user.id },
             { conversation_id: newConv.id, user_id: supplierId }
           ]);
@@ -40,7 +40,7 @@ export const MessagingPage: React.FC = () => {
       // Check if any of the user's conversations also include the supplier
       const convIds = convParts.map((row: any) => row.conversation_id);
       const { data: supplierParts } = await supabase
-        .from('conversation_participants')
+        .from('conversation_participant')
         .select('conversation_id')
         .eq('user_id', supplierId);
       const supplierConvIds = (supplierParts || []).map((row: any) => row.conversation_id);
@@ -52,12 +52,12 @@ export const MessagingPage: React.FC = () => {
       }
       // Otherwise, create a new conversation
       const { data: newConv, error: convErr } = await supabase
-        .from('conversations')
+        .from('conversation')
         .insert({})
         .select('*')
         .single();
       if (newConv) {
-        await supabase.from('conversation_participants').insert([
+        await supabase.from('conversation_participant').insert([
           { conversation_id: newConv.id, user_id: user.id },
           { conversation_id: newConv.id, user_id: supplierId }
         ]);
