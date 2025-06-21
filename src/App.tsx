@@ -8,6 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { DashboardPage } from './pages/DashboardPage';
+import { RequireRole } from './components/auth/RequireRole';
 import LogoutPage from './pages/LogoutPage';
 import CallbackPage from './pages/auth/CallbackPage';
 import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
@@ -200,10 +201,23 @@ function App() {
 
             {/* Protected Routes */}
             <Route 
+              path="/select-role"
+              element={
+                <ProtectedRoute>
+                  <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+                    {/** Lazy load SelectRolePage */}
+                    {React.createElement(React.lazy(() => import('./pages/SelectRolePage')))}
+                  </React.Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route 
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <DashboardPage />
+                  <RequireRole>
+                    <DashboardPage />
+                  </RequireRole>
                 </ProtectedRoute>
               } 
             />

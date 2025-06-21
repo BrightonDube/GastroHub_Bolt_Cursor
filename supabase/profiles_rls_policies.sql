@@ -1,3 +1,10 @@
+-- Add default role and password_hash to profile table
+ALTER TABLE public.profile
+  ALTER COLUMN role SET DEFAULT 'buyer';
+
+ALTER TABLE public.profile
+  ADD COLUMN password_hash text;
+
 -- Enable Row Level Security (RLS) on the profiles table
 ALTER TABLE profile ENABLE ROW LEVEL SECURITY;
 

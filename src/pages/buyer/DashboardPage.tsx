@@ -19,65 +19,15 @@ import { useBuyerDashboardStats } from '../../hooks/useDashboardStats';
 
 export function BuyerDashboard() {
   console.log('[BuyerDashboard] Render');
-  // Fetch buyer dashboard stats from backend
-  const { data: stats = [], isLoading: statsLoading } = useBuyerDashboardStats();
+  // Fetch all dashboard data from backend
+  const { data, isLoading, error } = useBuyerDashboardStats();
 
+  // Defensive null checks
+  const stats = data?.stats || [];
+  const recentOrders = data?.recentOrders || [];
+  const favoriteSuppliers = data?.favoriteSuppliers || [];
 
-  const favoriteSuppliers = [
-    {
-      id: '1',
-      name: 'Fresh Valley Farms',
-      category: 'Organic Produce',
-      rating: 4.9,
-      orders: 15,
-      lastOrder: '2 days ago'
-    },
-    {
-      id: '2',
-      name: 'Ocean Breeze Seafood',
-      category: 'Fresh Seafood',
-      rating: 4.8,
-      orders: 8,
-      lastOrder: '1 week ago'
-    },
-    {
-      id: '3',
-      name: 'Golden Grain Co.',
-      category: 'Bakery Supplies',
-      rating: 4.7,
-      orders: 12,
-      lastOrder: '3 days ago'
-    }
-  ];
-
-  const recentOrders = [
-    {
-      id: 'ORD-001',
-      supplier: 'Fresh Valley Farms',
-      items: 'Organic Tomatoes, Fresh Basil',
-      amount: '$145.00',
-      status: 'delivered',
-      date: '2024-01-15',
-    },
-    {
-      id: 'ORD-002',
-      supplier: 'Ocean Breeze Seafood',
-      items: 'Fresh Salmon, Shrimp',
-      amount: '$320.00',
-      status: 'in_transit',
-      date: '2024-01-14',
-    },
-    {
-      id: 'ORD-003',
-      supplier: 'Golden Grain Co.',
-      items: 'Premium Flour, Yeast',
-      amount: '$89.50',
-      status: 'preparing',
-      date: '2024-01-13',
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
+  const getOrderStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
         return 'success';
@@ -117,8 +67,12 @@ export function BuyerDashboard() {
           </div>
         </div>
 
+        {/* Loading/Error States */}
+        {isLoading && <div>Loading dashboard...</div>}
+        {error && <div className="text-red-500">Error loading dashboard: {error.message}</div>}
+
         {/* Stats */}
-        <DashboardStats stats={stats} />
+        {!isLoading && !error && <DashboardStats stats={stats} />}
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -129,21 +83,19 @@ export function BuyerDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentOrders.map((order) => (
+                {recentOrders.length === 0 && <div className="text-muted-foreground">No recent orders.</div>}
+                {recentOrders.map((order: any) => (
                   <div key={order.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <span className="font-semibold text-foreground">{order.id}</span>
-                        <Badge variant={getStatusColor(order.status) as any} size="sm">
-                          {order.status.replace('_', ' ')}
+                        <Badge variant={getOrderStatusColor(order.status) as any} size="sm">
+                          {order.status?.replace('_', ' ') || 'unknown'}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">{order.supplier}</p>
-                      <p className="text-xs text-muted-foreground">{order.items}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-foreground">{order.amount}</p>
-                      <p className="text-xs text-muted-foreground">{order.date}</p>
+                      <p className="text-sm text-muted-foreground mb-1">Supplier: {order.supplier_id}</p>
+                      <p className="text-xs text-muted-foreground">Amount: {order.amount}</p>
+                      <p className="text-xs text-muted-foreground">Date: {order.created_at?.slice(0, 10)}</p>
                     </div>
                   </div>
                 ))}
@@ -163,18 +115,18 @@ export function BuyerDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {favoriteSuppliers.map((supplier) => (
+                {favoriteSuppliers.length === 0 && <div className="text-muted-foreground">No favorite suppliers.</div>}
+                {favoriteSuppliers.map((supplier: any) => (
                   <div key={supplier.id} className="flex items-center justify-between p-4 bg-card rounded-xl">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-semibold text-foreground">{supplier.name}</span>
+                        <span className="font-semibold text-foreground">{supplier.business_name}</span>
                         <div className="flex items-center space-x-1">
                           <Star className="w-6 h-6 text-primary-600 text-secondary-400 fill-current" />
-                          <span className="text-sm text-muted-foreground">{supplier.rating}</span>
+                          <span className="text-sm text-muted-foreground">{supplier.rating ?? '-'}</span>
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-1">{supplier.category}</p>
-                      <p className="text-xs text-muted-foreground">{supplier.orders} orders • Last: {supplier.lastOrder}</p>
                     </div>
                     <div className="text-right">
                       <Button variant="ghost" size="sm">

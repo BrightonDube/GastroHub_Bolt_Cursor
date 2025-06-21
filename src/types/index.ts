@@ -3,20 +3,20 @@ import { Database } from './database';
 // Database table types
 export type Profile = Database['public']['Tables']['profile']['Row'];
 export type Listing = Database['public']['Tables']['listing']['Row'];
-export type Order = Database['public']['Tables']['orders']['Row'];
-export type DeliveryTask = Database['public']['Tables']['delivery_tasks']['Row'];
+export type Order = Database['public']['Tables']['order']['Row'];
+export type DeliveryTask = Database['public']['Tables']['delivery_task']['Row'];
 
 // Insert types
 export type ProfileInsert = Database['public']['Tables']['profile']['Insert'];
 export type ListingInsert = Database['public']['Tables']['listing']['Insert'];
-export type OrderInsert = Database['public']['Tables']['orders']['Insert'];
-export type DeliveryTaskInsert = Database['public']['Tables']['delivery_tasks']['Insert'];
+export type OrderInsert = Database['public']['Tables']['order']['Insert'];
+export type DeliveryTaskInsert = Database['public']['Tables']['delivery_task']['Insert'];
 
 // Update types
-export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
+export type ProfileUpdate = Database['public']['Tables']['profile']['Update'];
 export type ListingUpdate = Database['public']['Tables']['listing']['Update'];
-export type OrderUpdate = Database['public']['Tables']['orders']['Update'];
-export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_tasks']['Update'];
+export type OrderUpdate = Database['public']['Tables']['order']['Update'];
+export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_task']['Update'];
 
 // Enum types
 export type UserRole = 'buyer' | 'supplier' | 'delivery_partner';

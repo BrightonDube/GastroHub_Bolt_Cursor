@@ -59,17 +59,21 @@ function getStats() {
 export function DashboardPage() {
   const { user } = useAuthContext();
 
-  
-
-  
-
-  
+  // Guard: Show loading or fallback if user/profile is missing
+  if (!user || !user.profile) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-lg text-muted-foreground">Loading your dashboard...</div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   const getWelcomeMessage = () => {
     const timeOfDay = new Date().getHours() < 12 ? 'morning' : 
                      new Date().getHours() < 18 ? 'afternoon' : 'evening';
-    
-    return `Good ${timeOfDay}, ${user?.profile.full_name || 'there'}!`;
+    return `Good ${timeOfDay}, ${user.profile.full_name || 'there'}!`;
   };
 
   const getQuickActions = () => {
@@ -122,7 +126,7 @@ export function DashboardPage() {
               {getWelcomeMessage()}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Here's what's happening with your {user?.role?.replace('_', ' ')} account today.
+              Here's what's happening with your {(user?.role || '').replace('_', ' ')} account today.
             </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 md:mt-0">

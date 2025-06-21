@@ -22,8 +22,8 @@ export function Sidebar() {
   const location = useLocation();
   console.log('[Sidebar] user:', user);
 
-  if (!user) {
-    console.log('[Sidebar] No user, not rendering sidebar');
+  if (!user || !user.role) {
+    console.log('[Sidebar] No user or role, not rendering sidebar');
     return null;
   }
 

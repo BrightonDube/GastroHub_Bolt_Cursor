@@ -14,16 +14,15 @@ export default function LogoutPage() {
       try {
         console.log('[LogoutPage] Logging out user...');
         await auth.signOut();
-        console.log('[Logout] Supabase signOut called.');
-        console.log('[Logout] Clearing localStorage and sessionStorage...');
-        localStorage.clear();
-        sessionStorage.clear();
-        // Remove all cookies (Supabase may use cookies for session info)
-        document.cookie.split(';').forEach(c => {
-          document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
-        });
-        console.log('[Logout] Forcing full reload to /login...');
-        window.location.href = '/login';
+        // Debug: Confirm cookies after signOut
+        setTimeout(() => {
+          console.log('[Logout] Cookies after signOut:', document.cookie);
+        }, 200);
+        // Force a hard reload to /login after everything is cleared
+        setTimeout(() => {
+          console.log('[Logout] Forcing full reload to /login...');
+          window.location.replace('/login');
+        }, 300);
       } catch (error) {
         console.error('[Logout] Error during logout:', error);
       }

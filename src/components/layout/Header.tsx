@@ -23,9 +23,23 @@ export function Header() {
 
   const handleSignOut = async () => {
     console.log('[Header] handleSignOut called');
-    await signOut();
-    navigate('/');
+    try {
+      const result = await signOut();
+      console.log('[Header] signOut result:', result);
+      setTimeout(() => {
+        console.log('[Header] Cookies after signOut:', document.cookie);
+      }, 200);
+      setTimeout(() => {
+        console.log('[Header] Forcing full reload to /login...');
+        window.location.replace('/login');
+      }, 300);
+    } catch (err) {
+      console.error('[Header] signOut error:', err);
+      alert('Logout failed: ' + (err instanceof Error ? err.message : String(err)));
+    }
   };
+
+
 
   const getRoleIcon = (role: string) => {
     switch (role) {
@@ -116,7 +130,7 @@ export function Header() {
                 <ThemeToggle />
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground">
-                    {(user.profile && user.profile.full_name) ? user.profile.full_name : (user.email || 'User')}
+                    {user?.profile?.full_name || user?.email || 'User'}
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 
