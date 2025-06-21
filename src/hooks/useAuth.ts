@@ -1,3 +1,5 @@
+// WARNING: Do NOT use useAuth directly in components.
+// useAuth is ONLY for use inside AuthProvider. All components/pages/hooks must use useAuthContext from App.tsx instead.
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
@@ -46,11 +48,10 @@ export function useAuth() {
 
   const fetchUserProfile = async (authUser: User) => {
     console.log('[fetchUserProfile] Called with:', authUser);
-
     console.log('[useAuth] fetchUserProfile called for', authUser);
     try {
       const { data: profile, error } = await supabase
-        .from('profiles')
+        .from('profile')
         .select('*')
         .eq('id', authUser.id)
         .single();
@@ -62,67 +63,39 @@ export function useAuth() {
         const profileInsert = {
           id: authUser.id,
           email: authUser.email,
-          full_name: authUser.user_metadata?.full_name || authUser.email || '',
-          logo_url: authUser.user_metadata?.avatar_url || null,
+          full_name: authUser.user_metadata?.full_name || '',
           role: 'buyer', // default or infer from metadata if possible
+          business_name: authUser.user_metadata?.business_name || '',
+          phone: authUser.user_metadata?.phone || '',
+          created_at: new Date().toISOString(),
         };
-        console.log('[fetchUserProfile] Attempting to insert profile:', profileInsert);
-        const { error: insertError } = await supabase.from('profiles').insert(profileInsert);
+        const { data: insertData, error: insertError } = await supabase
+          .from('profile')
+          .insert(profileInsert)
+          .select()
+          .single();
         if (insertError) {
           console.error('[fetchUserProfile] Error creating profile:', insertError);
-          // Clear session if profile creation fails
-          await supabase.auth.signOut();
-          setUser(null);
-          setLoading(false);
-          return;
+          // Return error up the stack for UI display
+          return { error: insertError.message || 'Failed to create profile', data: null };
         }
-        // Fetch again
-        const { data: newProfile, error: fetchAgainError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', authUser.id)
-          .single();
-        console.log('[fetchUserProfile] Fetched new profile after insert:', { newProfile, fetchAgainError });
-        if (newProfile) {
-          setUser({
-            id: authUser.id,
-            email: authUser.email!,
-            role: newProfile.role,
-            profile: newProfile,
-          });
-        } else {
-          console.error('[fetchUserProfile] Could not fetch new profile after insert:', fetchAgainError);
-          await supabase.auth.signOut();
-          setUser(null);
-          setLoading(false);
-        }
-        return;
+        return { error: null, data: insertData };
       }
 
       if (error) {
         console.error('[fetchUserProfile] Error fetching profile:', error);
-        // Clear session if fetch fails
-        await supabase.auth.signOut();
-        setUser(null);
-        setLoading(false);
-        return;
+        // Return error up the stack for UI display
+        return { error: error?.message || 'Failed to fetch profile', data: null };
       }
 
       if (profile) {
         console.log('[fetchUserProfile] Profile exists, setting user:', profile);
-        setUser({
-          id: authUser.id,
-          email: authUser.email!,
-          role: profile.role,
-          profile,
-        });
+        return { error: null, data: profile };
       }
     } catch (error) {
       console.error('[fetchUserProfile] Exception thrown:', error);
-      // Clear session on unexpected error
-      await supabase.auth.signOut();
-      setUser(null);
-      setLoading(false);
+      // Return error up the stack for UI display
+      return { error: error instanceof Error ? error.message : 'Unexpected error', data: null };
     }
   };
 
@@ -210,7 +183,8 @@ export function useAuth() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: { prompt: 'consent' },
         },
       });
 

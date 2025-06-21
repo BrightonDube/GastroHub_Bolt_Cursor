@@ -17,10 +17,15 @@ import {
 } from 'lucide-react';
 
 export function Sidebar() {
+  console.log('[Sidebar] Render');
   const { user } = useAuthContext();
   const location = useLocation();
+  console.log('[Sidebar] user:', user);
 
-  if (!user) return null;
+  if (!user) {
+    console.log('[Sidebar] No user, not rendering sidebar');
+    return null;
+  }
 
   const getNavigationItems = () => {
     const baseItems = [

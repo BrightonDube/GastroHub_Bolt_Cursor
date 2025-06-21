@@ -16,10 +16,13 @@ import {
 } from 'lucide-react';
 
 export function Header() {
+  console.log('[Header] Render');
   const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
+  console.log('[Header] user:', user);
 
   const handleSignOut = async () => {
+    console.log('[Header] handleSignOut called');
     await signOut();
     navigate('/');
   };
@@ -113,7 +116,7 @@ export function Header() {
                 <ThemeToggle />
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground">
-                    {user.profile.full_name || 'User'}
+                    {(user.profile && user.profile.full_name) ? user.profile.full_name : (user.email || 'User')}
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 

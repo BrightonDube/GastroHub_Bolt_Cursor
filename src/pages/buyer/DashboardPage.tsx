@@ -18,6 +18,7 @@ import {
 import { useBuyerDashboardStats } from '../../hooks/useDashboardStats';
 
 export function BuyerDashboard() {
+  console.log('[BuyerDashboard] Render');
   // Fetch buyer dashboard stats from backend
   const { data: stats = [], isLoading: statsLoading } = useBuyerDashboardStats();
 

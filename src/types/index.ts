@@ -1,13 +1,13 @@
 import { Database } from './database';
 
 // Database table types
-export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type Profile = Database['public']['Tables']['profile']['Row'];
 export type Listing = Database['public']['Tables']['listing']['Row'];
 export type Order = Database['public']['Tables']['orders']['Row'];
 export type DeliveryTask = Database['public']['Tables']['delivery_tasks']['Row'];
 
 // Insert types
-export type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
+export type ProfileInsert = Database['public']['Tables']['profile']['Insert'];
 export type ListingInsert = Database['public']['Tables']['listing']['Insert'];
 export type OrderInsert = Database['public']['Tables']['orders']['Insert'];
 export type DeliveryTaskInsert = Database['public']['Tables']['delivery_tasks']['Insert'];

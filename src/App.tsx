@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthUser } from './types';
 import { Toaster } from 'sonner';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ const queryClient = new QueryClient({
 
 // Auth context to avoid multiple useAuth calls
 interface AuthContextType {
+  session: any;
   user: AuthUser | null;
   loading: boolean;
   signUp: (email: string, password: string, userData: { fullName: string; role: 'buyer' | 'supplier' | 'delivery_partner'; businessName?: string; phone?: string; }) => Promise<{ data: any; error: string | null }>;
@@ -43,21 +44,91 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function useAuthContext() {
   const context = useContext(AuthContext);
   if (!context) throw new Error('AuthContext not found');
+  // Debug: log context value
+  console.log('[useAuthContext] called, context:', context);
   return context;
 }
 
+import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  // useAuth is only used here to provide context value
+  console.log('[AuthProvider] Render');
+  const [session, setSession] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
   const auth = useAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+
+  // Debug: log state changes
+  React.useEffect(() => {
+    console.log('[AuthProvider] session changed:', session);
+  }, [session]);
+  React.useEffect(() => {
+    console.log('[AuthProvider] user changed:', user);
+  }, [user]);
+  React.useEffect(() => {
+    console.log('[AuthProvider] loading changed:', loading);
+  }, [loading]);
+
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+    setLoading(true);
+    console.log('[AuthProvider] useEffect (mount): fetching initial session');
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session && session.user) {
+        console.log('[AuthProvider] Initial session found:', session);
+        setSession(session);
+        setUser({ id: session.user.id, email: session.user.email, role: session.user.role, profile: null });
+      } else {
+        console.log('[AuthProvider] No initial session');
+        setSession(null);
+        setUser(null);
+      }
+      setLoading(false);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
+      if (event === "SIGNED_IN" && session?.user) {
+        setSession(session);
+        setUser({ id: session.user.id, email: session.user.email, role: session.user.role, profile: null });
+      } else if (event === "SIGNED_OUT") {
+        setSession(null);
+        setUser(null);
+      }
+    });
+    unsubscribe = () => {
+      console.log('[AuthProvider] Cleaning up onAuthStateChange listener');
+      listener?.subscription?.unsubscribe?.();
+    };
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{
+      session,
+      user,
+      loading,
+      signUp: auth.signUp,
+      signIn: auth.signIn,
+      signInWithGoogle: auth.signInWithGoogle,
+      signOut: auth.signOut,
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const trace = Math.random().toString(36).substr(2, 5); // unique trace for this render
+  console.log(`[ProtectedRoute][${trace}] Render, children:`, !!children);
+
   const { user, loading } = useAuthContext();
+  console.log(`[ProtectedRoute] user:`, user, 'loading:', loading);
 
   if (loading) {
+    console.log('[ProtectedRoute] Still loading, rendering spinner');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
@@ -66,10 +137,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
+    console.log('[ProtectedRoute] No user, redirecting to /login');
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  console.log('[ProtectedRoute] User authenticated, rendering children');
+  return children ? <>{children}</> : <Outlet />;
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {

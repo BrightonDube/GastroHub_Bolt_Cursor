@@ -1,0 +1,7 @@
+{
+  "root": true,
+  "plugins": ["no-useauth-directly"],
+  "rules": {
+    "no-useauth-directly/no-useauth-directly": "error"
+  }
+}

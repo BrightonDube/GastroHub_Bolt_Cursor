@@ -11,22 +11,22 @@ export default function LogoutPage() {
 
   useEffect(() => {
     const doLogout = async () => {
-      console.log('[LogoutPage] Logging out user...');
-      // 1. Call Supabase signOut
-      if (auth?.signOut) {
+      try {
+        console.log('[LogoutPage] Logging out user...');
         await auth.signOut();
-        console.log('[LogoutPage] Supabase signOut called.');
+        console.log('[Logout] Supabase signOut called.');
+        console.log('[Logout] Clearing localStorage and sessionStorage...');
+        localStorage.clear();
+        sessionStorage.clear();
+        // Remove all cookies (Supabase may use cookies for session info)
+        document.cookie.split(';').forEach(c => {
+          document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+        });
+        console.log('[Logout] Forcing full reload to /login...');
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('[Logout] Error during logout:', error);
       }
-      // 2. Clear localStorage/sessionStorage of auth tokens
-      localStorage.removeItem('supabase.auth.token');
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      sessionStorage.clear();
-      console.log('[LogoutPage] Cleared localStorage and sessionStorage.');
-      // 3. Optionally clear any other sensitive app state
-      // 4. Redirect to home
-      console.log('[LogoutPage] Redirecting to home page...');
-      navigate('/', { replace: true });
     };
     doLogout();
     // eslint-disable-next-line
