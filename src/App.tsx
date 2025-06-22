@@ -60,7 +60,30 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<any>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
   const auth = useAuth();
+
+  // Helper to fetch and set user profile
+  const fetchAndSetUserProfile = async (session: any) => {
+    if (session && session.user) {
+      const { id, email, role } = session.user;
+      try {
+        const result = await auth.fetchUserProfile(session.user);
+        if (result.error) {
+          setProfileError(result.error);
+          setUser({ id, email, role, profile: null });
+        } else {
+          setProfileError(null);
+          setUser({ id, email, role, profile: result.data });
+        }
+      } catch (err) {
+        setProfileError('Unexpected error fetching profile');
+        setUser({ id, email, role, profile: null });
+      }
+    } else {
+      setUser(null);
+    }
+  };
 
   // Debug: log state changes
   React.useEffect(() => {
@@ -76,12 +99,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     setLoading(true);
+    setProfileError(null);
     console.log('[AuthProvider] useEffect (mount): fetching initial session');
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session && session.user) {
         console.log('[AuthProvider] Initial session found:', session);
         setSession(session);
-        setUser({ id: session.user.id, email: session.user.email, role: session.user.role, profile: null });
+        await fetchAndSetUserProfile(session);
       } else {
         console.log('[AuthProvider] No initial session');
         setSession(null);
@@ -89,11 +113,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       setLoading(false);
     });
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
       if (event === "SIGNED_IN" && session?.user) {
         setSession(session);
-        setUser({ id: session.user.id, email: session.user.email, role: session.user.role, profile: null });
+        await fetchAndSetUserProfile(session);
       } else if (event === "SIGNED_OUT") {
         setSession(null);
         setUser(null);
@@ -118,6 +142,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       signInWithGoogle: auth.signInWithGoogle,
       signOut: auth.signOut,
     }}>
+      {profileError && (
+        <div className="bg-red-100 text-red-800 px-4 py-2 mb-2 rounded text-center">
+          Error loading profile: {profileError}
+        </div>
+      )}
       {children}
     </AuthContext.Provider>
   );
@@ -275,14 +304,12 @@ function App() {
             <Route 
               path="/marketplace" 
               element={
-                <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">Marketplace</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold text-neutral-900 mb-4">Marketplace</h1>
+                    <p className="text-neutral-600">This page is under construction.</p>
                   </div>
-                </ProtectedRoute>
+                </div>
               } 
             />
             <Route 

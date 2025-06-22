@@ -87,12 +87,35 @@ export function Header() {
     }
   };
 
+  // Notification state (example: fetch from backend or context)
+  const [unreadNotifications, setUnreadNotifications] = React.useState<number>(0);
+  // TODO: Replace with real notification fetching logic
+  React.useEffect(() => {
+    // Simulate fetching unread notifications
+    setUnreadNotifications(2); // Set to 0 for no badge, >0 to show badge
+  }, []);
+
+  // Navigation links for all roles
+  const navLinks = [
+    { to: '/marketplace', label: 'Marketplace' },
+    { to: '/orders', label: 'Orders' },
+    { to: '/supplier/listings', label: 'My Listings', role: 'supplier' },
+    { to: '/deliveries', label: 'Deliveries', role: 'delivery_partner' },
+  ];
+
+  // Super admin sees all links, others see by role
+  const showLink = (link: any) => {
+    if (!link.role) return true;
+    if (user && isSuperAdmin(user)) return true;
+    return user?.role === link.role;
+  };
+
   return (
     <header className="bg-card border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
+          <Link to="/" className="flex items-center space-x-2 group" aria-label="Home">
             <div className="p-2 bg-primary-900 rounded-lg group-hover:bg-primary-800 transition-colors">
               <ChefHat className="w-6 h-6 text-white" />
             </div>
@@ -106,43 +129,30 @@ export function Header() {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/marketplace" 
-              className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
-            >
-              Marketplace
-            </Link>
-            <Link 
-              to="/orders" 
-              className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
-            >
-              Orders
-            </Link>
-            {user?.role === 'supplier' && (
-              <Link 
-                to="/supplier/listings" 
+            {navLinks.filter(showLink).map(link => (
+              <Link
+                key={link.to}
+                to={link.to}
                 className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
+                aria-label={link.label}
               >
-                My Listings
+                {link.label}
               </Link>
-            )}
-            {user?.role === 'delivery_partner' && (
-              <Link 
-                to="/deliveries" 
-                className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
-              >
-                Deliveries
-              </Link>
-            )}
+            ))}
           </nav>
 
           {/* User Section */}
           {user ? (
             <div className="flex items-center space-x-4">
               {/* Notifications */}
-              <button className="relative p-2 text-neutral-400 hover:text-primary-600 dark:text-neutral-500 dark:hover:text-primary-400 transition-colors">
+              <button
+                className="relative p-2 text-neutral-400 hover:text-primary-600 dark:text-neutral-500 dark:hover:text-primary-400 transition-colors"
+                aria-label={unreadNotifications > 0 ? `You have ${unreadNotifications} unread notifications` : 'Notifications'}
+              >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-error-500 rounded-full"></span>
+                {unreadNotifications > 0 && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-error-500 rounded-full" />
+                )}
               </button>
 
               {/* User Menu */}
@@ -172,6 +182,7 @@ export function Header() {
                     variant="ghost"
                     size="sm"
                     onClick={() => navigate('/profile')}
+                    aria-label="Profile settings"
                   >
                     <Settings className="w-4 h-4" />
                   </Button>
@@ -179,6 +190,7 @@ export function Header() {
                     variant="ghost"
                     size="sm"
                     onClick={handleSignOut}
+                    aria-label="Sign out"
                   >
                     <LogOut className="w-4 h-4" />
                   </Button>

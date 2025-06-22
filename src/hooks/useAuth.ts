@@ -198,5 +198,6 @@ export function useAuth() {
     signIn,
     signInWithGoogle,
     signOut,
+    fetchUserProfile, // Exported so AuthProvider can use it
   };
 }
