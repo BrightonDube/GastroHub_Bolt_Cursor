@@ -3,14 +3,14 @@
 -- ============================================
 
 -- Drop all existing tables, policies, and constraints
-DROP POLICY IF EXISTS "Users can view their own orders as buyer" ON "Order";
-DROP POLICY IF EXISTS "Users can view their own orders as supplier" ON "Order";
-DROP POLICY IF EXISTS "Users can create orders as buyer" ON "Order";
-DROP POLICY IF EXISTS "Suppliers can update their orders" ON "Order";
-DROP POLICY IF EXISTS "Everyone can view active listings" ON "Listing";
-DROP POLICY IF EXISTS "Suppliers can manage their own listings" ON "Listing";
-DROP POLICY IF EXISTS "Users can view order items for their orders" ON "OrderItem";
-DROP POLICY IF EXISTS "Users can create order items for their orders" ON "OrderItem";
+DROP POLICY IF EXISTS "Users can view their own orders as buyer" ON order;
+DROP POLICY IF EXISTS "Users can view their own orders as supplier" ON order;
+DROP POLICY IF EXISTS "Users can create orders as buyer" ON order;
+DROP POLICY IF EXISTS "Suppliers can update their orders" ON order;
+DROP POLICY IF EXISTS "Everyone can view active listings" ON listing;
+DROP POLICY IF EXISTS "Suppliers can manage their own listings" ON listing;
+DROP POLICY IF EXISTS "Users can view order items for their orders" ON orderitem;
+DROP POLICY IF EXISTS "Users can create order items for their orders" ON orderitem;
 DROP POLICY IF EXISTS "Users can manage their own cart items" ON cart_items;
 DROP POLICY IF EXISTS "Users can view their own cart items" ON cart_items;
 DROP POLICY IF EXISTS "Users can create their own cart items" ON cart_items;
@@ -38,14 +38,14 @@ DROP POLICY IF EXISTS "Users can insert their own profile" ON profiles;
 DROP TABLE IF EXISTS reviews CASCADE;
 DROP TABLE IF EXISTS order_tracking CASCADE;
 DROP TABLE IF EXISTS invoices CASCADE;
-DROP TABLE IF EXISTS "OrderItem" CASCADE;
+DROP TABLE IF EXISTS orderitem CASCADE;
 DROP TABLE IF EXISTS cart_items CASCADE;
 DROP TABLE IF EXISTS inventory CASCADE;
 DROP TABLE IF EXISTS messages CASCADE;
 DROP TABLE IF EXISTS conversation_participants CASCADE;
 DROP TABLE IF EXISTS conversations CASCADE;
-DROP TABLE IF EXISTS "Order" CASCADE;
-DROP TABLE IF EXISTS "Listing" CASCADE;
+DROP TABLE IF EXISTS order CASCADE;
+DROP TABLE IF EXISTS listing CASCADE;
 DROP TABLE IF EXISTS user_subscriptions CASCADE;
 DROP TABLE IF EXISTS subscription_plans CASCADE;
 DROP TABLE IF EXISTS payment_methods CASCADE;
@@ -109,10 +109,10 @@ $$ language 'plpgsql';
 CREATE TABLE profiles (
   id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email text NOT NULL,
-  full_name text,
+  full_title text,
   phone text,
   role text NOT NULL DEFAULT 'buyer',
-  business_name text,
+  business_title text,
   business_address text,
   business_type text,
   business_description text,
@@ -132,10 +132,10 @@ CREATE TABLE profiles (
 -- Create categories table
 CREATE TABLE categories (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
+  title text NOT NULL,
   description text,
   parent_id uuid REFERENCES categories(id),
-  icon_name text,
+  icon_title text,
   is_active boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now()
@@ -145,10 +145,10 @@ CREATE TABLE categories (
 CREATE TABLE custom_categories (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name text NOT NULL,
+  title text NOT NULL,
   description text,
   parent_id uuid REFERENCES categories(id),
-  icon_name text,
+  icon_title text,
   is_active boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now()
@@ -169,7 +169,7 @@ CREATE TABLE business_hours (
 -- Create subscription_plans table
 CREATE TABLE subscription_plans (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
+  title text NOT NULL,
   description text,
   price_monthly numeric,
   price_yearly numeric,
@@ -197,50 +197,50 @@ CREATE TABLE user_subscriptions (
 );
 
 -- Create Listing table
-CREATE TABLE "Listing" (
+CREATE TABLE listing (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  "supplierId" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  name text NOT NULL,
+  "supplier_id" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  title text NOT NULL,
   description text,
-  category text NOT NULL,
+  category_id text NOT NULL,
   price numeric NOT NULL,
   unit text NOT NULL,
-  "minOrder" integer NOT NULL DEFAULT 1,
-  "maxOrder" integer,
+  "min_quantity" integer NOT NULL DEFAULT 1,
+  "max_quantity" integer,
   images text[],
-  "isActive" boolean NOT NULL DEFAULT true,
-  "createdAt" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" timestamp without time zone NOT NULL
+  "availability" boolean NOT NULL DEFAULT true,
+  "created_at" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp without time zone NOT NULL
 );
 
 -- Create Order table
-CREATE TABLE "Order" (
+CREATE TABLE order (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  "buyerId" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  "supplierId" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  "buyer_id" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  "supplier_id" uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   "totalAmount" numeric NOT NULL,
   "deliveryAddress" text NOT NULL,
   "deliveryNotes" text,
   status "OrderStatus" NOT NULL DEFAULT 'PENDING',
-  "createdAt" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" timestamp without time zone NOT NULL
+  "created_at" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp without time zone NOT NULL
 );
 
 -- Create OrderItem table
-CREATE TABLE "OrderItem" (
+CREATE TABLE orderitem (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  "orderId" uuid NOT NULL REFERENCES "Order"(id) ON DELETE CASCADE,
-  "listingId" uuid NOT NULL REFERENCES "Listing"(id) ON DELETE CASCADE,
+  "orderId" uuid NOT NULL REFERENCES order(id) ON DELETE CASCADE,
+  "listingId" uuid NOT NULL REFERENCES listing(id) ON DELETE CASCADE,
   quantity integer NOT NULL,
   price numeric NOT NULL,
-  "createdAt" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+  "created_at" timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create cart_items table
 CREATE TABLE cart_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  listing_id uuid NOT NULL REFERENCES "Listing"(id) ON DELETE CASCADE,
+  listing_id uuid NOT NULL REFERENCES listing(id) ON DELETE CASCADE,
   quantity integer NOT NULL DEFAULT 1,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -251,10 +251,10 @@ CREATE TABLE cart_items (
 CREATE TABLE inventory (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   supplier_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  listing_id uuid REFERENCES "Listing"(id) ON DELETE SET NULL,
-  product_name text NOT NULL,
+  listing_id uuid REFERENCES listing(id) ON DELETE SET NULL,
+  product_title text NOT NULL,
   description text,
-  category_id uuid REFERENCES categories(id),
+  category_id_id uuid REFERENCES categories(id),
   current_stock numeric NOT NULL DEFAULT 0,
   minimum_stock numeric DEFAULT 0,
   unit_price numeric NOT NULL,
@@ -267,7 +267,7 @@ CREATE TABLE inventory (
 -- Create conversations table
 CREATE TABLE conversations (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id uuid REFERENCES "Order"(id) ON DELETE CASCADE,
+  order_id uuid REFERENCES order(id) ON DELETE CASCADE,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now()
 );
@@ -292,7 +292,7 @@ CREATE TABLE messages (
 CREATE TABLE delivery_zones (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   supplier_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  zone_name text NOT NULL,
+  zone_title text NOT NULL,
   base_delivery_fee numeric NOT NULL DEFAULT 0,
   free_delivery_threshold numeric,
   max_delivery_distance integer,
@@ -314,7 +314,7 @@ CREATE TABLE favorites (
 
 CREATE TABLE invoices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id uuid REFERENCES "Order"(id) ON DELETE CASCADE,
+  order_id uuid REFERENCES order(id) ON DELETE CASCADE,
   supplier_id uuid REFERENCES profiles(id),
   buyer_id uuid REFERENCES profiles(id),
   status text DEFAULT 'draft',
@@ -337,7 +337,7 @@ CREATE TABLE notifications (
 
 CREATE TABLE order_tracking (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id uuid NOT NULL REFERENCES "Order"(id) ON DELETE CASCADE,
+  order_id uuid NOT NULL REFERENCES order(id) ON DELETE CASCADE,
   status text NOT NULL,
   message text,
   location jsonb,
@@ -365,7 +365,7 @@ CREATE TABLE reviews (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   reviewer_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   reviewee_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  order_id uuid REFERENCES "Order"(id) ON DELETE SET NULL,
+  order_id uuid REFERENCES order(id) ON DELETE SET NULL,
   rating integer NOT NULL CHECK (rating >= 1 AND rating <= 5),
   comment text,
   is_verified boolean DEFAULT false,
@@ -395,9 +395,9 @@ ALTER TABLE custom_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE business_hours ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscription_plans ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_subscriptions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "Listing" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "Order" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "OrderItem" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE listing ENABLE ROW LEVEL SECURITY;
+ALTER TABLE order ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orderitem ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
@@ -433,28 +433,28 @@ CREATE POLICY "Anyone can view subscription plans" ON subscription_plans FOR SEL
 CREATE POLICY "Users can view their own subscriptions" ON user_subscriptions FOR SELECT USING (user_id = auth.uid());
 
 -- Listing policies
-CREATE POLICY "Everyone can view active listings" ON "Listing" FOR SELECT USING ("isActive" = true);
-CREATE POLICY "Suppliers can manage their own listings" ON "Listing" FOR ALL USING ("supplierId" = auth.uid());
+CREATE POLICY "Everyone can view active listings" ON listing FOR SELECT USING ("availability" = true);
+CREATE POLICY "Suppliers can manage their own listings" ON listing FOR ALL USING ("supplier_id" = auth.uid());
 
 -- Order policies
-CREATE POLICY "Users can view their own orders as buyer" ON "Order" FOR SELECT USING ("buyerId" = auth.uid());
-CREATE POLICY "Users can view their own orders as supplier" ON "Order" FOR SELECT USING ("supplierId" = auth.uid());
-CREATE POLICY "Users can create orders as buyer" ON "Order" FOR INSERT WITH CHECK ("buyerId" = auth.uid());
-CREATE POLICY "Suppliers can update their orders" ON "Order" FOR UPDATE USING ("supplierId" = auth.uid());
+CREATE POLICY "Users can view their own orders as buyer" ON order FOR SELECT USING ("buyer_id" = auth.uid());
+CREATE POLICY "Users can view their own orders as supplier" ON order FOR SELECT USING ("supplier_id" = auth.uid());
+CREATE POLICY "Users can create orders as buyer" ON order FOR INSERT WITH CHECK ("buyer_id" = auth.uid());
+CREATE POLICY "Suppliers can update their orders" ON order FOR UPDATE USING ("supplier_id" = auth.uid());
 
 -- OrderItem policies
-CREATE POLICY "Users can view order items for their orders" ON "OrderItem" FOR SELECT USING (
+CREATE POLICY "Users can view order items for their orders" ON orderitem FOR SELECT USING (
   EXISTS (
-    SELECT 1 FROM "Order" o 
-    WHERE o.id = "OrderItem"."orderId" 
-    AND (o."buyerId" = auth.uid() OR o."supplierId" = auth.uid())
+    SELECT 1 FROM order o 
+    WHERE o.id = orderitem."orderId" 
+    AND (o."buyer_id" = auth.uid() OR o."supplier_id" = auth.uid())
   )
 );
-CREATE POLICY "Users can create order items for their orders" ON "OrderItem" FOR INSERT WITH CHECK (
+CREATE POLICY "Users can create order items for their orders" ON orderitem FOR INSERT WITH CHECK (
   EXISTS (
-    SELECT 1 FROM "Order" o 
-    WHERE o.id = "OrderItem"."orderId" 
-    AND o."buyerId" = auth.uid()
+    SELECT 1 FROM order o 
+    WHERE o.id = orderitem."orderId" 
+    AND o."buyer_id" = auth.uid()
   )
 );
 
@@ -508,16 +508,16 @@ CREATE POLICY "Users can view their own invoices" ON invoices FOR SELECT USING (
 CREATE POLICY "Users can view their own notifications" ON notifications FOR ALL USING (user_id = auth.uid());
 CREATE POLICY "Order participants can view tracking" ON order_tracking FOR SELECT USING (
   EXISTS (
-    SELECT 1 FROM "Order" o 
+    SELECT 1 FROM order o 
     WHERE o.id = order_tracking.order_id 
-    AND (o."buyerId" = auth.uid() OR o."supplierId" = auth.uid())
+    AND (o."buyer_id" = auth.uid() OR o."supplier_id" = auth.uid())
   )
 );
 CREATE POLICY "Suppliers can add tracking updates" ON order_tracking FOR INSERT WITH CHECK (
   EXISTS (
-    SELECT 1 FROM "Order" o 
+    SELECT 1 FROM order o 
     WHERE o.id = order_tracking.order_id 
-    AND o."supplierId" = auth.uid()
+    AND o."supplier_id" = auth.uid()
   )
 );
 CREATE POLICY "Users can manage their own payment methods" ON payment_methods FOR ALL USING (user_id = auth.uid());
@@ -527,14 +527,14 @@ CREATE POLICY "Users can create reviews" ON reviews FOR INSERT WITH CHECK (revie
 -- Create indexes for performance
 CREATE INDEX idx_profiles_role ON profiles(role);
 CREATE INDEX idx_profiles_email ON profiles(email);
-CREATE INDEX idx_listing_supplier ON "Listing"("supplierId");
-CREATE INDEX idx_listing_category ON "Listing"(category);
-CREATE INDEX idx_listing_active ON "Listing"("isActive");
-CREATE INDEX idx_order_buyer ON "Order"("buyerId");
-CREATE INDEX idx_order_supplier ON "Order"("supplierId");
-CREATE INDEX idx_order_status ON "Order"(status);
-CREATE INDEX idx_orderitem_order ON "OrderItem"("orderId");
-CREATE INDEX idx_orderitem_listing ON "OrderItem"("listingId");
+CREATE INDEX idx_listing_supplier ON listing("supplier_id");
+CREATE INDEX idx_listing_category_id ON listing(category_id);
+CREATE INDEX idx_listing_active ON listing("availability");
+CREATE INDEX idx_order_buyer ON order("buyer_id");
+CREATE INDEX idx_order_supplier ON order("supplier_id");
+CREATE INDEX idx_order_status ON order(status);
+CREATE INDEX idx_orderitem_order ON orderitem("orderId");
+CREATE INDEX idx_orderitem_listing ON orderitem("listingId");
 CREATE INDEX idx_cart_user ON cart_items(user_id);
 CREATE INDEX idx_cart_listing ON cart_items(listing_id);
 CREATE INDEX idx_inventory_supplier ON inventory(supplier_id);
@@ -558,11 +558,11 @@ SECURITY DEFINER
 AS $$
 BEGIN
     -- Create profile
-    INSERT INTO public.profiles (id, email, full_name)
+    INSERT INTO public.profiles (id, email, full_title)
     VALUES (
         NEW.id,
         NEW.email,
-        COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name')
+        COALESCE(NEW.raw_user_meta_data->>'full_title', NEW.raw_user_meta_data->>'title')
     );
     
     -- Assign free subscription plan
@@ -573,7 +573,7 @@ BEGIN
         'active',
         now() + interval '1 year'
     FROM subscription_plans sp 
-    WHERE sp.name = 'Free'
+    WHERE sp.title = 'Free'
     LIMIT 1;
     
     RETURN NEW;

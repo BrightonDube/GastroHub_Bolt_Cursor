@@ -55,11 +55,11 @@ export class OrderService {
 
       // Step 6: Create order in database
       const { data: order, error: dbError } = await supabase
-        .from('orders')
+        .from('order')
         .insert({
           id: orderId,
           buyer_id: orderRequest.buyerId,
-          supplier_id: orderRequest.items[0]?.productId, // Assuming single supplier for now
+          supplier_id: orderRequest.items[0]?.listing_id, // Assuming single supplier for now
           status: 'pending',
           total_amount: calculations.total - discounts.amount,
           delivery_address: orderRequest.shippingAddress,
@@ -75,14 +75,14 @@ export class OrderService {
       // Step 7: Create order items
       const orderItems = orderRequest.items.map(item => ({
         order_id: orderId,
-        product_id: item.productId,
+        listing_id: item.listing_id,
         quantity: item.quantity,
         unit_price: item.unitPrice,
         total_price: item.quantity * item.unitPrice
       }));
 
       const { error: itemsError } = await supabase
-        
+        .from('orderitem')
         .insert(orderItems);
 
       if (itemsError) throw itemsError;
@@ -238,7 +238,7 @@ export class OrderService {
 
       // Update order status in database
       await supabase
-        .from('orders')
+        .from('order')
         .update({ 
           status: orderStatus,
           updated_at: new Date().toISOString()
@@ -293,7 +293,7 @@ export class OrderService {
 
       // Step 2: Get current order state
       const { data: currentOrder, error: fetchError } = await supabase
-        .from('orders')
+        .from('order')
         .select('*')
         .eq('id', updateRequest.orderId)
         .single();
@@ -350,7 +350,7 @@ export class OrderService {
 
       // Step 5: Update order in database
       const { error: updateError } = await supabase
-        .from('orders')
+        .from('order')
         .update(updateData)
         .eq('id', updateRequest.orderId);
 
@@ -412,7 +412,7 @@ export class OrderService {
     if (!request.paymentDetails.method) errors.push('Payment method is required');
 
     request.items.forEach((item, index) => {
-      if (!item.productId) errors.push(`Item ${index + 1}: Product ID is required`);
+      if (!item.listing_id) errors.push(`Item ${index + 1}: Listing ID is required`);
       if (!item.quantity || item.quantity <= 0) errors.push(`Item ${index + 1}: Valid quantity is required`);
       if (!item.unitPrice || item.unitPrice <= 0) errors.push(`Item ${index + 1}: Valid unit price is required`);
     });
@@ -425,13 +425,13 @@ export class OrderService {
 
   private static async checkInventoryAvailability(items: OrderRequest['items']) {
     // Collect all product IDs to fetch in a single query
-    const productIds = items.map(item => item.productId);
+    const productIds = items.map(item => item.listing_id);
     const unavailableItems: any[] = [];
     
     // Fetch all products in a single query to avoid N+1 problem
     const { data: products, error } = await supabase
-      
-      .select('id, name, availability')
+      .from('listing')
+      .select('id, title, availability')
       .in('id', productIds);
 
     if (error) {
@@ -443,14 +443,14 @@ export class OrderService {
 
     // Check availability for each item
     for (const item of items) {
-      const product = productMap.get(item.productId);
+      const product = productMap.get(item.listing_id);
       
       if (!product || product.availability === 'out_of_stock') {
         unavailableItems.push({
-          productId: item.productId,
-          productName: product?.name || 'Unknown Product',
-          requestedQuantity: item.quantity,
-          availableQuantity: 0
+          listing_id: item.listing_id,
+          listing_name: product?.title || 'Unknown Product',
+          requested_quantity: item.quantity,
+          available_quantity: 0
         });
       }
     }
@@ -483,7 +483,7 @@ export class OrderService {
 
     // First-time buyer discount
     const { count } = await supabase
-      .from('orders')
+      .from('order')
       .select('*', { count: 'exact', head: true })
       .eq('buyer_id', buyerId);
 
@@ -517,12 +517,12 @@ export class OrderService {
 
   private static async enrichOrderItems(items: OrderRequest['items']) {
     // Collect all product IDs to fetch in a single query
-    const productIds = items.map(item => item.productId);
+    const productIds = items.map(item => item.listing_id);
     
     // Fetch all products in a single query to avoid N+1 problem
     const { data: products, error } = await supabase
-      
-      .select('id, name, availability')
+      .from('listing')
+      .select('id, title, availability')
       .in('id', productIds);
 
     if (error) {
@@ -538,7 +538,7 @@ export class OrderService {
       
       return {
         productId: item.productId,
-        productName: product?.name || 'Unknown Product',
+        productName: product?.title || 'Unknown Product',
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         totalPrice: item.quantity * item.unitPrice,

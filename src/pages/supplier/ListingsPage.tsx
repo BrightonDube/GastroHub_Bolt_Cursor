@@ -56,9 +56,9 @@ export function ListingsPage() {
   ];
 
   const filteredListings = listings?.filter(listing => {
-    const matchesSearch = listing.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          listing.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !categoryFilter || listing.category === categoryFilter;
+    const matchesCategory = !categoryFilter || listing.category_id === categoryFilter;
     const matchesStatus = !statusFilter || listing.availability === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
@@ -151,7 +151,7 @@ export function ListingsPage() {
               />
             </div>
             <Select
-              options={categories}
+              options={categoryOptions}
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
             />
@@ -223,7 +223,7 @@ export function ListingsPage() {
                 <div className="relative">
                   <img
                     src={listing.images?.[0] || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400'}
-                    alt={listing.name}
+                    alt={listing.title}
                     className="w-full h-48 object-cover rounded-t-xl"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
@@ -246,9 +246,9 @@ export function ListingsPage() {
 
                 <div className="p-4">
                   <h3 className="font-semibold text-neutral-900 mb-1 line-clamp-2">
-                    {listing.name}
+                    {listing.title}
                   </h3>
-                  <p className="text-sm text-neutral-600 mb-2">{listing.category}</p>
+                  <p className="text-sm text-neutral-600 mb-2">{listing.category_id}</p>
                   
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-lg font-bold text-primary-900">

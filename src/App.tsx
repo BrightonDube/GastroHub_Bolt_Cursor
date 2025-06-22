@@ -303,14 +303,7 @@ function App() {
             {/* Placeholder routes - to be implemented */}
             <Route 
               path="/marketplace" 
-              element={
-                <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="text-2xl font-bold text-neutral-900 mb-4">Marketplace</h1>
-                    <p className="text-neutral-600">This page is under construction.</p>
-                  </div>
-                </div>
-              } 
+              element={<MarketplacePage />} 
             />
             <Route 
               path="/orders" 

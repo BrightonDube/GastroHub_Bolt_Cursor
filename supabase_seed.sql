@@ -5,11 +5,11 @@
 -- WARNING: This script assumes a fresh DB. Remove DELETEs if running on production data!
 -- Clear existing data (order matters for FKs)
 DELETE FROM order_tracking;
-DELETE FROM "OrderItem";
-DELETE FROM "Order";
+DELETE FROM orderitem;
+DELETE FROM order;
 DELETE FROM delivery_zones;
 DELETE FROM inventory;
-DELETE FROM "Listing";
+DELETE FROM listing;
 DELETE FROM categories;
 DELETE FROM custom_categories;
 DELETE FROM favorites;
@@ -26,7 +26,7 @@ DELETE FROM profiles;
 DELETE FROM subscription_plans;
 
 -- 1. Insert subscription plans
-INSERT INTO subscription_plans (name, description, price_monthly, price_yearly, features, max_listings, max_orders_per_month, commission_rate) VALUES
+INSERT INTO subscription_plans (title, description, price_monthly, price_yearly, features, max_listings, max_orders_per_month, commission_rate) VALUES
 ('Free', 'Basic plan for getting started', 0, 0, '["Basic listing", "Standard support", "Up to 5 listings"]', 5, 10, 0.10),
 ('Pro', 'Professional plan for growing businesses', 29.99, 299.99, '["Unlimited listings", "Priority support", "Analytics dashboard", "Advanced messaging"]', NULL, 100, 0.05),
 ('Enterprise', 'Enterprise plan for large operations', 99.99, 999.99, '["Everything in Pro", "Custom integrations", "Dedicated support", "White-label options"]', NULL, NULL, 0.03)
@@ -34,7 +34,7 @@ ON CONFLICT DO NOTHING;
 
 -- 2. Insert 10 suppliers into profiles
 INSERT INTO profiles (
-  id, email, full_name, role, business_name, business_address, business_type, business_description,
+  id, email, full_title, role, business_title, business_address, business_type, business_description,
   website_url, registration_number, tax_number, subscription_tier, logo_url, banking_details,
   is_verified, created_at, updated_at
 ) VALUES
@@ -51,14 +51,14 @@ INSERT INTO profiles (
 
 -- 3. Insert 3 buyers into profiles
 INSERT INTO profiles (
-  id, email, full_name, role, created_at, updated_at
+  id, email, full_title, role, created_at, updated_at
 ) VALUES
   ('b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer1@example.com', 'Buyer One', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('b2222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer2@example.com', 'Buyer Two', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('b3333333-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'buyer3@example.com', 'Buyer Three', 'buyer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 4. Insert categories
-INSERT INTO categories (name, description, icon_name, is_active, created_at, updated_at) VALUES
+INSERT INTO categories (title, description, icon_title, is_active, created_at, updated_at) VALUES
   ('Fresh Produce', 'Fruits, vegetables, herbs and fresh organic produce', 'leaf', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('Meat & Seafood', 'Fresh meat, poultry, fish and seafood products', 'fish', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('Dairy & Eggs', 'Milk, cheese, yogurt, eggs and dairy products', 'milk', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -73,8 +73,8 @@ ON CONFLICT DO NOTHING;
 
 
 -- 5. Insert listings for each supplier
-INSERT INTO "Listing" (
-  id, supplierId, name, description, category, price, unit, minOrder, maxOrder, images, isActive, createdAt, updatedAt
+INSERT INTO listing (
+  id, supplier_id, title, description, category_id, price, unit, min_quantity, max_quantity, images, availability, created_at, updated_at
 ) VALUES
   ('l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'Organic Tomatoes', 'Fresh organic tomatoes', 'Fresh Produce', 4.50, 'lb', 5, 50, ARRAY['tomatoes1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'Fresh Salmon', 'Wild-caught salmon', 'Meat & Seafood', 18.99, 'lb', 2, 20, ARRAY['salmon1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -82,28 +82,28 @@ INSERT INTO "Listing" (
 
 -- 6. Insert delivery zones for suppliers
 INSERT INTO delivery_zones (
-  id, supplier_id, zone_name, base_delivery_fee, free_delivery_threshold, max_delivery_distance, estimated_delivery_hours, cities, postal_codes, is_active, created_at, updated_at
+  id, supplier_id, zone_title, base_delivery_fee, free_delivery_threshold, max_delivery_distance, estimated_delivery_hours, cities, postal_codes, is_active, created_at, updated_at
 ) VALUES
   ('dz111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'City Center', 5.00, 100.00, 10, 2, ARRAY['Downtown'], ARRAY['10001'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('dz222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'Suburban', 8.50, 150.00, 20, 4, ARRAY['Suburbs'], ARRAY['10101'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 7. Insert inventory
 INSERT INTO inventory (
-  id, supplier_id, listing_id, product_name, description, category_id, current_stock, minimum_stock, unit_price, unit_type, is_available, created_at, updated_at
+  id, supplier_id, listing_id, product_title, description, category_id_id, current_stock, minimum_stock, unit_price, unit_type, is_available, created_at, updated_at
 ) VALUES
   ('inv11111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Organic Tomatoes', 'Fresh organic tomatoes', 'c1111111-cccc-cccc-cccc-cccccccccccc', 150, 25, 4.50, 'lb', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('inv22222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '22222222-2222-2222-2222-222222222222', 'l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Fresh Salmon', 'Wild-caught salmon', 'c2222222-cccc-cccc-cccc-cccccccccccc', 45, 10, 18.99, 'lb', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 8. Insert orders
-INSERT INTO "Order" (
-  id, buyerId, supplierId, totalAmount, deliveryAddress, deliveryNotes, status, createdAt, updatedAt
+INSERT INTO order (
+  id, buyer_id, supplier_id, totalAmount, deliveryAddress, deliveryNotes, status, created_at, updated_at
 ) VALUES
   ('o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b1111111-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 127.50, '123 Restaurant Ave', 'Please deliver to back entrance', 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
   ('o2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'b2222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '22222222-2222-2222-2222-222222222222', 89.25, '456 Cafe Street', 'Call upon arrival', 'APPROVED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 9. Insert order items
 INSERT INTO orderitem (
-  id, orderId, listingId, quantity, price, createdAt
+  id, orderId, listingId, quantity, price, created_at
 ) VALUES
   ('oi111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'l1111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, 4.50, CURRENT_TIMESTAMP),
   ('oi222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'o2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'l2222222-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, 18.99, CURRENT_TIMESTAMP);
@@ -123,7 +123,7 @@ INSERT INTO cart_items (
 
 -- 12. Insert custom categories for suppliers
 INSERT INTO custom_categories (
-  id, user_id, name, description, parent_id, icon_name, is_active, created_at, updated_at
+  id, user_id, title, description, parent_id, icon_title, is_active, created_at, updated_at
 ) VALUES
   ('cc111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'Specialty Produce', 'Unique produce', NULL, 'star', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
@@ -194,43 +194,43 @@ ON CONFLICT DO NOTHING;
 
 -- Insert subcategories with parent relationships
 WITH main_categories AS (
-  SELECT id, name FROM categories WHERE parent_id IS NULL
+  SELECT id, title FROM categories WHERE parent_id IS NULL
 )
-INSERT INTO categories (name, description, parent_id, icon_name)
+INSERT INTO categories (title, description, parent_id, icon_title)
 SELECT 'Organic Vegetables', 'Certified organic vegetables', mc.id, 'sprout'
-FROM main_categories mc WHERE mc.name = 'Fresh Produce'
+FROM main_categories mc WHERE mc.title = 'Fresh Produce'
 UNION ALL
 SELECT 'Tropical Fruits', 'Exotic and tropical fruits', mc.id, 'apple'
-FROM main_categories mc WHERE mc.name = 'Fresh Produce'
+FROM main_categories mc WHERE mc.title = 'Fresh Produce'
 UNION ALL
 SELECT 'Local Herbs', 'Fresh locally grown herbs', mc.id, 'leaf'
-FROM main_categories mc WHERE mc.name = 'Fresh Produce'
+FROM main_categories mc WHERE mc.title = 'Fresh Produce'
 UNION ALL
 SELECT 'Grass-Fed Beef', 'Premium grass-fed beef products', mc.id, 'beef'
-FROM main_categories mc WHERE mc.name = 'Meat & Seafood'
+FROM main_categories mc WHERE mc.title = 'Meat & Seafood'
 UNION ALL
 SELECT 'Wild-Caught Fish', 'Sustainably sourced wild fish', mc.id, 'fish'
-FROM main_categories mc WHERE mc.name = 'Meat & Seafood'
+FROM main_categories mc WHERE mc.title = 'Meat & Seafood'
 UNION ALL
 SELECT 'Artisan Cheese', 'Handcrafted artisanal cheeses', mc.id, 'milk'
-FROM main_categories mc WHERE mc.name = 'Dairy & Eggs'
+FROM main_categories mc WHERE mc.title = 'Dairy & Eggs'
 UNION ALL
 SELECT 'Craft Beer', 'Local and craft beer selection', mc.id, 'glass-water'
-FROM main_categories mc WHERE mc.name = 'Beverages'
+FROM main_categories mc WHERE mc.title = 'Beverages'
 UNION ALL
 SELECT 'Fine Wine', 'Curated wine selection', mc.id, 'wine'
-FROM main_categories mc WHERE mc.name = 'Beverages'
+FROM main_categories mc WHERE mc.title = 'Beverages'
 ON CONFLICT DO NOTHING;
 
 -- Insert delivery zones
-INSERT INTO delivery_zones (supplier_id, zone_name, base_delivery_fee, free_delivery_threshold, cities, postal_codes, estimated_delivery_hours) VALUES
+INSERT INTO delivery_zones (supplier_id, zone_title, base_delivery_fee, free_delivery_threshold, cities, postal_codes, estimated_delivery_hours) VALUES
 (gen_random_uuid(), 'City Center', 5.00, 100.00, ARRAY['Downtown', 'Midtown'], ARRAY['10001', '10002', '10003'], 2),
 (gen_random_uuid(), 'Suburban Area', 8.50, 150.00, ARRAY['Suburbs', 'Residential'], ARRAY['10101', '10102'], 4),
 (gen_random_uuid(), 'Extended Area', 12.00, 200.00, ARRAY['Extended City'], ARRAY['10201', '10202'], 6)
 ON CONFLICT DO NOTHING;
 
 -- Insert sample listings
-INSERT INTO "Listing" ("supplierId", name, description, category, price, unit, "minOrder", "maxOrder", images, "isActive", "createdAt", "updatedAt") VALUES
+INSERT INTO listing ("supplier_id", title, description, category_id, price, unit, "min_quantity", "max_quantity", images, "availability", "created_at", "updated_at") VALUES
 (gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes from local farm', 'Fresh Produce', 4.50, 'lb', 5, 50, ARRAY['tomatoes1.jpg', 'tomatoes2.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Fresh Salmon Fillet', 'Wild-caught Atlantic salmon fillet', 'Meat & Seafood', 18.99, 'lb', 2, 20, ARRAY['salmon1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Artisan Sourdough Bread', 'Hand-crafted sourdough bread', 'Dry Goods', 6.50, 'loaf', 1, 10, ARRAY['bread1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -249,7 +249,7 @@ INSERT INTO "Listing" ("supplierId", name, description, category, price, unit, "
 ON CONFLICT DO NOTHING;
 
 -- Insert inventory data
-INSERT INTO inventory (supplier_id, product_name, description, current_stock, minimum_stock, unit_price, unit_type, is_available) VALUES
+INSERT INTO inventory (supplier_id, product_title, description, current_stock, minimum_stock, unit_price, unit_type, is_available) VALUES
 (gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes', 150.0, 25.0, 4.50, 'lbs', true),
 (gen_random_uuid(), 'Fresh Salmon', 'Wild-caught salmon fillets', 45.0, 10.0, 18.99, 'lbs', true),
 (gen_random_uuid(), 'Sourdough Bread', 'Artisan sourdough loaves', 25.0, 5.0, 6.50, 'loaves', true),
@@ -265,7 +265,7 @@ INSERT INTO inventory (supplier_id, product_name, description, current_stock, mi
 ON CONFLICT DO NOTHING;
 
 -- Insert sample orders
-INSERT INTO "Order" ("buyerId", "supplierId", "totalAmount", "deliveryAddress", "deliveryNotes", status, "createdAt", "updatedAt") VALUES
+INSERT INTO order ("buyer_id", "supplier_id", "totalAmount", "deliveryAddress", "deliveryNotes", status, "created_at", "updated_at") VALUES
 (gen_random_uuid(), gen_random_uuid(), 127.50, '123 Restaurant Ave, Food City, FC 12345', 'Please deliver to back entrance', 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), gen_random_uuid(), 89.25, '456 Cafe Street, Dine Town, DT 67890', 'Call upon arrival', 'APPROVED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), gen_random_uuid(), 234.80, '789 Hotel Plaza, Service City, SC 13579', 'Security desk check-in required', 'IN_PREPARATION', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

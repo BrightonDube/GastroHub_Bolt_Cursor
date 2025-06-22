@@ -119,7 +119,6 @@ export function LoginForm() {
               className="w-full"
               onClick={handleGoogleSignIn}
               loading={googleLoading}
-              size="lg"
             >
               <Chrome className="w-5 h-5 mr-2" />
               Continue with Google
