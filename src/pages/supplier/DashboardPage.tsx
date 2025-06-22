@@ -15,7 +15,7 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 
-import { useSupplierDashboardStats } from '../../hooks/useDashboardStats';
+import { useSupplierDashboardStats } from '../../hooks/useSupplierDashboardStats';
 
 export function SupplierDashboard() {
   const { data: stats = [], isLoading: statsLoading } = useSupplierDashboardStats();

@@ -21,6 +21,11 @@ import NewListingPage from './pages/supplier/NewListingPage';
 import EditListingPage from './pages/supplier/EditListingPage';
 import { ThemeProvider } from './context/ThemeProvider';
 import RoleProfileForm from './pages/onboarding/RoleProfileForm';
+import BuyerDashboard from './pages/buyer/DashboardPage';
+import SupplierDashboard from './pages/supplier/DashboardPage';
+import DeliveryDashboard from './pages/delivery/DashboardPage';
+import SuperAdminDashboard from './pages/superAdmin/DashboardPage';
+import MarketplacePage from './pages/MarketplacePage';
 
 // Create a client
 const queryClient = new QueryClient({
