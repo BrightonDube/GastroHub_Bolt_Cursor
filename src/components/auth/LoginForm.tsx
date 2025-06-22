@@ -136,12 +136,12 @@ export function LoginForm() {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full flex items-center justify-center gap-2 min-h-[37.33px] px-4"
               onClick={handleGoogleSignIn}
               loading={googleLoading}
             >
-              <Chrome className="w-5 h-5 mr-2" />
-              Continue with Google
+              <Chrome className="w-5 h-5" />
+              <span className="inline-block">Continue with Google</span>
             </Button>
 
             {/* Divider */}
