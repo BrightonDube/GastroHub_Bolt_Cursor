@@ -56,7 +56,9 @@ function getStats() {
   ];
 }
 
-export function DashboardPage() {
+// Deprecated: This file is no longer used. See role-based dashboards instead.
+
+// Deprecated: This file is no longer used. See role-based dashboards instead.
   const { user } = useAuthContext();
 
   // Guard: Show loading or fallback if user/profile is missing

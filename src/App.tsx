@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
-import { DashboardPage } from './pages/DashboardPage';
+
 import { RequireRole } from './components/auth/RequireRole';
 import LogoutPage from './pages/LogoutPage';
 import CallbackPage from './pages/auth/CallbackPage';
@@ -242,16 +242,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <RequireRole>
-                    <DashboardPage />
-                  </RequireRole>
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/buyer/dashboard" element={<ProtectedRoute><BuyerDashboard /></ProtectedRoute>} />
+            <Route path="/supplier/dashboard" element={<ProtectedRoute><SupplierDashboard /></ProtectedRoute>} />
+            <Route path="/delivery/dashboard" element={<ProtectedRoute><DeliveryDashboard /></ProtectedRoute>} />
+            <Route path="/super-admin/dashboard" element={<ProtectedRoute><SuperAdminDashboard /></ProtectedRoute>} />
 
             {/* Supplier Routes */}
             <Route 

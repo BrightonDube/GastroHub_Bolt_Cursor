@@ -32,7 +32,7 @@ export function Sidebar() {
     const baseItems = [
       {
         name: 'Dashboard',
-        href: '/dashboard',
+        href: getDashboardPathByRole(user.role),
         icon: LayoutDashboard,
       },
     ];

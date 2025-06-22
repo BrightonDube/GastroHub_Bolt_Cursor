@@ -16,7 +16,7 @@ export default function SelectRolePage() {
 
   React.useEffect(() => {
     if (!loading && user && user.role) {
-      navigate('/dashboard', { replace: true });
+      navigate(getDashboardPathByRole(user.role), { replace: true });
     }
   }, [user, loading, navigate]);
 
@@ -31,7 +31,7 @@ export default function SelectRolePage() {
       });
       const data = await res.json();
       if (data.success) {
-        navigate('/dashboard', { replace: true });
+        navigate(getDashboardPathByRole(user.role), { replace: true });
       } else {
         alert('Failed to update role: ' + (data.error || 'Unknown error'));
       }

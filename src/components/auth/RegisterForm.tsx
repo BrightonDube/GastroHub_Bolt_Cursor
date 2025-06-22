@@ -47,6 +47,14 @@ export function RegisterForm() {
   const { signUp, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
+  // Utility to get dashboard path by role
+  function getDashboardPath(role: string) {
+    if (role === 'supplier') return '/supplier/dashboard';
+    if (role === 'buyer') return '/buyer/dashboard';
+    if (role === 'delivery_partner') return '/delivery/dashboard';
+    return '/dashboard';
+  }
+
   const roleOptions = [
     { value: 'buyer', label: 'Buyer - I want to purchase food products' },
     { value: 'supplier', label: 'Supplier - I want to sell food products' },
@@ -70,7 +78,7 @@ export function RegisterForm() {
       return;
     }
 
-    const { error } = await signUp(formData.email, formData.password, {
+    const { error, data } = await signUp(formData.email, formData.password, {
       fullName: formData.fullName,
       role: formData.role,
       businessName: formData.businessName || undefined,
@@ -78,11 +86,12 @@ export function RegisterForm() {
     });
 
     if (error) {
-      setError(error);
+      setError(typeof error === 'string' ? error : (error?.message || 'Registration failed'));
     } else {
-      navigate('/dashboard');
+      // Use selected role for redirect
+      navigate(getDashboardPath(formData.role));
     }
-
+    console.log('[RegisterForm] Registration successful, redirecting to dashboard');
     setLoading(false);
   };
 
@@ -96,7 +105,9 @@ export function RegisterForm() {
       setError(error);
       setGoogleLoading(false);
     }
+    console.log('[RegisterForm] Google sign up successful, redirecting to dashboard');
     // Note: Don't set loading to false here as the user will be redirected
+    setLoading(false);
   };
 
   const handleInputChange = (field: string, value: string) => {

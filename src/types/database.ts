@@ -1,3 +1,6 @@
+// AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY.
+// Updated Supabase types for GastroHub project
+
 export type Json =
   | string
   | number

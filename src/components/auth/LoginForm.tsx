@@ -39,18 +39,38 @@ export function LoginForm() {
   const { signIn, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
+  // Utility to get dashboard path by role
+  function getDashboardPath(role: string) {
+    if (role === 'supplier') return '/supplier/dashboard';
+    if (role === 'buyer') return '/buyer/dashboard';
+    if (role === 'delivery_partner') return '/delivery/dashboard';
+    return '/dashboard';
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     console.log('[LoginForm] Attempting login for', email);
-    const { error } = await signIn(email, password);
+    const { error, data } = await signIn(email, password);
     if (error) {
       console.error('[LoginForm] Login failed:', error);
-      setError(error);
+      setError(typeof error === 'string' ? error : (error?.message || 'Login failed'));
     } else {
-      console.log('[LoginForm] Login successful, redirecting to /dashboard');
-      navigate('/dashboard');
+      // Try to get user role from returned data or context
+      let role = data?.user?.role;
+      if (!role && data?.user && data.user.id) {
+        // Try to get role from profile if available
+        role = data.user.role || data.user.profile?.role;
+      }
+      // Fallback: try context
+      try {
+        const ctx = useAuthContext();
+        role = role || ctx?.user?.role;
+      } catch {}
+      const dashboardPath = getDashboardPath(role);
+      console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
+      navigate(dashboardPath);
     }
     setLoading(false);
   };
@@ -171,18 +191,6 @@ export function LoginForm() {
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-neutral-400">
-                    Remember me
-                  </label>
-                </div>
-
                 <div className="text-sm">
                   <Link to="/forgot-password" className="font-medium text-primary-400 hover:text-primary-300">
                     Forgot your password?
