@@ -31,7 +31,8 @@ export default function SelectRolePage() {
       });
       const data = await res.json();
       if (data.success) {
-        navigate(getDashboardPathByRole(user.role), { replace: true });
+        // After role is set, redirect to role-specific profile form
+        navigate('/onboarding/role-profile', { replace: true });
       } else {
         alert('Failed to update role: ' + (data.error || 'Unknown error'));
       }

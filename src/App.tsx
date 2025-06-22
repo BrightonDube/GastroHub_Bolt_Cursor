@@ -8,7 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 
-import { RequireRole } from './components/auth/RequireRole';
+import RequireRoleGuard from './components/auth/RequireRoleGuard';
 import LogoutPage from './pages/LogoutPage';
 import CallbackPage from './pages/auth/CallbackPage';
 import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
@@ -20,6 +20,7 @@ import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
 import NewListingPage from './pages/supplier/NewListingPage';
 import EditListingPage from './pages/supplier/EditListingPage';
 import { ThemeProvider } from './context/ThemeProvider';
+import RoleProfileForm from './pages/onboarding/RoleProfileForm';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -242,10 +243,13 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/buyer/dashboard" element={<ProtectedRoute><BuyerDashboard /></ProtectedRoute>} />
-            <Route path="/supplier/dashboard" element={<ProtectedRoute><SupplierDashboard /></ProtectedRoute>} />
-            <Route path="/delivery/dashboard" element={<ProtectedRoute><DeliveryDashboard /></ProtectedRoute>} />
-            <Route path="/super-admin/dashboard" element={<ProtectedRoute><SuperAdminDashboard /></ProtectedRoute>} />
+            <Route path="/buyer/dashboard" element={<ProtectedRoute><RequireRoleGuard><BuyerDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/dashboard" element={<ProtectedRoute><RequireRoleGuard><SupplierDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/delivery/dashboard" element={<ProtectedRoute><RequireRoleGuard><DeliveryDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
+
+            {/* Onboarding: Role Profile Form */}
+            <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Supplier Routes */}
             <Route 
