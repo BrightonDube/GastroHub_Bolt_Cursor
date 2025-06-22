@@ -1,7 +1,7 @@
 import { Database } from './database';
 
 // Database table types
-export type Profile = Database['public']['Tables']['profile']['Row'];
+export type Profiles = Database['public']['Tables']['profiles']['Row'];
 export type Listing = Database['public']['Tables']['listing']['Row'];
 export type Order = Database['public']['Tables']['order']['Row'];
 export type DeliveryTask = Database['public']['Tables']['delivery_task']['Row'];
@@ -45,7 +45,7 @@ export interface AuthUser {
   id: string;
   email: string;
   role: UserRole;
-  profile: Profile;
+  profiles: Profiles;
 }
 
 // Form types

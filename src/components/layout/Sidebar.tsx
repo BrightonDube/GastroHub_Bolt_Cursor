@@ -1,8 +1,9 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../App';
 import { cn } from '../../utils/cn';
 import { isSuperAdmin } from '../../utils/superAdmin';
+import { getDashboardPathByRole } from '../../utils/dashboardPaths';
+import { UserRole } from '../../types/index';
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -12,8 +13,6 @@ import {
   BarChart3,
   Settings,
   Users,
-  MapPin,
-  CreditCard,
   FileText,
 } from 'lucide-react';
 
@@ -32,12 +31,12 @@ export function Sidebar() {
     const baseItems = [
       {
         name: 'Dashboard',
-        href: getDashboardPathByRole(user.role),
+        href: getDashboardPathByRole(user.role as UserRole),
         icon: LayoutDashboard,
       },
     ];
 
-    const roleSpecificItems = {
+    const roleSpecificItems: Record<UserRole, Array<{name: string, href: string, icon: any}>> = {
       buyer: [
         {
           name: 'Marketplace',
@@ -106,7 +105,7 @@ export function Sidebar() {
     }
     return [
       ...baseItems,
-      ...roleSpecificItems[user.role],
+      ...roleSpecificItems[user.role as UserRole],
       ...settingsItems,
     ];
   };

@@ -2,7 +2,8 @@ import React from 'react';
 import { useAuthContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { UserRole } from '../types';
+import { UserRole } from '../types/index';
+import { getDashboardPathByRole } from '../utils/dashboardPaths';
 
 const roleOptions = [
   { value: 'buyer', label: 'Buyer - I want to purchase food products' },

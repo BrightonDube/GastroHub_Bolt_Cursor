@@ -49,6 +49,84 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      },
+      // ... (rest of types truncated for brevity)
+    },
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      DeliveryStatus: [
+        "PENDING",
+        "ASSIGNED",
+        "PICKED_UP",
+        "IN_TRANSIT",
+        "DELIVERED",
+        "FAILED",
+      ],
+      OrderStatus: [
+        "PENDING",
+        "APPROVED",
+        "REJECTED",
+        "IN_PREPARATION",
+        "READY_FOR_PICKUP",
+        "IN_TRANSIT",
+        "DELIVERED",
+        "CANCELLED",
+      ],
+      UserRole: ["SUPPLIER", "BUYER", "DELIVERY_PARTNER"],
+    },
+  },
+} as const
+
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  public: {
+    Tables: {
+      business_hour: {
+        Row: {
+          close_time: string | null
+          created_at: string | null
+          day_of_week: string
+          id: string
+          is_closed: boolean | null
+          open_time: string | null
+          supplier_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          close_time?: string | null
+          created_at?: string | null
+          day_of_week: string
+          id?: string
+          is_closed?: boolean | null
+          open_time?: string | null
+          supplier_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          close_time?: string | null
+          created_at?: string | null
+          day_of_week?: string
+          id?: string
+          is_closed?: boolean | null
+          open_time?: string | null
+          supplier_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_hour_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cart_item: {
         Row: {
@@ -856,7 +934,7 @@ export type Database = {
           },
         ]
       }
-      profile: {
+      profiles: {
         Row: {
           business_name: string | null
           created_at: string | null
