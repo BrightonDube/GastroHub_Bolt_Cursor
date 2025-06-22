@@ -1,52 +1,61 @@
 import React from 'react';
 import { cn } from '../../utils/cn';
-import { Loader2 } from 'lucide-react';
+import { VariantProps, cva } from 'class-variance-authority';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
-  loading?: boolean;
-  children: React.ReactNode;
+const buttonVariants = cva(
+  "relative group border text-foreground mx-auto text-center rounded-full",
+  {
+    variants: {
+      variant: {
+        default: "bg-blue-500/5 hover:bg-blue-500/0 border-blue-500/20",
+        solid: "bg-blue-500 hover:bg-blue-600 text-white border-transparent hover:border-foreground/50 transition-all duration-200",
+        ghost: "border-transparent bg-transparent hover:border-zinc-600 hover:bg-white/10",
+      },
+      size: {
+        default: "px-7 py-1.5 ",
+        sm: "px-4 py-0.5 ",
+        lg: "px-10 py-2.5 ",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  neon?: boolean;
 }
 
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  disabled,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
-  
-  const variants = {
-    primary: 'bg-primary-500 text-primary-foreground hover:bg-primary-600 focus:ring-primary-500 shadow-sm hover:shadow-md dark:bg-primary-600 dark:hover:bg-primary-700',
-    secondary: 'bg-secondary-500 text-secondary-foreground hover:bg-secondary-600 focus:ring-secondary-500 shadow-sm hover:shadow-md dark:bg-secondary-600 dark:hover:bg-secondary-700',
-    ghost: 'text-foreground hover:bg-muted focus:ring-primary-500 dark:hover:bg-neutral-800',
-    outline: 'border border-input text-foreground hover:bg-muted focus:ring-primary-500 dark:border-neutral-700 dark:hover:bg-neutral-800',
-    danger: 'bg-error-500 text-white hover:bg-error-600 focus:ring-error-500 shadow-sm hover:shadow-md dark:bg-error-600 dark:hover:bg-error-700',
-  };
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, neon = true, size, variant, children, ...props }, ref) => {
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size }), className)}
+        ref={ref}
+        {...props}
+      >
+        <span
+          className={cn(
+            "absolute h-px opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-x-0 inset-y-0 bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden",
+            neon && "block"
+          )}
+        />
+        {children}
+        <span
+          className={cn(
+            "absolute group-hover:opacity-30 transition-all duration-500 ease-in-out inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden",
+            neon && "block"
+          )}
+        />
+      </button>
+    );
+  }
+);
 
-  const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base',
-  };
+Button.displayName = 'Button';
 
-  return (
-    <button
-      className={cn(
-        baseClasses,
-        variants[variant],
-        sizes[size],
-        className
-      )}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-      {children}
-    </button>
-  );
-}
+export { Button, buttonVariants };

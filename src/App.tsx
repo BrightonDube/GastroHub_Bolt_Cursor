@@ -17,6 +17,8 @@ import SupplierMessages from './pages/supplier/SupplierMessages';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
+import NewListingPage from './pages/supplier/NewListingPage';
+import EditListingPage from './pages/supplier/EditListingPage';
 import { ThemeProvider } from './context/ThemeProvider';
 
 // Create a client
@@ -240,12 +242,7 @@ function App() {
               path="/supplier/listings/new" 
               element={
                 <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">New Listing</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
-                  </div>
+                  <NewListingPage />
                 </ProtectedRoute>
               } 
             />
@@ -253,12 +250,7 @@ function App() {
               path="/supplier/listings/edit/:id" 
               element={
                 <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">Edit Listing</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
-                  </div>
+                  <EditListingPage />
                 </ProtectedRoute>
               } 
             />
@@ -266,12 +258,7 @@ function App() {
               path="/supplier/orders" 
               element={
                 <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">Supplier Orders</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
-                  </div>
+                  <OrdersPage />
                 </ProtectedRoute>
               } 
             />

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ChronicleButton } from './chronicle-button';
+import { Button } from './Button';
 
 interface TextStyle {
   color?: string;
@@ -213,16 +213,13 @@ export const DicedHeroSection: React.FC<DicedHeroSectionProps> = ({
               : 'flex-start',
           }}
         >
-          <ChronicleButton
-            text={buttonText}
-            onClick={onMainButtonClick}
-            hoverColor={buttonStyle?.hoverColor}
-            hoverForeground={buttonStyle?.hoverForeground ?? '#fff'} // NEW
-            borderRadius={buttonStyle?.borderRadius}
-            fontFamily={fontFamily}
-            customBackground={buttonStyle?.backgroundColor}
-            customForeground={buttonStyle?.color}
-          />
+          <Button
+            variant="solid"
+            size="lg"
+            className="w-72 rounded-3xl font-bold"
+          >
+            <b>Get Started Free</b>
+          </Button>
         </motion.div>
       </div>
       <div

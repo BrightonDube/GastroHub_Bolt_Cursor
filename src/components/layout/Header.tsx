@@ -4,6 +4,7 @@ import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { isSuperAdmin } from '../../utils/superAdmin';
 import { 
   ChefHat, 
   Bell, 
@@ -20,11 +21,23 @@ export function Header() {
   const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
   console.log('[Header] user:', user);
+  if (user && isSuperAdmin(user)) {
+    console.log('[Header] Super Admin detected, showing all role UI and navigation.');
+  }
+  console.log('[Header] signOut from context:', signOut, typeof signOut);
 
   const handleSignOut = async () => {
     console.log('[Header] handleSignOut called');
+    let finished = false;
+    setTimeout(() => {
+      if (!finished) {
+        console.warn('[Header] signOut still pending after 2s');
+      }
+    }, 2000);
     try {
+      console.log('[Header] About to await signOut');
       const result = await signOut();
+      finished = true;
       console.log('[Header] signOut result:', result);
       setTimeout(() => {
         console.log('[Header] Cookies after signOut:', document.cookie);
@@ -34,6 +47,7 @@ export function Header() {
         window.location.replace('/login');
       }, 300);
     } catch (err) {
+      finished = true;
       console.error('[Header] signOut error:', err);
       alert('Logout failed: ' + (err instanceof Error ? err.message : String(err)));
     }
@@ -41,7 +55,10 @@ export function Header() {
 
 
 
-  const getRoleIcon = (role: string) => {
+  const getRoleIcon = (role: string, user: any) => {
+    if (user && isSuperAdmin(user)) {
+      return <ChefHat className="w-4 h-4 text-primary-700" />;
+    }
     switch (role) {
       case 'buyer':
         return <ShoppingCart className="w-4 h-4" />;
@@ -54,7 +71,10 @@ export function Header() {
     }
   };
 
-  const getRoleColor = (role: string) => {
+  const getRoleColor = (role: string, user: any) => {
+    if (isSuperAdmin(user)) {
+      return 'primary';
+    }
     switch (role) {
       case 'buyer':
         return 'primary';
@@ -100,7 +120,7 @@ export function Header() {
             </Link>
             {user?.role === 'supplier' && (
               <Link 
-                to="/my-listings" 
+                to="/supplier/listings" 
                 className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
               >
                 My Listings
@@ -134,13 +154,13 @@ export function Header() {
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 
-                      variant={getRoleColor(user.role) as 'primary' | 'secondary' | 'success' | 'default'}
+                      variant={getRoleColor(user.role, user) as 'primary' | 'secondary' | 'success' | 'default'}
                       size="sm"
                     >
                       <span className="flex items-center space-x-1">
-                        {getRoleIcon(user.role)}
+                        {getRoleIcon(user.role, user)}
                         <span className="capitalize">
-                          {user.role.replace('_', ' ')}
+                          {isSuperAdmin(user) ? 'Super Admin' : user.role.replace('_', ' ')}
                         </span>
                       </span>
                     </Badge>

@@ -5,14 +5,14 @@ import React from "react";
 const styles = `
 .chronicleButton {
   --chronicle-button-default-hover-color: var(--theme-color);
-  --chronicle-button-border-radius: var(--general-rounding, 8px);
+  --chronicle-button-border-radius: 999px;
   border-radius: var(--chronicle-button-border-radius);
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
   line-height: 1;
-  padding: 1rem 1.232rem;
+  padding: 1rem 2.5rem;
   cursor: pointer;
   border: none;
   font-weight: 700;
@@ -113,7 +113,7 @@ export const ChronicleButton: React.FC<ChronicleButtonProps> = ({
   width = "160px",
   outlined = false,
   outlinePaddingAdjustment = "2px",
-  borderRadius = "8px",
+  borderRadius = "999px",
   outlinedButtonBackgroundOnHover = "transparent",
   customBackground = "#fff",
   customForeground = "#111014",

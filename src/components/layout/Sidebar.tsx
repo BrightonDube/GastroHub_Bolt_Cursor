@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../App';
 import { cn } from '../../utils/cn';
+import { isSuperAdmin } from '../../utils/superAdmin';
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -57,17 +58,17 @@ export function Sidebar() {
       supplier: [
         {
           name: 'My Listings',
-          href: '/my-listings',
+          href: '/supplier/listings',
           icon: Package,
         },
         {
           name: 'Add Listing',
-          href: '/add-listing',
+          href: '/supplier/listings/new',
           icon: PlusCircle,
         },
         {
           name: 'Orders',
-          href: '/orders',
+          href: '/supplier/orders',
           icon: FileText,
         },
         {
@@ -78,19 +79,9 @@ export function Sidebar() {
       ],
       delivery_partner: [
         {
-          name: 'Available Deliveries',
-          href: '/deliveries/available',
-          icon: MapPin,
-        },
-        {
           name: 'My Deliveries',
           href: '/deliveries',
           icon: Truck,
-        },
-        {
-          name: 'Earnings',
-          href: '/earnings',
-          icon: CreditCard,
         },
       ],
     };
@@ -103,6 +94,16 @@ export function Sidebar() {
       },
     ];
 
+    if (isSuperAdmin(user)) {
+      // Show all navigation items for all roles
+      return [
+        ...baseItems,
+        ...roleSpecificItems['buyer'],
+        ...roleSpecificItems['supplier'],
+        ...roleSpecificItems['delivery_partner'],
+        ...settingsItems,
+      ];
+    }
     return [
       ...baseItems,
       ...roleSpecificItems[user.role],
@@ -113,8 +114,8 @@ export function Sidebar() {
   const navigationItems = getNavigationItems();
 
   return (
-   <div className="hidden md:flex md:w-64 md:flex-col">
-     <div
+    <div className="hidden md:flex md:w-64 md:flex-col">
+      <div
         className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto"
         style={{
           background: 'var(--card)',
