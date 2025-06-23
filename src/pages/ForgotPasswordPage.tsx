@@ -16,12 +16,19 @@ export function ForgotPasswordPage() {
     setLoading(true);
     setError('');
 
-    // Simulate password reset request
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // For demo purposes, always succeed
-    setSent(true);
-    setLoading(false);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) {
+        setError(error.message || 'Failed to send reset email.');
+        setLoading(false);
+        return;
+      }
+      setSent(true);
+    } catch (err) {
+      setError((err as Error).message || 'Failed to send reset email.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (sent) {
