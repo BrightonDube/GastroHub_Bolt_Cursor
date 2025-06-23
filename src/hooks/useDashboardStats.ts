@@ -55,7 +55,7 @@ export function useBuyerDashboardStats() {
       if (favorites && favorites.length > 0) {
         const supplierIds = favorites.map(f => f.target_id);
         const { data: suppliers } = await supabase
-          .from('profile')
+          .from('profiles')
           .select('id, business_name, category, rating')
           .in('id', supplierIds);
         favoriteSuppliers = suppliers || [];

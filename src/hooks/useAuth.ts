@@ -52,7 +52,7 @@ export function useAuth() {
     console.log('[useAuth] fetchUserProfile called for', authUser);
     try {
       const { data: profile, error } = await supabase
-        .from('profile')
+        .from('profiles')
         .select('*')
         .eq('id', authUser.id)
         .single();

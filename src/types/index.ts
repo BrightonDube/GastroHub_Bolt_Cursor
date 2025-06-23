@@ -7,13 +7,13 @@ export type Order = Database['public']['Tables']['order']['Row'];
 export type DeliveryTask = Database['public']['Tables']['delivery_task']['Row'];
 
 // Insert types
-export type ProfileInsert = Database['public']['Tables']['profile']['Insert'];
+export type ProfilesInsert = Database['public']['Tables']['profiles']['Insert'];
 export type ListingInsert = Database['public']['Tables']['listing']['Insert'];
 export type OrderInsert = Database['public']['Tables']['order']['Insert'];
 export type DeliveryTaskInsert = Database['public']['Tables']['delivery_task']['Insert'];
 
 // Update types
-export type ProfileUpdate = Database['public']['Tables']['profile']['Update'];
+export type ProfilesUpdate = Database['public']['Tables']['profiles']['Update'];
 export type ListingUpdate = Database['public']['Tables']['listing']['Update'];
 export type OrderUpdate = Database['public']['Tables']['order']['Update'];
 export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_task']['Update'];
@@ -25,19 +25,19 @@ export type DeliveryStatus = 'assigned' | 'picked_up' | 'in_transit' | 'delivere
 
 // Extended types with relations
 export interface ListingWithSupplier extends Listing {
-  supplier: Profile;
+  supplier: Profiles;
 }
 
 export interface OrderWithDetails extends Order {
   listing: Listing;
-  buyer: Profile;
-  supplier: Profile;
-  delivery_partner?: Profile;
+  buyer: Profiles;
+  supplier: Profiles;
+  delivery_partner?: Profiles;
 }
 
 export interface DeliveryTaskWithDetails extends DeliveryTask {
   order: OrderWithDetails;
-  delivery_partner: Profile;
+  delivery_partner: Profiles;
 }
 
 // Auth types
@@ -45,7 +45,7 @@ export interface AuthUser {
   id: string;
   email: string;
   role: UserRole;
-  profiles: Profiles;
+  profiles: Profiless;
 }
 
 // Form types

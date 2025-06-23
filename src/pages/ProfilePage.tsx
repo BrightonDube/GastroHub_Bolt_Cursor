@@ -6,8 +6,8 @@ import { Input } from '../components/ui/Input';
 import { Badge } from '../components/ui/Badge';
 import { User, Mail, Phone, Edit3, CheckCircle } from 'lucide-react';
 
-export function ProfilePage() {
-  // Mock user data
+export function ProfilessPage() {
+  // Mock users data
   const user = {
     name: 'Alex Morgan',
     email: 'alex.morgan@gastrohub.com',
@@ -20,7 +20,7 @@ export function ProfilePage() {
   return (
     <DashboardLayout>
       <div className="max-w-3xl mx-auto space-y-8">
-        {/* Profile Header */}
+        {/* Profiless Header */}
         <Card padding="lg" style={{ background: 'var(--card, #fff)' }}>
           <div className="flex items-center space-x-6">
             <img
@@ -51,10 +51,10 @@ export function ProfilePage() {
           </div>
         </Card>
 
-        {/* Profile Details Form (read-only) */}
+        {/* Profiless Details Form (read-only) */}
         <Card padding="lg" style={{ background: 'var(--card, #fff)' }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-            Profile Details
+            Profiless Details
           </h3>
           <form className="space-y-6">
             <div>
@@ -88,4 +88,4 @@ export function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default ProfilessPage;

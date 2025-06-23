@@ -15,22 +15,35 @@ export default function CallbackPage() {
 
   useEffect(() => {
     const finalizeLogin = async () => {
-      console.log('[CallbackPage] Finalizing Google OAuth login...');
+      console.log('[CallbackPage] Finalizing OAuth login with backup and onboarding enforcement...');
       const { data: { session }, error } = await supabase.auth.getSession();
       console.log('[CallbackPage] getSession result:', session, 'error:', error);
       if (session?.user && !error) {
-        // Attempt to fetch/create profile if needed
+        // Fetch user profiles
+        let profilesResult = null;
         if (auth && typeof auth.fetchUserProfile === 'function') {
-          const result = await auth.fetchUserProfile(session.user);
-          if (result && result.error) {
-            setErrorMsg(result.error);
-            console.error('[CallbackPage] Error fetching/creating profile:', result.error);
+          profilesResult = await auth.fetchUserProfile(session.user);
+          if (profilesResult && profilesResult.error) {
+            setErrorMsg(profilesResult.error);
+            console.error('[CallbackPage] Error fetching/creating profiles:', profilesResult.error);
             return;
-          } else {
-            console.log('[CallbackPage] Profile fetched/created successfully');
           }
         }
-        // Session and profile valid, redirect
+        const profiles = profilesResult?.data;
+        // --- 1. Detect Google sign-in ---
+        const identities = session.user.identities || [];
+        const hasGoogle = identities.some((id) => id.provider === 'google');
+        const hasEmail = identities.some((id) => id.provider === 'email');
+        const onboardingIncomplete = profiles && (!profiles.role || profiles.onboarding_complete === false);
+
+        // --- Unified onboarding/backup credential flow ---
+        if ((hasGoogle && !hasEmail) || onboardingIncomplete) {
+          console.log('[CallbackPage] Redirecting to unified onboarding/backup credential flow.');
+          navigate('/onboarding/unified', { replace: true });
+          return;
+        }
+
+        // --- All checks passed, allow dashboard access ---
         navigate('/dashboard', { replace: true });
       } else {
         // No valid session, redirect to login

@@ -45,7 +45,7 @@ export type Database = {
             foreignKeyName: "business_hour_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -123,7 +123,7 @@ export type Database = {
             foreignKeyName: "business_hour_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -162,7 +162,7 @@ export type Database = {
             foreignKeyName: "cart_item_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -254,7 +254,7 @@ export type Database = {
             foreignKeyName: "conversation_participant_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -298,7 +298,7 @@ export type Database = {
             foreignKeyName: "custom_category_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -358,7 +358,7 @@ export type Database = {
             foreignKeyName: "delivery_zone_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -390,7 +390,7 @@ export type Database = {
             foreignKeyName: "favorite_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -490,7 +490,7 @@ export type Database = {
             foreignKeyName: "invoice_buyer_id_fkey"
             columns: ["buyer_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -504,7 +504,7 @@ export type Database = {
             foreignKeyName: "invoice_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -566,7 +566,7 @@ export type Database = {
             foreignKeyName: "listing_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -656,7 +656,7 @@ export type Database = {
             foreignKeyName: "message_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -691,7 +691,7 @@ export type Database = {
             foreignKeyName: "notification_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -738,14 +738,14 @@ export type Database = {
             foreignKeyName: "order_buyer_id_fkey"
             columns: ["buyer_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -929,7 +929,7 @@ export type Database = {
             foreignKeyName: "payment_method_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1000,7 +1000,7 @@ export type Database = {
             foreignKeyName: "review_reviewer_id_fkey"
             columns: ["reviewer_id"]
             isOneToOne: false
-            referencedRelation: "profile"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

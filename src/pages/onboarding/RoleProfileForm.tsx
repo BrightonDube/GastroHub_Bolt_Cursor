@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { useAuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { Profiles } from '../../types/index';
 
 /**
- * RoleProfileForm: Shows a role-specific profile form after role selection.
+ * RoleProfilesInsertForm: Shows a role-specific profiles form after role selection.
  * - Buyer: liquor license (if selling alcohol), company registration
  * - Supplier: liquor license, business registration, other licenses
  * - Delivery Partner: driver's license, vehicle license, roadworthy, police clearance
  */
-export default function RoleProfileForm() {
+export default function RoleProfilesInsertForm() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const [form, setForm] = useState<any>({});
+  const [form, setForm] = useState<Profiles>({});
   const [files, setFiles] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,16 +96,16 @@ export default function RoleProfileForm() {
           }
         }
       }
-      // Update profile table
-      const { error: profileError } = await supabase.from('profile').update({ ...uploadedUrls, onboarding_complete: true }).eq('id', user.id);
-      if (profileError) {
-        setError('Failed to update profile: ' + profileError.message);
+      // Update profiles table
+      const { error: profilesError } = await supabase.from('profiles').update({ ...uploadedUrls, onboarding_complete: true }).eq('id', user.id);
+      if (profilesError) {
+        setError('Failed to update profiles: ' + profilesError.message);
         setLoading(false);
         return;
       }
       navigate(`/${user.role}/dashboard`);
     } catch (err: any) {
-      setError('Failed to submit profile. Please try again.');
+      setError('Failed to submit profiles. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -112,7 +113,7 @@ export default function RoleProfileForm() {
 
   return (
     <div className="max-w-xl mx-auto py-8">
-      <h2 className="text-2xl font-bold mb-4">Complete Your Profile</h2>
+      <h2 className="text-2xl font-bold mb-4">Complete Your Profiles</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {roleFields.map(field => (
           <div key={field.name}>
@@ -129,7 +130,7 @@ export default function RoleProfileForm() {
         ))}
         {error && <div className="text-red-600">{error}</div>}
         <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-          {loading ? 'Saving...' : 'Submit Profile'}
+          {loading ? 'Saving...' : 'Submit Profiles'}
         </button>
       </form>
     </div>
