@@ -60,8 +60,8 @@ export function LoginForm() {
       // Try to get user role from returned data or context
       let role = data?.user?.role;
       if (!role && data?.user && data.user.id) {
-        // Try to get role from profile if available
-        role = data.user.role || data.user.profile?.role;
+        // Try to get role from profiles if available
+        role = data.user.role || data.user.profiles?.role;
       }
       // Fallback: try context
       try {

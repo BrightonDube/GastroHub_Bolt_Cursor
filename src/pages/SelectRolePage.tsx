@@ -22,7 +22,7 @@ export default function SelectRolePage() {
   }, [user, loading, navigate]);
 
   const handleRoleSelect = async (role: UserRole) => {
-    // TODO: Update the user's profile in the database with the selected role
+    // TODO: Update the user's profiles in the database with the selected role
     // and refresh the user context
     try {
       const res = await fetch('/api/set-role', {
@@ -32,8 +32,8 @@ export default function SelectRolePage() {
       });
       const data = await res.json();
       if (data.success) {
-        // After role is set, redirect to role-specific profile form
-        navigate('/onboarding/role-profile', { replace: true });
+        // After role is set, redirect to role-specific profiles form
+        navigate('/onboarding/role-profiles', { replace: true });
       } else {
         alert('Failed to update role: ' + (data.error || 'Unknown error'));
       }

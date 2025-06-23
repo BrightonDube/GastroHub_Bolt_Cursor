@@ -7,7 +7,7 @@ import { Card } from '../../components/ui/Card';
 import { Building, Phone, MapPin, User } from 'lucide-react';
 import { UserRole } from '../../types';
 
-export function ProfileDetailsPage() {
+export function ProfilesDetailsPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthContext();
@@ -31,7 +31,7 @@ export function ProfileDetailsPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Here you would update the user's profile in the database
+    // Here you would update the user's profiles in the database
     // For now, we'll just navigate to the appropriate dashboard
     
     setTimeout(() => {
@@ -107,7 +107,7 @@ export function ProfileDetailsPage() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-heading font-bold text-neutral-900 mb-4">
-            Complete Your Profile
+            Complete Your Profiles
           </h1>
           <p className="text-xl text-neutral-600">
             Tell us more about your {selectedRole?.replace('_', ' ')} business
@@ -178,4 +178,4 @@ export function ProfileDetailsPage() {
   );
 }
 
-export default ProfileDetailsPage;
+export default ProfilesDetailsPage;
