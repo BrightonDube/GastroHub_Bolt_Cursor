@@ -17,6 +17,23 @@ import {
 } from 'lucide-react';
 
 export function Header() {
+  const [legalOpen, setLegalOpen] = React.useState(false);
+  const legalRef = React.useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  React.useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (legalRef.current && !legalRef.current.contains(e.target as Node)) {
+        setLegalOpen(false);
+      }
+    }
+    if (legalOpen) {
+      document.addEventListener('mousedown', handleClick);
+    } else {
+      document.removeEventListener('mousedown', handleClick);
+    }
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [legalOpen]);
   console.log('[Header] Render');
   const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
@@ -96,9 +113,15 @@ export function Header() {
   }, []);
 
   // Navigation links for all roles
+  // Responsive and role-aware nav links
   const navLinks = [
     { to: '/marketplace', label: 'Marketplace' },
-    { to: '/orders', label: 'Orders' },
+    { to: '/about', label: 'About' },
+    { to: '/blog', label: 'Blog' },
+    { to: '/careers', label: 'Careers' },
+    // Legal dropdown handled separately
+    // Orders only for logged-in users
+    ...(user ? [{ to: '/orders', label: 'Orders', role: user.role }] : []),
     { to: '/supplier/listings', label: 'My Listings', role: 'supplier' },
     { to: '/deliveries', label: 'Deliveries', role: 'delivery_partner' },
   ];
@@ -139,7 +162,33 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            {/* Legal Dropdown (click to open, matches navbar bg) */}
+            <div className="relative" ref={legalRef}>
+              <button
+                className="text-neutral-600 hover:text-primary-900 font-medium transition-colors flex items-center focus:outline-none"
+                onClick={() => setLegalOpen((prev: boolean) => !prev)}
+                aria-haspopup="true"
+                aria-expanded={legalOpen}
+                type="button"
+              >
+                Legal
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {legalOpen && (
+                <div className="absolute left-0 mt-2 w-40 bg-card border border-neutral-200 dark:border-neutral-800 rounded shadow-lg z-50">
+                  <Link to="/privacy-policy" className="block px-4 py-2 text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-900" onClick={() => setLegalOpen(false)}>Privacy Policy</Link>
+                  <Link to="/terms" className="block px-4 py-2 text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-900" onClick={() => setLegalOpen(false)}>Terms</Link>
+                </div>
+              )}
+            </div>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-neutral-600 hover:text-primary-900 focus:outline-none">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+          </div>
 
           {/* User Section */}
           {user ? (

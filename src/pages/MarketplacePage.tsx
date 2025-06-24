@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { useState, useRef, useEffect } from 'react';
+
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
@@ -9,7 +9,10 @@ import { Search, Filter, ShoppingCart, Package } from 'lucide-react';
 import { useListingsInfinite, useFeaturedListings } from '../hooks/useListings';
 import { useCategories } from '../hooks/useCategories';
 
+import { Header } from '../components/layout/Header';
+
 export function MarketplacePage() {
+  // Remove authentication gating; always fetch data
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState('relevance');
@@ -24,14 +27,8 @@ export function MarketplacePage() {
     isError: featuredError
   } = useFeaturedListings();
 
-  // Categories
-  const {
-    data: categoriesData = [],
-    isLoading: categoriesLoading,
-    isError: categoriesError
-  } = useCategories();
+  const { data: categoriesData = [] } = useCategories();
 
-  // Flatten hierarchical categories for dropdown
   function flattenCategories(nodes: any[]): { value: string; label: string }[] {
     let arr: { value: string; label: string }[] = [];
     for (const node of nodes) {
@@ -42,11 +39,11 @@ export function MarketplacePage() {
     }
     return arr;
   }
+
   const categoryOptions = [
     { value: '', label: 'All Categories' },
     ...flattenCategories(categoriesData)
   ];
-
 
   const sortOptions = [
     { value: 'relevance', label: 'Most Relevant' },
@@ -56,10 +53,22 @@ export function MarketplacePage() {
     { value: 'newest', label: 'Newest First' },
   ];
 
-  // Combine all loaded pages
-  const listings: Listing[] = data?.pages?.flat() ?? [];
+  const {
+    data,
+    isLoading: listingsLoading,
+    isError: listingsError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useListingsInfinite({
+    searchTerm,
+    category: categoryFilter,
+    sortBy,
+  });
 
-  // Infinite scroll: load more when sentinel is in view
+  // TODO: Replace 'any' with the actual Listing type from your types module
+const listings: any[] = data?.pages?.flat() ?? [];
+
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!hasNextPage || listingsLoading || isFetchingNextPage) return;
@@ -77,10 +86,9 @@ export function MarketplacePage() {
     };
   }, [hasNextPage, listingsLoading, isFetchingNextPage, fetchNextPage]);
 
-  // Filter and sort client-side (optional, for search/sort)
   const filteredListings = listings
-    .filter((listing) =>
-      (!searchTerm || listing.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    .filter((listing: any) =>
+      (!searchTerm || listing.title?.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (!categoryFilter || listing.category_id === categoryFilter)
     )
     .sort((a, b) => {
@@ -92,9 +100,15 @@ export function MarketplacePage() {
       }
     });
 
+  // Debug logs to understand why no products are appearing
+  console.log('Raw data from useListingsInfinite:', data);
+  console.log('Flattened listings array:', listings);
+  console.log('Filtered and sorted listings:', filteredListings);
+
   return (
-    <DashboardLayout>
-      <div className="space-y-8">
+    <div className="min-h-screen bg-background text-foreground p-0">
+      <Header />
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-heading font-bold" >
@@ -119,7 +133,7 @@ export function MarketplacePage() {
               />
             </div>
             <Select
-              options={categories}
+              options={categoryOptions}
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               
@@ -135,7 +149,11 @@ export function MarketplacePage() {
             <p className="text-sm" >
               {listingsLoading ? 'Loading products...' : listingsError ? 'Failed to load products' : `Showing ${filteredListings.length} products`}
             </p>
-            <Button variant="outline" size="sm" >
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-md shadow-sm hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+            >
               <Filter className="w-4 h-4 mr-2" />
               More Filters
             </Button>
@@ -296,7 +314,7 @@ export function MarketplacePage() {
         {/* Infinite Scroll Sentinel */}
         <div ref={loadMoreRef} className="h-8" />
       </div>
-    </DashboardLayout>
+    </div>
   );
 }
 

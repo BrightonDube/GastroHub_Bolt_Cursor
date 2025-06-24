@@ -26,6 +26,15 @@ import SupplierDashboard from './pages/supplier/DashboardPage';
 import DeliveryDashboard from './pages/delivery/DashboardPage';
 import SuperAdminDashboard from './pages/superAdmin/DashboardPage';
 import MarketplacePage from './pages/MarketplacePage';
+import Footer from './components/layout/Footer';
+
+// Lazy-loaded public pages
+const AboutPage = React.lazy(() => import('./pages/AboutPage'));
+const BlogPage = React.lazy(() => import('./pages/BlogPage'));
+const CareersPage = React.lazy(() => import('./pages/CareersPage'));
+const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+
 
 // Create a client
 const queryClient = new QueryClient({
@@ -303,7 +312,14 @@ function App() {
               } 
             />
 
-            {/* Placeholder routes - to be implemented */}
+            {/* Public Pages - No Authentication Required */}
+            <Route path="/about" element={<React.Suspense fallback={<div>Loading...</div>}><AboutPage /></React.Suspense>} />
+            <Route path="/blog" element={<React.Suspense fallback={<div>Loading...</div>}><BlogPage /></React.Suspense>} />
+            <Route path="/careers" element={<React.Suspense fallback={<div>Loading...</div>}><CareersPage /></React.Suspense>} />
+            <Route path="/privacy-policy" element={<React.Suspense fallback={<div>Loading...</div>}><PrivacyPolicyPage /></React.Suspense>} />
+            <Route path="/terms" element={<React.Suspense fallback={<div>Loading...</div>}><TermsPage /></React.Suspense>} />
+            
+            {/* Marketplace - No Authentication Required */}
             <Route 
               path="/marketplace" 
               element={<MarketplacePage />} 

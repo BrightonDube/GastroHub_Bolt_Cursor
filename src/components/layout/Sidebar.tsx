@@ -22,10 +22,7 @@ export function Sidebar() {
   const location = useLocation();
   console.log('[Sidebar] user:', user);
 
-  if (!user || !user.role) {
-    console.log('[Sidebar] No user or role, not rendering sidebar');
-    return null;
-  }
+  const validRoles: UserRole[] = ['buyer', 'supplier', 'delivery_partner'];
 
   const getNavigationItems = () => {
     const baseItems = [
@@ -93,6 +90,21 @@ export function Sidebar() {
       },
     ];
 
+    // Always show base and settings items for public/unauthenticated users
+    if (!user) {
+      return [
+        ...baseItems,
+        ...settingsItems,
+      ];
+    }
+    // If user exists but has no role, show minimal nav
+    if (!user.role) {
+      console.warn('[Sidebar] User exists but has no role; showing minimal navigation.');
+      return [
+        ...baseItems,
+        ...settingsItems,
+      ];
+    }
     if (isSuperAdmin(user)) {
       // Show all navigation items for all roles
       return [
@@ -100,6 +112,14 @@ export function Sidebar() {
         ...roleSpecificItems['buyer'],
         ...roleSpecificItems['supplier'],
         ...roleSpecificItems['delivery_partner'],
+        ...settingsItems,
+      ];
+    }
+    if (!validRoles.includes(user.role as UserRole)) {
+      // Unknown or invalid role: show only base and settings
+      console.warn(`[Sidebar] Unexpected user.role: '${user.role}'. Showing minimal navigation.`);
+      return [
+        ...baseItems,
         ...settingsItems,
       ];
     }
