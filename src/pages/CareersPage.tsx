@@ -480,18 +480,6 @@ export function CareersPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[var(--background-dark)] text-[var(--foreground)] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
-            <span className="text-xl font-heading font-bold text-[var(--foreground)]">GastroHub</span>
-          </div>
-          <p className="text-[var(--muted-foreground)]">
-            &copy; 2024 GastroHub. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
