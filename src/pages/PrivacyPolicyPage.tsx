@@ -255,6 +255,7 @@ export function PrivacyPolicyPage() {
 
       {/* Footer */}
 
+      <Footer />
     </div>
   );
 }

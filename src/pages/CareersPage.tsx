@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '../components/layout/Header';
+import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -480,6 +481,7 @@ export function CareersPage() {
         </div>
       </section>
 
+      <Footer />
     </div>
   );
 }

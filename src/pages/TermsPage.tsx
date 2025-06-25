@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header } from '../components/layout/Header';
+import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { 
   ChefHat, 
@@ -201,6 +202,7 @@ const lastUpdated = getLastUpdatedDate();
       </section>
 
 
+      <Footer />
     </div>
   );
 }
