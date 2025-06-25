@@ -6,7 +6,7 @@ import { useAuthContext } from '../../App';
  * RequireRoleGuard ensures that all authenticated users have a role set.
  * If not, redirects to /select-role. Can be wrapped around all protected routes.
  */
-export function RequireRoleGuard({ children }: { children?: React.ReactNode }) {
+export function RequireRoleGuard({ children, requiredRole }: { children?: React.ReactNode, requiredRole?: string }) {
   const { user, loading } = useAuthContext();
 
   if (loading) {
@@ -23,6 +23,11 @@ export function RequireRoleGuard({ children }: { children?: React.ReactNode }) {
   // If role is missing or empty, redirect to role selection
   if (!user.role) {
     return <Navigate to="/select-role" replace />;
+  }
+
+  // If requiredRole is set, enforce it
+  if (requiredRole && user.role !== requiredRole) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   // Otherwise, render children or nested routes

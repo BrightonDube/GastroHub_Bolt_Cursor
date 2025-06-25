@@ -35,6 +35,8 @@ const ArticlePage = React.lazy(() => import('./pages/ArticlePage'));
 const CareersPage = React.lazy(() => import('./pages/CareersPage'));
 const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+const CreateArticlePage = React.lazy(() => import('./pages/CreateArticlePage'));
+const UnauthorizedPage = React.lazy(() => import('./pages/UnauthorizedPage'));
 
 
 // Create a client
@@ -316,7 +318,15 @@ function App() {
             {/* Public Pages - No Authentication Required */}
             <Route path="/about" element={<React.Suspense fallback={<div>Loading...</div>}><AboutPage /></React.Suspense>} />
             <Route path="/blog" element={<React.Suspense fallback={<div>Loading...</div>}><BlogPage /></React.Suspense>} />
-<Route path="/articles/:id" element={<React.Suspense fallback={<div>Loading...</div>}><ArticlePage /></React.Suspense>} />
+            <Route path="/articles/:id" element={<React.Suspense fallback={<div>Loading...</div>}><ArticlePage /></React.Suspense>} />
+            <Route path="/create-article" element={
+              <ProtectedRoute>
+                <RequireRoleGuard requiredRole="superadmin">
+                  <React.Suspense fallback={<div>Loading...</div>}><CreateArticlePage /></React.Suspense>
+                </RequireRoleGuard>
+              </ProtectedRoute>
+            } />
+            <Route path="/unauthorized" element={<React.Suspense fallback={<div>Loading...</div>}><UnauthorizedPage /></React.Suspense>} />
             <Route path="/careers" element={<React.Suspense fallback={<div>Loading...</div>}><CareersPage /></React.Suspense>} />
             <Route path="/privacy-policy" element={<React.Suspense fallback={<div>Loading...</div>}><PrivacyPolicyPage /></React.Suspense>} />
             <Route path="/terms" element={<React.Suspense fallback={<div>Loading...</div>}><TermsPage /></React.Suspense>} />
