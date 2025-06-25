@@ -149,7 +149,6 @@ export function Sidebar() {
               const disabledRoutes = [
                 '/suppliers',
                 '/delivery',
-                '/help',
               ];
               const isDisabled = disabledRoutes.includes(item.href);
               return (

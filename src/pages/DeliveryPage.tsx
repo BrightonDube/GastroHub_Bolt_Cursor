@@ -16,38 +16,12 @@ import {
   Users,
   TrendingUp
 } from 'lucide-react';
+import { useDeliveryStats } from '../hooks/useDeliveryStats';
+import { useServiceAreas } from '../hooks/useServiceAreas';
 
 export function DeliveryPage() {
-  const deliveryStats = [
-    {
-      title: 'Active Drivers',
-      value: '2,847',
-      change: '+12%',
-      icon: <Users className="w-6 h-6" />,
-      color: 'primary'
-    },
-    {
-      title: 'Deliveries Today',
-      value: '15,234',
-      change: '+8%',
-      icon: <Package className="w-6 h-6" />,
-      color: 'success'
-    },
-    {
-      title: 'Average Rating',
-      value: '4.8',
-      change: '+0.2',
-      icon: <Star className="w-6 h-6" />,
-      color: 'secondary'
-    },
-    {
-      title: 'On-Time Rate',
-      value: '96.5%',
-      change: '+1.2%',
-      icon: <Clock className="w-6 h-6" />,
-      color: 'warning'
-    }
-  ];
+  const { data: stats, isLoading: statsLoading, error: statsError } = useDeliveryStats();
+  const { data: serviceAreas, isLoading: areasLoading, error: areasError } = useServiceAreas();
 
   const features = [
     {
@@ -72,15 +46,6 @@ export function DeliveryPage() {
     }
   ];
 
-  const serviceAreas = [
-    { city: 'New York', drivers: 487, avgTime: '45 min', coverage: '98%' },
-    { city: 'Los Angeles', drivers: 623, avgTime: '52 min', coverage: '95%' },
-    { city: 'Chicago', drivers: 312, avgTime: '38 min', coverage: '97%' },
-    { city: 'Houston', drivers: 298, avgTime: '41 min', coverage: '94%' },
-    { city: 'Phoenix', drivers: 189, avgTime: '35 min', coverage: '92%' },
-    { city: 'Philadelphia', drivers: 234, avgTime: '43 min', coverage: '96%' }
-  ];
-
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -95,23 +60,46 @@ export function DeliveryPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {deliveryStats.map((stat, index) => (
-            <Card key={index} padding="md" className="text-center">
-              <div className={`inline-flex p-3 rounded-full mb-4 ${
-                stat.color === 'primary' ? 'bg-[var(--primary-50)] text-[var(--primary-600)]' :
-                stat.color === 'success' ? 'bg-[var(--success-100)] text-[var(--success-600)]' :
-                stat.color === 'secondary' ? 'bg-[var(--secondary-50)] text-[var(--secondary-400)]' :
-                'bg-[var(--warning-100)] text-[var(--warning-600)]'
-              }`}>
-                {stat.icon}
+        {statsLoading ? (
+          <div className="flex items-center justify-center min-h-32">Loading delivery stats...</div>
+        ) : statsError ? (
+          <div className="flex items-center justify-center min-h-32 text-error-600">Error loading stats.</div>
+        ) : stats ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card padding="md" className="text-center">
+              <div className="inline-flex p-3 rounded-full mb-4 bg-[var(--primary-50)] text-[var(--primary-600)]">
+                <Users className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">{stat.value}</h3>
-              <p className="text-sm text-[var(--muted-foreground)] mb-2">{stat.title}</p>
-              <Badge variant="success" size="sm" className="bg-[var(--success-100)] text-[var(--success-600)]">{stat.change} this month</Badge>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">{stats.activeDrivers}</h3>
+              <p className="text-sm text-[var(--muted-foreground)] mb-2">Active Drivers</p>
+              <Badge variant="success" size="sm" className="bg-[var(--success-100)] text-[var(--success-600)]">This month</Badge>
             </Card>
-          ))}
-        </div>
+            <Card padding="md" className="text-center">
+              <div className="inline-flex p-3 rounded-full mb-4 bg-[var(--success-100)] text-[var(--success-600)]">
+                <Package className="w-6 h-6" />
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">{stats.deliveriesToday}</h3>
+              <p className="text-sm text-[var(--muted-foreground)] mb-2">Deliveries Today</p>
+              <Badge variant="success" size="sm" className="bg-[var(--success-100)] text-[var(--success-600)]">Today</Badge>
+            </Card>
+            <Card padding="md" className="text-center">
+              <div className="inline-flex p-3 rounded-full mb-4 bg-[var(--secondary-50)] text-[var(--secondary-400)]">
+                <Star className="w-6 h-6" />
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">{stats.avgRating}</h3>
+              <p className="text-sm text-[var(--muted-foreground)] mb-2">Average Rating</p>
+              <Badge variant="secondary" size="sm">+0.2</Badge>
+            </Card>
+            <Card padding="md" className="text-center">
+              <div className="inline-flex p-3 rounded-full mb-4 bg-[var(--warning-100)] text-[var(--warning-600)]">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">{stats.onTimeRate}%</h3>
+              <p className="text-sm text-[var(--muted-foreground)] mb-2">On-Time Rate</p>
+              <Badge variant="warning" size="sm">+1.2%</Badge>
+            </Card>
+          </div>
+        ) : null}
 
         {/* Features */}
         <div>
@@ -140,64 +128,62 @@ export function DeliveryPage() {
           <h2 className="text-2xl font-heading font-bold text-[var(--foreground)] mb-6">
             Service Coverage Areas
           </h2>
-          <Card padding="none">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-[var(--card-muted,#f9fafb)] border-b border-neutral-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      City
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Active Drivers
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Avg. Delivery Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Coverage
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[var(--background)] divide-y divide-neutral-200">
-                  {serviceAreas.map((area, index) => (
-                    <tr key={index} className="hover:bg-[var(--card-muted,#f9fafb)]">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <MapPin className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
-                          <span className="text-sm font-medium text-[var(--foreground)]">{area.city}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <Truck className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
-                          <span className="text-sm text-[var(--foreground)]">{area.drivers}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
-                          <span className="text-sm text-[var(--foreground)]">{area.avgTime}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm text-[var(--foreground)]">{area.coverage}</span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <Badge variant="success" size="sm">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Active
-                        </Badge>
-                      </td>
+          {areasLoading ? (
+            <div className="flex items-center justify-center min-h-32">Loading service areas...</div>
+          ) : areasError ? (
+            <div className="flex items-center justify-center min-h-32 text-error-600">Error loading service areas.</div>
+          ) : serviceAreas && serviceAreas.length > 0 ? (
+            <Card padding="none">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[var(--card-muted,#f9fafb)] border-b border-neutral-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">City</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Active Drivers</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Avg. Delivery Time</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Coverage</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+                  </thead>
+                  <tbody className="bg-[var(--background)] divide-y divide-neutral-200">
+                    {serviceAreas.map((area: any, index: number) => (
+                      <tr key={index} className="hover:bg-[var(--card-muted,#f9fafb)]">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <MapPin className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
+                            <span className="text-sm font-medium text-[var(--foreground)]">{area.city}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <Truck className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
+                            <span className="text-sm text-[var(--foreground)]">{area.drivers}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <Clock className="w-4 h-4 text-[var(--muted-foreground)] mr-2" />
+                            <span className="text-sm text-[var(--foreground)]">{area.avgTime}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-[var(--foreground)]">{area.coverage}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Badge variant={area.coverage === 'Active' ? 'success' : 'secondary'} size="sm">
+                            {area.coverage === 'Active' ? <CheckCircle className="w-3 h-3 mr-1" /> : <Package className="w-3 h-3 mr-1" />}
+                            {area.coverage}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          ) : (
+            <div className="flex items-center justify-center min-h-32 text-muted-foreground">No service areas found.</div>
+          )}
         </div>
 
         {/* CTA Section */}

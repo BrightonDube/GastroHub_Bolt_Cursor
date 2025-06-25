@@ -371,7 +371,6 @@ export function HomePage() {
             <div>
               <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Support</h3>
               <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-                <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Help Center (Coming Soon)</Link></li>
                 <li><Link to="/terms" className="hover:text-primary-600 dark:hover:text-white">Terms</Link></li>
                 <li><Link to="/privacy-policy" className="hover:text-primary-600 dark:hover:text-white">Privacy Policy</Link></li>
               </ul>
