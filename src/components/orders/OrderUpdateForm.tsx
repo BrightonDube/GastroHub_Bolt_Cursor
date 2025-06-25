@@ -270,7 +270,7 @@ export function OrderUpdateForm({
           </div>
 
           <div className="flex space-x-4 justify-center">
-            <Button variant="outline" onClick={() => reset()}>
+            <Button onClick={() => reset()}>
               Make Another Update
             </Button>
             <Button onClick={() => window.location.href = `/orders/${updateResult.data.orderId}`}>
@@ -409,14 +409,13 @@ export function OrderUpdateForm({
         {/* Submit Buttons */}
         <div className="flex justify-end space-x-4">
           {onCancel && (
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type="button" onClick={onCancel}>
               Cancel
             </Button>
           )}
           <Button 
             type="submit" 
             loading={isSubmitting}
-            variant={watchedUpdateType === 'cancel' ? 'danger' : 'primary'}
           >
             {watchedUpdateType === 'cancel' ? 'Cancel Order' : 'Update Order'}
           </Button>

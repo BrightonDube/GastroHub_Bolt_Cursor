@@ -23,22 +23,33 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
     // Fix: pageParam is unknown, must cast to number
     queryFn: async ({ pageParam = 0 }) => {
       const page = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
-      let query = supabase
-        .from('listing')
-        .select('*')
-        
+      let query = (supabase.from('listing') as any)
+        .select(`
+          id,
+          supplier_id as supplierId,
+          title as name,
+          description,
+          category,
+          price,
+          unit,
+          min_quantity as minOrder,
+          max_quantity as maxOrder,
+          images,
+          is_active as isActive,
+          created_at as createdAt,
+          updated_at as updatedAt
+        `)
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
       if (searchTerm) query = query.ilike('title', `%${searchTerm}%`);
-      if (category) query = query.eq('category_id', category);
+      if (category) query = query.eq('category', category);
       // Sorting
       if (sortBy === 'price-low') query = query.order('price', { ascending: true });
       else if (sortBy === 'price-high') query = query.order('price', { ascending: false });
-      else if (sortBy === 'newest') query = query.order('created_at', { ascending: true });
+      else if (sortBy === 'newest') query = query.order('created_at', { ascending: false });
       // Default: relevance or fallback
       const { data, error } = await query;
       if (error) throw error;
-      // Assume DB columns match Listing interface (see types.ts)
       return (data as Listing[]) || [];
     },
   });

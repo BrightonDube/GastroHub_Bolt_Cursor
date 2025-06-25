@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../App';
-import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { isSuperAdmin } from '../../utils/superAdmin';
@@ -15,10 +14,13 @@ import {
   Package,
   Truck
 } from 'lucide-react';
+import { NavLink } from '../ui/NavLink';
+import { Button } from '../ui/Button';
 
 export function Header() {
   const [legalOpen, setLegalOpen] = React.useState(false);
   const legalRef = React.useRef<HTMLDivElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Close dropdown on outside click
   React.useEffect(() => {
@@ -158,14 +160,14 @@ export function Header() {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.filter(showLink).map(link => (
-              <Link
+              <NavLink
                 key={link.to}
                 to={link.to}
                 className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
                 aria-label={link.label}
               >
                 {link.label}
-              </Link>
+              </NavLink>
             ))}
             {/* Legal Dropdown (click to open, matches navbar bg) */}
             <div className="relative" ref={legalRef}>
@@ -214,7 +216,7 @@ export function Header() {
                 <ThemeToggle />
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground">
-                    {user?.profile?.full_name || user?.email || 'User'}
+                    {user?.profiles?.full_name || user?.email || 'User'}
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 
@@ -233,7 +235,6 @@ export function Header() {
                 
                 <div className="flex items-center space-x-2">
                   <Button
-                    variant="ghost"
                     size="sm"
                     onClick={() => navigate('/profile')}
                     aria-label="Profile settings"
@@ -241,7 +242,6 @@ export function Header() {
                     <Settings className="w-4 h-4" />
                   </Button>
                   <Button
-                    variant="ghost"
                     size="sm"
                     onClick={handleSignOut}
                     aria-label="Sign out"
@@ -254,18 +254,18 @@ export function Header() {
           ) : (
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/login')}
+              <Link
+                to="/login"
+                className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
               >
                 Sign In
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => navigate('/register')}
+              </Link>
+              <Link
+                to="/register"
+                className="inline-block px-4 py-2 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-md shadow-sm transition-all"
               >
                 Get Started
-              </Button>
+              </Link>
             </div>
           )}
         </div>

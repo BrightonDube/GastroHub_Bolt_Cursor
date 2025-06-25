@@ -74,11 +74,11 @@ export function SupplierDashboard() {
             </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 md:mt-0">
-            <Button variant="outline" size="sm">
+            <Button>
               <Eye className="w-6 h-6 text-primary-600 mr-2" />
               View Analytics
             </Button>
-            <Button variant="primary" size="sm">
+            <Button>
               <Plus className="w-6 h-6 text-primary-600 mr-2" />
               Add Listing
             </Button>
@@ -111,7 +111,7 @@ export function SupplierDashboard() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-foreground">{listing.price}</p>
-                      <Button variant="ghost" size="sm">
+                      <Button>
                         <Edit className="w-6 h-6 text-primary-600" />
                       </Button>
                     </div>
@@ -119,7 +119,7 @@ export function SupplierDashboard() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-border">
-                <Button variant="ghost" className="w-full">
+                <Button className="w-full">
                   View All Listings
                 </Button>
               </div>
@@ -133,19 +133,19 @@ export function SupplierDashboard() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-3">
-                <Button variant="outline" className="justify-start h-12">
+                <Button className="justify-start h-12">
                   <Plus className="w-6 h-6 text-primary-600 mr-3" />
                   Create New Listing
                 </Button>
-                <Button variant="outline" className="justify-start h-12">
+                <Button className="justify-start h-12">
                   <Package className="w-6 h-6 text-primary-600 mr-3" />
                   Manage Inventory
                 </Button>
-                <Button variant="outline" className="justify-start h-12">
+                <Button className="justify-start h-12">
                   <ShoppingCart className="w-6 h-6 text-primary-600 mr-3" />
                   View Orders
                 </Button>
-                <Button variant="outline" className="justify-start h-12">
+                <Button className="justify-start h-12">
                   <TrendingUp className="w-6 h-6 text-primary-600 mr-3" />
                   Analytics & Reports
                 </Button>

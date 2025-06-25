@@ -153,9 +153,8 @@ export function OrderDetailPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Button
-              variant="ghost"
-              size="sm"
               onClick={() => navigate('/supplier/orders')}
+              variant="ghost"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Orders
@@ -174,7 +173,7 @@ export function OrderDetailPage() {
               {getStatusIcon(order.status)}
               <span>{order.status.replace('_', ' ')}</span>
             </Badge>
-            <Button variant="outline" size="sm">
+            <Button variant="solid">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
@@ -336,7 +335,6 @@ export function OrderDetailPage() {
                     {availableActions.map((action) => (
                       <Button
                         key={action}
-                        variant={action === 'cancelled' ? 'danger' : 'primary'}
                         className="w-full"
                         onClick={() => setShowConfirmDialog({ action, show: true })}
                         loading={updateStatusMutation.isPending}

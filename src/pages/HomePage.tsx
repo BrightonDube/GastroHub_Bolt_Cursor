@@ -264,7 +264,7 @@ export function HomePage() {
                   <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                     Be part of the largest food industry network
                   </p>
-                  <Button size="lg" variant="outline">
+                  <Button>
                     <Link to="/register">
                       Start Your Journey
                     </Link>
@@ -320,12 +320,12 @@ export function HomePage() {
             Join GastroHub today and experience the future of food commerce.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="outline">
+            <Button>
               <Link to="/register">
                 Start Free Trial
               </Link>
             </Button>
-            <Button size="lg" variant="ghost" className="text-white border-white hover:bg-white hover:text-primary-900">
+            <Button>
               <Link to="/contact">
                 Contact Sales
               </Link>

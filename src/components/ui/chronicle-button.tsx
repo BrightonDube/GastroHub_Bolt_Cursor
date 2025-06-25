@@ -91,6 +91,19 @@ const styles = `
 }
 `;
 
+function getContrastYIQ(hexcolor: string) {
+  // Remove # if present
+  hexcolor = hexcolor.replace('#', '');
+  if (hexcolor.length === 3) {
+    hexcolor = hexcolor.split('').map(x => x + x).join('');
+  }
+  const r = parseInt(hexcolor.substr(0,2),16);
+  const g = parseInt(hexcolor.substr(2,2),16);
+  const b = parseInt(hexcolor.substr(4,2),16);
+  const yiq = ((r*299)+(g*587)+(b*114))/1000;
+  return yiq >= 128 ? '#111014' : '#fff';
+}
+
 interface ChronicleButtonProps {
   text: string;
   onClick?: () => void;
@@ -117,7 +130,7 @@ export const ChronicleButton: React.FC<ChronicleButtonProps> = ({
   outlinedButtonBackgroundOnHover = "transparent",
   customBackground = "#fff",
   customForeground = "#111014",
-  hoverForeground = "#111014",
+  hoverForeground,
   fontFamily = "inherit",
 }) => {
   // Inject styles once
@@ -131,11 +144,17 @@ export const ChronicleButton: React.FC<ChronicleButtonProps> = ({
     }
   }, []);
 
+  // Enforce accessible hoverForeground if not set
+  let computedHoverForeground = hoverForeground;
+  if (!hoverForeground && hoverColor) {
+    computedHoverForeground = getContrastYIQ(hoverColor.replace('0x', '').replace('0X', '').replace('0o', '').replace('0O', '').replace('0b', '').replace('0B', '').replace(/[^a-fA-F0-9]/g, ''));
+  }
+
   const buttonStyle = {
     "--chronicle-button-background": customBackground,
     "--chronicle-button-foreground": customForeground,
     "--chronicle-button-hover-background": hoverColor,
-    "--chronicle-button-hover-foreground": hoverForeground,
+    "--chronicle-button-hover-foreground": computedHoverForeground,
     "--outline-padding-adjustment": outlinePaddingAdjustment,
     "--chronicle-button-border-radius": borderRadius,
     "--outlined-button-background-on-hover": outlinedButtonBackgroundOnHover,

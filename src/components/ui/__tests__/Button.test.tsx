@@ -8,60 +8,6 @@ describe('Button', () => {
     
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('bg-primary-900'); // Primary variant
-    expect(button).toHaveClass('px-4', 'py-2'); // Medium size
-  });
-
-  it('should render different variants correctly', () => {
-    const variants = ['primary', 'secondary', 'ghost', 'outline', 'danger'] as const;
-    
-    variants.forEach(variant => {
-      const { rerender } = render(<Button variant={variant}>Test</Button>);
-      const button = screen.getByRole('button');
-      
-      switch (variant) {
-        case 'primary':
-          expect(button).toHaveClass('bg-primary-900');
-          break;
-        case 'secondary':
-          expect(button).toHaveClass('bg-secondary-400');
-          break;
-        case 'ghost':
-          expect(button).toHaveClass('text-primary-900', 'hover:bg-primary-50');
-          break;
-        case 'outline':
-          expect(button).toHaveClass('border', 'border-primary-200');
-          break;
-        case 'danger':
-          expect(button).toHaveClass('bg-error-600');
-          break;
-      }
-      
-      rerender(<div />);
-    });
-  });
-
-  it('should render different sizes correctly', () => {
-    const sizes = ['sm', 'md', 'lg'] as const;
-    
-    sizes.forEach(size => {
-      const { rerender } = render(<Button size={size}>Test</Button>);
-      const button = screen.getByRole('button');
-      
-      switch (size) {
-        case 'sm':
-          expect(button).toHaveClass('px-3', 'py-1.5', 'text-sm');
-          break;
-        case 'md':
-          expect(button).toHaveClass('px-4', 'py-2', 'text-sm');
-          break;
-        case 'lg':
-          expect(button).toHaveClass('px-6', 'py-3', 'text-base');
-          break;
-      }
-      
-      rerender(<div />);
-    });
   });
 
   it('should handle click events', () => {
@@ -74,31 +20,12 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should show loading state', () => {
-    render(<Button loading>Loading</Button>);
-    
-    const button = screen.getByRole('button');
-    expect(button).toBeDisabled();
-    expect(button).toHaveTextContent('Loading');
-    
-    // Check for loading spinner
-    const spinner = button.querySelector('.animate-spin');
-    expect(spinner).toBeInTheDocument();
-  });
-
   it('should be disabled when disabled prop is true', () => {
     render(<Button disabled>Disabled</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
     expect(button).toHaveClass('disabled:opacity-50');
-  });
-
-  it('should be disabled when loading', () => {
-    render(<Button loading>Loading</Button>);
-    
-    const button = screen.getByRole('button');
-    expect(button).toBeDisabled();
   });
 
   it('should not trigger click when disabled', () => {
@@ -182,5 +109,26 @@ describe('Button', () => {
     
     expect(screen.getByTestId('test-icon')).toBeInTheDocument();
     expect(screen.getByText('Button with icon')).toBeInTheDocument();
+  });
+
+  it('should render with neon styles', () => {
+    render(<Button variant="solid">Neon Button</Button>);
+    
+    const button = screen.getByRole('button', { name: /neon button/i });
+    expect(button).toHaveClass('bg-neon-500', 'text-white');
+  });
+
+  it('should render with different variants', () => {
+    render(
+      <>
+        <Button variant="solid">Solid</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+      </>
+    );
+    
+    expect(screen.getByRole('button', { name: /solid/i })).toHaveClass('bg-primary-600');
+    expect(screen.getByRole('button', { name: /outline/i })).toHaveClass('border-2', 'border-primary-600');
+    expect(screen.getByRole('button', { name: /ghost/i })).toHaveClass('bg-transparent');
   });
 });

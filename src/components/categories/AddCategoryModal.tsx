@@ -37,7 +37,7 @@ export const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ open, onClos
             <input type="text" value={name} onChange={e => setName(e.target.value)} className="input" required />
           </div>
           {error && <div className="text-error-600 text-sm">{error}</div>}
-          <Button type="submit" variant="primary" className="w-full">Add</Button>
+          <Button type="submit" className="w-full">Add</Button>
         </form>
       </div>
     </div>

@@ -361,7 +361,7 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
                 placeholder="Add a tag..."
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
               />
-              <Button type="button" variant="outline" onClick={addTag}>
+              <Button type="button" onClick={addTag}>
                 Add
               </Button>
             </div>
@@ -371,7 +371,7 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
 
       {/* Submit Buttons */}
       <div className="flex justify-end space-x-4">
-        <Button type="button" variant="outline" onClick={() => reset()}>
+        <Button type="button" onClick={() => reset()}>
           Reset
         </Button>
         <Button type="submit" loading={loading}>

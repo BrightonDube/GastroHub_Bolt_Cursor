@@ -56,7 +56,7 @@ export function EditListingPage() {
           <p className="text-neutral-600 mb-6">
             The listing you're looking for doesn't exist or you don't have permission to edit it.
           </p>
-          <Button onClick={() => navigate('/supplier/listings')}>
+          <Button onClick={() => navigate('/supplier/listings')} variant="ghost">
             Back to Listings
           </Button>
         </div>
@@ -70,9 +70,8 @@ export function EditListingPage() {
         {/* Header */}
         <div className="flex items-center space-x-4">
           <Button
-            variant="ghost"
-            size="sm"
             onClick={() => navigate('/supplier/listings')}
+            variant="ghost"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Listings

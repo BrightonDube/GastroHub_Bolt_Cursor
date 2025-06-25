@@ -161,7 +161,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         )}
       </div>
-      <Button type="submit" variant="primary" disabled={loading}>{loading ? 'Saving...' : mode === 'create' ? 'Create Product' : 'Update Product'}</Button>
+      <Button>{loading ? 'Saving...' : mode === 'create' ? 'Create Product' : 'Update Product'}</Button>
     </form>
   );
 };

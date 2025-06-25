@@ -54,10 +54,10 @@ export function NewListingPage() {
             Your product listing has been created and is now live on the marketplace.
           </p>
           <div className="space-x-4">
-            <Button variant="outline" onClick={() => navigate('/supplier/listings')}>
+            <Button onClick={() => navigate('/supplier/listings')} variant="solid">
               View All Listings
             </Button>
-            <Button onClick={() => navigate('/supplier/listings/new')}>
+            <Button onClick={() => navigate('/supplier/listings/new')} variant="ghost">
               Create Another Listing
             </Button>
           </div>
@@ -72,8 +72,6 @@ export function NewListingPage() {
         {/* Header */}
         <div className="flex items-center space-x-4">
           <Button
-            variant="ghost"
-            size="sm"
             onClick={() => navigate('/supplier/listings')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />

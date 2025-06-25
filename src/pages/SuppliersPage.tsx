@@ -100,7 +100,7 @@ export function SuppliersPage() {
             <p className="text-sm text-[var(--muted-foreground)]">
               {isLoading ? 'Loading suppliers...' : `Showing ${suppliers.length} suppliers`}
             </p>
-            <Button variant="outline" size="sm" className="text-[var(--foreground)]">
+            <Button variant="outline" className="text-[var(--foreground)]">
               <Filter className="w-4 h-4 mr-2" />
               Advanced Filters
             </Button>
@@ -189,13 +189,13 @@ export function SuppliersPage() {
                         <p>{(supplier.certifications || []).join(', ')}</p>
                       </div>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" className="text-[var(--foreground)]">
+                        <Button className="text-[var(--foreground)]">
                           <Mail className="w-4 h-4 mr-1" />
                           Contact
                         </Button>
-                        <Button size="sm">
-                          <Users className="w-4 h-4 mr-1" />
-                          View Profile
+                        <Button className="text-[var(--foreground)]">
+                          <Phone className="w-4 h-4 mr-1" />
+                          Call
                         </Button>
                       </div>
                     </div>

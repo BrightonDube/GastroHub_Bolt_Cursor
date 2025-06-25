@@ -203,7 +203,7 @@ const onSubmit = async (data: OrderFormData) => {
           </div>
 
           <div className="flex space-x-4 justify-center">
-            <Button variant="outline" onClick={() => reset()}>
+            <Button onClick={() => reset()}>
               Create Another Order
             </Button>
             <Button onClick={() => window.location.href = '/orders'}>
@@ -265,9 +265,9 @@ const onSubmit = async (data: OrderFormData) => {
               </div>
               <Button
                 type="button"
+                onClick={() => append({ productId: '', quantity: 1, unitPrice: 0 })}
                 variant="outline"
                 size="sm"
-                onClick={() => append({ productId: '', quantity: 1, unitPrice: 0 })}
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add Item
@@ -302,11 +302,10 @@ const onSubmit = async (data: OrderFormData) => {
                   <div className="flex items-end">
                     <Button
                       type="button"
-                      variant="outline"
-                      size="sm"
                       onClick={() => remove(index)}
                       disabled={fields.length === 1}
-                      className="w-full"
+                      variant="ghost"
+                      size="sm"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -442,11 +441,11 @@ const onSubmit = async (data: OrderFormData) => {
         {/* Submit Buttons */}
         <div className="flex justify-end space-x-4">
           {onCancel && (
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type="button" onClick={onCancel} variant="ghost">
               Cancel
             </Button>
           )}
-          <Button type="submit" loading={isSubmitting} size="lg">
+          <Button type="submit" loading={isSubmitting} size="lg" variant="solid">
             Create Order
           </Button>
         </div>

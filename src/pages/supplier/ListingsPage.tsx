@@ -19,6 +19,7 @@ import {
   Package,
   DollarSign
 } from 'lucide-react';
+import { useCategories } from '../../hooks/useCategories';
 
 export function ListingsPage() {
   const { user } = useAuthContext();
@@ -30,7 +31,6 @@ export function ListingsPage() {
   const toggleStatusMutation = useToggleListingStatus();
 
   // Fetch categories from backend
-  import { useCategories } from '../../hooks/useCategories';
   const { data: categoriesData = [], isLoading: categoriesLoading } = useCategories();
   // Flatten categories for select filter
   function flattenCategories(nodes: any[]): { value: string; label: string }[] {
@@ -130,7 +130,7 @@ export function ListingsPage() {
               Manage your product listings and inventory
             </p>
           </div>
-          <Button asChild>
+          <Button variant="solid">
             <Link to="/supplier/listings/new">
               <Plus className="w-4 h-4 mr-2" />
               Create New Listing
@@ -160,7 +160,7 @@ export function ListingsPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             />
-            <Button variant="outline" className="flex items-center">
+            <Button variant="ghost">
               <Filter className="w-4 h-4 mr-2" />
               More Filters
             </Button>
@@ -260,23 +260,14 @@ export function ListingsPage() {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1"
-                      asChild
-                    >
+                    <Button variant="ghost">
                       <Link to={`/supplier/listings/edit/${listing.id}`}>
                         <Edit className="w-4 h-4 mr-1" />
                         Edit
                       </Link>
                     </Button>
-                    
                     <Button
-                      variant="ghost"
-                      size="sm"
                       onClick={() => handleToggleStatus(listing.id, listing.availability)}
-                      loading={toggleStatusMutation.isPending}
                     >
                       {listing.availability === 'available' ? 'Deactivate' : 'Activate'}
                     </Button>
@@ -298,7 +289,7 @@ export function ListingsPage() {
               }
             </p>
             {!searchTerm && !categoryFilter && !statusFilter && (
-              <Button asChild>
+              <Button variant="solid">
                 <Link to="/supplier/listings/new">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Your First Listing

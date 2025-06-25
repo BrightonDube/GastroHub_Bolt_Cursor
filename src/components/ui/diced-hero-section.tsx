@@ -213,11 +213,7 @@ export const DicedHeroSection: React.FC<DicedHeroSectionProps> = ({
               : 'flex-start',
           }}
         >
-          <Button
-            variant="solid"
-            size="lg"
-            className="w-72 rounded-3xl font-bold"
-          >
+          <Button>
             <b>Get Started Free</b>
           </Button>
         </motion.div>

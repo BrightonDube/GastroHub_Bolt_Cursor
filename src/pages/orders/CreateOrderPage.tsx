@@ -26,6 +26,7 @@ export function CreateOrderPage() {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/orders')}
+            className="neon-button"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Orders
