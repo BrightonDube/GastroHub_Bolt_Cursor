@@ -43,7 +43,7 @@ export function MarketplacePage() {
   const categoryOptions = [
     { value: '', label: 'All Categories' },
     ...flattenCategories(categoriesData)
-  ];
+  ]; // categoriesData is already from useCategories (category table)
 
   const sortOptions = [
     { value: 'relevance', label: 'Most Relevant' },

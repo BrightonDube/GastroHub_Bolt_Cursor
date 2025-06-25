@@ -5,6 +5,7 @@ import { useCreateListing } from '../../hooks/useListings';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { ListingForm } from '../../components/forms/ListingForm';
 import { Button } from '../../components/ui/Button';
+import { CategorySelector } from '../../components/categories/CategorySelector';
 import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function NewListingPage() {
@@ -13,6 +14,7 @@ export function NewListingPage() {
   const createListingMutation = useCreateListing();
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { data: categoriesData = [] } = useCategories();
 
   const handleSubmit = async (data: any) => {
     if (!user?.id) return;

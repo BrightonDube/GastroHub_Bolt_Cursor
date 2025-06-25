@@ -64,15 +64,16 @@ async function fetchUserCategoryChildren(userId: string, parentId: string): Prom
 export function useCategories() {
   const { user } = useAuthContext();
   return useQuery({
-    queryKey: ['category', user?.id],
+    queryKey: ['category', user?.id || 'public'],
     queryFn: async () => {
-      const [master, userCats] = await Promise.all([
-        fetchMasterCategories(),
-        user?.id ? fetchUserCategories(user.id) : Promise.resolve([]),
-      ]);
-      return [...master, ...userCats];
+      const master = await fetchMasterCategories();
+      if (user?.id) {
+        const userCats = await fetchUserCategories(user.id);
+        return [...master, ...userCats];
+      }
+      return master;
     },
-    enabled: !!user,
+    enabled: true, // Always enabled
     staleTime: 10 * 60 * 1000,
   });
 }
