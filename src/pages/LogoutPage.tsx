@@ -18,11 +18,15 @@ export default function LogoutPage() {
         setTimeout(() => {
           console.log('[Logout] Cookies after signOut:', document.cookie);
         }, 200);
-        // Force a hard reload to /login after everything is cleared
-        setTimeout(() => {
-          console.log('[Logout] Forcing full reload to /login...');
+        // Prefer SPA navigation to login for a smoother UX
+        try {
+          navigate('/login', { replace: true });
+          console.log('[LogoutPage] Navigated to /login using navigate()');
+        } catch (err) {
+          // Fallback: force a hard reload if navigation fails
+          console.warn('[LogoutPage] navigate() failed, falling back to window.location.replace');
           window.location.replace('/login');
-        }, 300);
+        }
       } catch (error) {
         console.error('[Logout] Error during logout:', error);
       }

@@ -136,9 +136,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       if (event === "SIGNED_IN" && session?.user) {
         setSession(session);
         await fetchAndSetUserProfile(session);
+        setLoading(false);
       } else if (event === "SIGNED_OUT") {
         setSession(null);
         setUser(null);
+        setLoading(false); // Ensure loading is always false after logout
+        console.log('[AuthProvider] SIGNED_OUT: user and session cleared, loading set to false');
       }
     });
     unsubscribe = () => {
@@ -172,11 +175,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const trace = Math.random().toString(36).substr(2, 5); // unique trace for this render
-  console.log(`[ProtectedRoute][${trace}] Render, children:`, !!children);
-
   const { user, loading } = useAuthContext();
+  console.log(`[ProtectedRoute][${trace}] Render, children:`, !!children);
   console.log(`[ProtectedRoute] user:`, user, 'loading:', loading);
-
   if (loading) {
     console.log('[ProtectedRoute] Still loading, rendering spinner');
     return (
@@ -185,12 +186,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-
   if (!user) {
     console.log('[ProtectedRoute] No user, redirecting to /login');
     return <Navigate to="/login" replace />;
   }
-
   console.log('[ProtectedRoute] User authenticated, rendering children');
   return children ? <>{children}</> : <Outlet />;
 }

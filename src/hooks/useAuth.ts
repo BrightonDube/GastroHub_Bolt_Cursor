@@ -1,5 +1,7 @@
 // WARNING: Do NOT use useAuth directly in components.
 // useAuth is ONLY for use inside AuthProvider. All components/pages/hooks must use useAuthContext from App.tsx instead.
+// Debug: If you see this in a component, you are using it incorrectly.
+// import { useEffect, useState } from 'react';
 import { useEffect, useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { User } from '@supabase/supabase-js';

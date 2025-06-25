@@ -59,10 +59,15 @@ export function Header() {
       setTimeout(() => {
         console.log('[Header] Cookies after signOut:', document.cookie);
       }, 200);
-      setTimeout(() => {
-        console.log('[Header] Forcing full reload to /login...');
+      // Prefer SPA navigation to login for a smoother UX
+      try {
+        navigate('/login', { replace: true });
+        console.log('[Header] Navigated to /login using navigate()');
+      } catch (err) {
+        // Fallback: force a hard reload if navigation fails
+        console.warn('[Header] navigate() failed, falling back to window.location.replace');
         window.location.replace('/login');
-      }, 300);
+      }
     } catch (err) {
       finished = true;
       console.error('[Header] signOut error:', err);

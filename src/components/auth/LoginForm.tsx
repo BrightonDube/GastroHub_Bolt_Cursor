@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { ChefHat, Mail, Lock, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getDashboardPathByRole } from '../../utils/dashboardPaths';
 
 // Placeholder for the animated map. Replace with a real animated map if desired.
 function AnimatedMap() {
@@ -39,14 +40,6 @@ export function LoginForm() {
   const { signIn, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
-  // Utility to get dashboard path by role
-  function getDashboardPath(role: string) {
-    if (role === 'supplier') return '/supplier/dashboard';
-    if (role === 'buyer') return '/buyer/dashboard';
-    if (role === 'delivery_partner') return '/delivery/dashboard';
-    return '/dashboard';
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -54,24 +47,24 @@ export function LoginForm() {
     console.log('[LoginForm] Attempting login for', email);
     const { error, data } = await signIn(email, password);
     if (error) {
-      console.error('[LoginForm] Login failed:', error);
-      setError(typeof error === 'string' ? error : (error?.message || 'Login failed'));
-    } else {
-      // Try to get user role from returned data or context
-      let role = data?.user?.role;
-      if (!role && data?.user && data.user.id) {
-        // Try to get role from profiles if available
-        role = data.user.role || data.user.profiles?.role;
-      }
-      // Fallback: try context
-      try {
-        const ctx = useAuthContext();
-        role = role || ctx?.user?.role;
-      } catch {}
-      const dashboardPath = getDashboardPath(role);
-      console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
-      navigate(dashboardPath);
+      setError(typeof error === 'string' ? error : (error && typeof error === 'object' && 'message' in error ? (error as any).message : 'Login failed'));
+      setLoading(false);
+      return;
     }
+    // Try to get user role from returned data or context
+    let role: string | undefined = data?.user?.role;
+    if (!role && data?.user && data.user.id) {
+      // Try to get role from profiles if available
+      role = data.user.role || data.user.profiles?.role;
+    }
+    // Fallback: try context
+    try {
+      const ctx = useAuthContext();
+      role = role || ctx?.user?.role;
+    } catch {}
+    const dashboardPath = getDashboardPathByRole(role as any);
+    console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
+    navigate(dashboardPath);
     setLoading(false);
   };
 

@@ -6,6 +6,7 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { ChefHat, Mail, Lock, User, Building, Phone, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getDashboardPathByRole } from '../../utils/dashboardPaths';
 
 // Placeholder for the animated map. Replace with a real animated map if desired.
 function AnimatedMap() {
@@ -46,14 +47,6 @@ export function RegisterForm() {
   const { signUp, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
 
-  // Utility to get dashboard path by role
-  function getDashboardPath(role: string) {
-    if (role === 'supplier') return '/supplier/dashboard';
-    if (role === 'buyer') return '/buyer/dashboard';
-    if (role === 'delivery_partner') return '/delivery/dashboard';
-    return '/dashboard';
-  }
-
   const roleOptions = [
     { value: 'buyer', label: 'Buyer - I want to purchase food products' },
     { value: 'supplier', label: 'Supplier - I want to sell food products' },
@@ -77,18 +70,18 @@ export function RegisterForm() {
       return;
     }
 
-    const { error, data } = await signUp(formData.email, formData.password, {
+    const { error: signUpError } = await signUp(formData.email, formData.password, {
       fullName: formData.fullName,
-      role: formData.role,
+      role: formData.role as UserRole,
       businessName: formData.businessName || undefined,
       phone: formData.phone || undefined,
     });
 
-    if (error) {
-      setError(typeof error === 'string' ? error : (error?.message || 'Registration failed'));
+    if (signUpError) {
+      setError(typeof signUpError === 'string' ? signUpError : (signUpError && typeof signUpError === 'object' && 'message' in signUpError ? (signUpError as any).message : 'Registration failed'));
     } else {
       // Use selected role for redirect
-      navigate(getDashboardPath(formData.role));
+      navigate(getDashboardPathByRole(formData.role as UserRole));
     }
     console.log('[RegisterForm] Registration successful, redirecting to dashboard');
     setLoading(false);
