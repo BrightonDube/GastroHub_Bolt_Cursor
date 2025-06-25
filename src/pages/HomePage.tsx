@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { useTheme } from '../hooks/useTheme';
@@ -15,7 +14,6 @@ import {
   Shield,
   Clock,
   CheckCircle,
-  ArrowRight,
   Star
 } from 'lucide-react';
 
@@ -163,18 +161,15 @@ export function HomePage() {
           onGridImageClick={(index) => console.log(`Clicked on ${heroSlides[3-index].title}`)}
           topTextStyle={{ 
             color: "var(--diced-hero-section-top-text)",
-            fontSize: "1.25rem",
-            fontWeight: "500"
+            fontSize: "1.25rem"
           }}
           mainTextStyle={{
             fontSize: "clamp(3rem, 8vw, 5rem)",
-            fontWeight: "700",
             gradient: "linear-gradient(90deg, var(--diced-hero-section-main-gradient-from), var(--diced-hero-section-main-gradient-to))",
           }}
           subMainTextStyle={{ 
             color: "var(--diced-hero-section-sub-text)",
-            fontSize: "1.25rem",
-            lineHeight: "1.6"
+            fontSize: "1.25rem"
           }}
           buttonStyle={{
             backgroundColor: "var(--diced-hero-section-button-bg)",
@@ -269,7 +264,7 @@ export function HomePage() {
                   <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                     Be part of the largest food industry network
                   </p>
-                  <Button size="lg" className="w-full">
+                  <Button size="lg" variant="outline">
                     <Link to="/register">
                       Start Your Journey
                     </Link>
@@ -325,7 +320,7 @@ export function HomePage() {
             Join GastroHub today and experience the future of food commerce.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
+            <Button size="lg" variant="outline">
               <Link to="/register">
                 Start Free Trial
               </Link>
@@ -357,8 +352,8 @@ export function HomePage() {
               <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Platform</h3>
               <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
                 <li><Link to="/marketplace" className="hover:text-primary-600 dark:hover:text-white">Marketplace</Link></li>
-                <li><Link to="/suppliers" className="hover:text-primary-600 dark:hover:text-white">Suppliers</Link></li>
-                <li><Link to="/delivery" className="hover:text-primary-600 dark:hover:text-white">Delivery</Link></li>
+                <li><Link to="/suppliers" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Suppliers (Coming Soon)</Link></li>
+                <li><Link to="/delivery" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Delivery (Coming Soon)</Link></li>
                 <li><Link to="/analytics" className="hover:text-primary-600 dark:hover:text-white">Analytics</Link></li>
               </ul>
             </div>
@@ -376,10 +371,9 @@ export function HomePage() {
             <div>
               <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Support</h3>
               <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-                <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white">Help Center</Link></li>
+                <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Help Center (Coming Soon)</Link></li>
                 <li><Link to="/terms" className="hover:text-primary-600 dark:hover:text-white">Terms</Link></li>
-                <li><Link to="/privacy" className="hover:text-primary-600 dark:hover:text-white">Privacy</Link></li>
-                <li><Link to="/security" className="hover:text-primary-600 dark:hover:text-white">Security</Link></li>
+                <li><Link to="/privacy-policy" className="hover:text-primary-600 dark:hover:text-white">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>

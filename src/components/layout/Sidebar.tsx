@@ -145,6 +145,13 @@ export function Sidebar() {
           <nav className="flex-1 px-4 space-y-1">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.href;
+              // Disable links to unimplemented or placeholder routes
+              const disabledRoutes = [
+                '/suppliers',
+                '/delivery',
+                '/help',
+              ];
+              const isDisabled = disabledRoutes.includes(item.href);
               return (
                 <Link
                   key={item.name}
@@ -153,8 +160,11 @@ export function Sidebar() {
                     'group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200',
                     isActive
                       ? 'bg-var(--primary-50) text-var(--primary-900) border-r-2 border-var(--primary-900)'
-                      : 'text-var(--neutral-600) hover:bg-var(--neutral-50) hover:text-var(--neutral-900)'
+                      : 'text-var(--neutral-600) hover:bg-var(--neutral-50) hover:text-var(--neutral-900)',
+                    isDisabled && 'opacity-50 pointer-events-none'
                   )}
+                  tabIndex={isDisabled ? -1 : undefined}
+                  aria-disabled={isDisabled ? 'true' : undefined}
                 >
                   <item.icon
                     className={cn(
@@ -165,6 +175,7 @@ export function Sidebar() {
                     )}
                   />
                   {item.name}
+                  {isDisabled && <span className="ml-2 text-xs">(Coming Soon)</span>}
                 </Link>
               );
             })}

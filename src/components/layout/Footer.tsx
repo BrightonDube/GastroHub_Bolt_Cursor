@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChefHat } from 'lucide-react';
 
@@ -20,8 +19,8 @@ export function Footer() {
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Platform</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
               <li><Link to="/marketplace" className="hover:text-primary-600 dark:hover:text-white">Marketplace</Link></li>
-              <li><Link to="/suppliers" className="hover:text-primary-600 dark:hover:text-white">Suppliers</Link></li>
-              <li><Link to="/delivery" className="hover:text-primary-600 dark:hover:text-white">Delivery</Link></li>
+              <li><Link to="/suppliers" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Suppliers (Coming Soon)</Link></li>
+              <li><Link to="/delivery" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Delivery (Coming Soon)</Link></li>
               <li><Link to="/analytics" className="hover:text-primary-600 dark:hover:text-white">Analytics</Link></li>
             </ul>
           </div>
@@ -37,10 +36,9 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Support</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-              <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white">Help Center</Link></li>
+              <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Help Center (Coming Soon)</Link></li>
               <li><Link to="/terms" className="hover:text-primary-600 dark:hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy-policy" className="hover:text-primary-600 dark:hover:text-white">Privacy</Link></li>
-              <li><Link to="/security" className="hover:text-primary-600 dark:hover:text-white">Security</Link></li>
+              <li><Link to="/privacy-policy" className="hover:text-primary-600 dark:hover:text-white">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>

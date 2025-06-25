@@ -6,7 +6,6 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { ChefHat, Mail, Lock, User, Building, Phone, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { UserRole } from '../../types';
 
 // Placeholder for the animated map. Replace with a real animated map if desired.
 function AnimatedMap() {
@@ -36,7 +35,7 @@ export function RegisterForm() {
     password: '',
     confirmPassword: '',
     fullName: '',
-    role: 'buyer' as UserRole,
+    role: 'buyer',
     businessName: '',
     phone: '',
   });
@@ -159,7 +158,7 @@ export function RegisterForm() {
               variant="outline"
               className="w-full flex items-center justify-center gap-2 min-h-[37.33px] px-4"
               onClick={handleGoogleSignUp}
-              loading={googleLoading}
+              disabled={googleLoading}
             >
               <Chrome className="w-5 h-5" />
               <span className="inline-block">Continue with Google</span>
@@ -182,7 +181,7 @@ export function RegisterForm() {
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                   <Input
                     type="text"
-                    placeholder="Full name"
+                    placeholder=""
                     value={formData.fullName}
                     onChange={(e) => handleInputChange('fullName', e.target.value)}
                     className="pl-10"
@@ -194,7 +193,7 @@ export function RegisterForm() {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                   <Input
                     type="email"
-                    placeholder="Email address"
+                    placeholder=""
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     className="pl-10"
@@ -206,7 +205,7 @@ export function RegisterForm() {
                 <Select
                   options={roleOptions}
                   value={formData.role}
-                  onChange={(e) => handleInputChange('role', e.target.value as UserRole)}
+                  onChange={(e) => handleInputChange('role', e.target.value)}
                   label="I am a..."
                   required
                 />
@@ -216,7 +215,7 @@ export function RegisterForm() {
                     <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                     <Input
                       type="text"
-                      placeholder="Company name (optional)"
+                      placeholder=""
                       value={formData.businessName}
                       onChange={(e) => handleInputChange('businessName', e.target.value)}
                       className="pl-10"
@@ -228,7 +227,7 @@ export function RegisterForm() {
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                   <Input
                     type="tel"
-                    placeholder="Phone number (optional)"
+                    placeholder=""
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                     className="pl-10"
@@ -240,7 +239,7 @@ export function RegisterForm() {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                   <Input
                     type="password"
-                    placeholder="Password"
+                    placeholder=""
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
                     className="pl-10"
@@ -253,7 +252,7 @@ export function RegisterForm() {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
                   <Input
                     type="password"
-                    placeholder="Confirm password"
+                    placeholder=""
                     value={formData.confirmPassword}
                     onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                     className="pl-10"
@@ -277,7 +276,7 @@ export function RegisterForm() {
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="text-primary-400 hover:text-primary-300">
+                  <Link to="/privacy-policy" className="text-primary-400 hover:text-primary-300">
                     Privacy Policy
                   </Link>
                 </label>
@@ -286,10 +285,10 @@ export function RegisterForm() {
               <Button
                 type="submit"
                 className="w-full"
-                loading={loading}
                 size="lg"
+                disabled={loading}
               >
-                Create Account
+                {loading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
 

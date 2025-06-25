@@ -55,7 +55,6 @@ GastroHub enables buyers to discover suppliers, place and track orders, manage i
 |-- /messaging
 |-- /privacy-policy
 |-- /profile
-|-- /security
 |-- /suppliers
 |-- /terms
 |-- /auth
@@ -121,7 +120,6 @@ graph TD;
   Root --> MessagingPage
   Root --> PrivacyPolicyPage
   Root --> ProfilePage
-  Root --> SecurityPage
   Root --> SuppliersPage
   Root --> TermsPage
   Root --> Auth

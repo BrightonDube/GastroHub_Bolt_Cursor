@@ -72,11 +72,7 @@ export default function UnifiedOnboardingPage() {
 
       // 2. Update user profile (role, business info, etc.)
       const { error: profileError } = await supabase
-<<<<<<< HEAD
         .from('profiles')
-=======
-        .from('profile')
->>>>>>> f8033bffe8a0ee06b09b707ba2573de2fbd6a417
         .update({
           role,
           business_name: companyName,

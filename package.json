@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
-    "@sentry/nextjs": "^9.31.0",
+    "@sentry/react": "^9.32.0",
+    "@sentry/tracing": "^7.120.3",
+    "@sentry/vite-plugin": "^3.5.0",
     "@supabase/supabase-js": "^2.45.1",
     "@tanstack/react-query": "^5.51.21",
     "bcryptjs": "^3.0.2",
@@ -55,5 +57,6 @@
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2",
     "vitest": "^1.3.1"
-  }
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
