@@ -121,7 +121,7 @@ export function EditListingPage() {
             unit: listing.unit,
             min_order_quantity: listing.min_order_quantity || 1,
             max_order_quantity: listing.max_order_quantity || undefined,
-            availability: listing.availability as any,
+            availability: listing.availability === 'out_of_stock' ? 'out_of_stock' : 'in_stock',
             is_organic: listing.is_organic || false,
             tags: listing.tags || [],
             images: listing.images || [],

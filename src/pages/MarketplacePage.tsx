@@ -303,7 +303,7 @@ const listings: any[] = data?.pages?.flat() ?? [];
                     size="sm"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    {product.availability !== 'out_of_stock' ? 'Add to Cart' : 'Out of Stock'}
+                    {product.availability === 'in_stock' ? 'Add to Cart' : 'Out of Stock'}
                   </Button>
                 </div>
               </Card>

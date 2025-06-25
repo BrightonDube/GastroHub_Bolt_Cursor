@@ -26,7 +26,7 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       let query = supabase
         .from('listing')
         .select('*')
-        .eq('availability', 'available')
+        
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
       if (searchTerm) query = query.ilike('title', `%${searchTerm}%`);
@@ -55,7 +55,7 @@ export function useListings() {
       const { data, error } = await supabase
         .from('listing')
         .select('*')
-        .eq('availability', 'available')
+        
         .order('created_at', { ascending: true });
       if (error) throw error;
       return data || [];
@@ -76,7 +76,7 @@ export function useFeaturedListings() {
       const { data, error } = await supabase
         .from('listing')
         .select('*')
-        .eq('availability', 'available')
+        
         .order('created_at', { ascending: true })
         .limit(8);
       if (error) throw error;

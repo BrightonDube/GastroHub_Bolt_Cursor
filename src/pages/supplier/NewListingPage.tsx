@@ -22,6 +22,7 @@ export function NewListingPage() {
       const listingData = {
         ...data,
         supplier_id: user.id,
+        availability: 'in_stock',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
