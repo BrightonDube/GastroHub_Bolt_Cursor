@@ -9,7 +9,22 @@ import {
 } from 'lucide-react';
 
 export function TermsPage() {
-  const lastUpdated = 'January 1, 2024';
+  // Dynamically get the last updated date of the app (build time or last modified)
+function getLastUpdatedDate() {
+  // Try Vite/CRA build time env var (if set), otherwise fallback to document.lastModified
+  let lastUpdatedString = '';
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_APP_BUILD_DATE) {
+    lastUpdatedString = import.meta.env.VITE_APP_BUILD_DATE;
+  } else if (typeof document !== 'undefined' && document.lastModified) {
+    lastUpdatedString = document.lastModified;
+  } else {
+    lastUpdatedString = new Date().toISOString();
+  }
+  const date = new Date(lastUpdatedString);
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const lastUpdated = getLastUpdatedDate();
 
   const sections = [
     {
@@ -89,7 +104,7 @@ export function TermsPage() {
             <div className="inline-flex p-4 bg-[var(--background)]/10 rounded-2xl mb-6">
               <FileText className="w-12 h-12" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6 text-white">
               Terms of Service
             </h1>
             <p className="text-xl md:text-2xl text-[var(--primary-900)] mb-8 max-w-3xl mx-auto">
@@ -104,23 +119,23 @@ export function TermsPage() {
       </section>
 
       {/* Important Notice */}
-      <section className="py-8 bg-warning-50 border-b border-warning-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start space-x-3">
-            <AlertCircle className="w-6 h-6 text-warning-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <h3 className="font-semibold text-warning-800 mb-1">
-                Important Legal Agreement
-              </h3>
-              <p className="text-warning-700 text-sm">
-                These Terms of Service constitute a legally binding agreement between you and GastroHub. 
-                By using our platform, you agree to be bound by these terms. If you do not agree with any 
-                part of these terms, you should not use our services.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="py-8 bg-primary-50 border-b border-primary-200">
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-start space-x-3">
+      <AlertCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" />
+      <div>
+        <h3 className="font-semibold text-primary-800 mb-1">
+          Important Legal Agreement
+        </h3>
+        <p className="text-primary-700 text-sm">
+          These Terms of Service constitute a legally binding agreement between you and GastroHub.
+          By using our platform, you agree to be bound by these terms. If you do not agree with any
+          part of these terms, you should not use our services.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Terms Content */}
       <section className="py-16">
@@ -152,7 +167,7 @@ export function TermsPage() {
             </div>
 
             {/* Effective Date */}
-            <Card padding="lg" className="mt-12 bg-[var(--card-muted,#f9fafb)]">
+            <Card padding="lg" className="mt-12 bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                   Effective Date
@@ -165,7 +180,7 @@ export function TermsPage() {
             </Card>
 
             {/* Contact Information */}
-            <Card padding="lg" className="mt-8 bg-primary-50">
+            <Card padding="lg" className="mt-8 bg-primary-50 text-primary-900 dark:bg-primary-900 dark:text-white">
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
                   Questions About These Terms?

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Header } from '../components/layout/Header';
+import { ARTICLES } from './BlogArticlesData';
+import { Link } from 'react-router-dom';
+import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -382,7 +385,8 @@ export function BlogPage() {
           </div>
         </div>
       </section>
-
+      <Footer />
+    </div>
   );
 }
 

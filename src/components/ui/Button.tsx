@@ -7,9 +7,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-blue-500/5 hover:bg-blue-500/0 border-blue-500/20",
+        default: "bg-blue-500/5 hover:bg-blue-500/0 border-blue-500/20 text-primary-900 dark:text-white", 
+        outline: "bg-white border border-primary-200 text-primary-900 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white",
         solid: "bg-blue-500 hover:bg-blue-600 text-white border-transparent hover:border-foreground/50 transition-all duration-200",
-        ghost: "border-transparent bg-transparent hover:border-zinc-600 hover:bg-white/10",
+        ghost: "border-transparent bg-transparent hover:border-zinc-600 hover:bg-white/10 text-primary-900 dark:text-white", 
       },
       size: {
         default: "px-7 py-1.5 ",
@@ -44,7 +45,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             neon && "block"
           )}
         />
-        {children}
+        <span className="inline-flex items-center justify-center gap-2 w-full">
+          {children}
+        </span>
         <span
           className={cn(
             "absolute group-hover:opacity-30 transition-all duration-500 ease-in-out inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden",

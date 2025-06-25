@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header } from '../components/layout/Header';
+import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { 
   ChefHat, 
@@ -190,65 +191,65 @@ export function PrivacyPolicyPage() {
           </div>
 
           {/* GDPR Rights */}
-          <Card padding="lg" className="mt-12 bg-primary-50">
-            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
-              Your Rights Under GDPR
-            </h3>
-            <p className="text-[var(--muted-foreground)] mb-4">
-              If you are located in the European Union, you have additional rights under the General 
-              Data Protection Regulation (GDPR), including:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to access your data</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to rectification</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to erasure</span>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to data portability</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to object to processing</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="text-sm text-neutral-700">Right to restrict processing</span>
-                </div>
-              </div>
-            </div>
-          </Card>
+          <Card padding="lg" className="mt-12 bg-primary-50 text-primary-900 dark:bg-primary-900 dark:text-primary-100">
+  <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
+    Your Rights Under GDPR
+  </h3>
+  <p className="text-[var(--muted-foreground)] mb-4">
+    If you are located in the European Union, you have additional rights under the General
+    Data Protection Regulation (GDPR), including:
+  </p>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-2">
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to access your data</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to rectification</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to erasure</span>
+      </div>
+    </div>
+    <div className="space-y-2">
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to data portability</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to object to processing</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <div className="w-2 h-2 bg-primary-600 rounded-full dark:bg-primary-200"></div>
+        <span className="text-sm text-primary-900 dark:text-primary-100">Right to restrict processing</span>
+      </div>
+    </div>
+  </div>
+</Card>
 
           {/* Contact Information */}
-          <Card padding="lg" className="mt-8 bg-[var(--card-muted,#f9fafb)]">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
-                Contact Us About Privacy
-              </h3>
-              <p className="text-[var(--muted-foreground)] mb-4">
-                If you have any questions about this Privacy Policy or our privacy practices, 
-                please contact our Data Protection Officer.
-              </p>
-              <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
-                <p><strong>Email:</strong> privacy@gastrohub.com</p>
-                <p><strong>Data Protection Officer:</strong> dpo@gastrohub.com</p>
-                <p><strong>Address:</strong> GastroHub Privacy Team</p>
-                <p>123 Market Street, Suite 400</p>
-                <p>San Francisco, CA 94105</p>
-              </div>
-            </div>
-          </Card>
+          <Card padding="lg" className="mt-8 bg-[var(--card-muted,#f9fafb)] text-[var(--foreground)] dark:bg-background dark:text-[var(--foreground)]">
+  <div className="text-center">
+    <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">
+      Contact Us About Privacy
+    </h3>
+    <p className="text-[var(--muted-foreground)] mb-4">
+      If you have any questions about this Privacy Policy or our privacy practices,
+      please contact our Data Protection Officer.
+    </p>
+    <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
+      <p><strong>Email:</strong> privacy@gastrohub.com</p>
+      <p><strong>Data Protection Officer:</strong> dpo@gastrohub.com</p>
+      <p><strong>Address:</strong> GastroHub Privacy Team</p>
+      <p>123 Market Street, Suite 400</p>
+      <p>San Francisco, CA 94105</p>
+    </div>
+  </div>
+</Card>
         </div>
       </section>
 

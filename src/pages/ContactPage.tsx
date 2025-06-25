@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '../components/layout/Header';
+import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -372,17 +373,7 @@ export function ContactPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="w-8 h-8 text-[var(--secondary-400)]" />
-            <span className="text-xl font-heading font-bold">GastroHub</span>
-          </div>
-          <p className="text-[var(--muted-foreground)]">
-            © 2024 GastroHub. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
