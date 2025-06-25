@@ -176,10 +176,10 @@ export function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
+      <section className="py-20 bg-neutral-900 text-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-primary-700 dark:text-primary-300">
               Our Values
             </h2>
             <p className="text-xl max-w-2xl mx-auto text-[var(--muted-foreground)]">
@@ -209,7 +209,7 @@ export function AboutPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-primary-700 dark:text-primary-300">
               Meet Our Team
             </h2>
             <p className="text-xl max-w-2xl mx-auto text-[var(--muted-foreground)]">
@@ -241,17 +241,17 @@ export function AboutPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
+      <section className="py-20 bg-neutral-900 text-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-[var(--foreground)]">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-primary-700 dark:text-primary-300">
               What Our Users Say
             </h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="relative" padding="lg">
+              <Card key={index} className="relative bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100" padding="lg">
                 <Quote className="w-8 h-8 text-primary-200 mb-4" />
                 <blockquote className="text-lg mb-6 italic text-[var(--muted-foreground)]">
                   "{testimonial.quote}"
@@ -263,7 +263,7 @@ export function AboutPage() {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <div className="font-semibold text-neutral-900">{testimonial.author}</div>
+                    <div className="font-semibold text-neutral-900 dark:text-neutral-100">{testimonial.author}</div>
                     <div className="text-sm text-[var(--muted-foreground)]">{testimonial.role}</div>
                   </div>
                 </div>

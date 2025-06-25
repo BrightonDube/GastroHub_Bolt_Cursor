@@ -236,10 +236,13 @@ export function BlogPage() {
                   ))}
                 </div>
 
-                <Button>
-                  Read Full Article
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                <Link
+  to={`/articles/${featuredPost.id}`}
+  className="relative group border text-foreground mx-auto text-center rounded-full bg-blue-500/5 hover:bg-blue-500/0 border-blue-500/20 text-primary-900 dark:text-white px-7 py-1.5 flex items-center justify-center gap-2 font-semibold transition-colors duration-200"
+>
+  Read Full Article
+  <ArrowRight className="w-4 h-4 ml-2" />
+</Link>
               </div>
             </div>
           </Card>
@@ -308,10 +311,13 @@ export function BlogPage() {
                     ))}
                   </div>
 
-                  <Button variant="ghost" size="sm" className="w-full group-hover:bg-[var(--primary-50)]">
-                    Read More
-                    <ArrowRight className="w-3 h-3 ml-2" />
-                  </Button>
+                  <Link
+  to={`/articles/${post.id}`}
+  className="w-full relative group border text-foreground text-center rounded-full border-transparent bg-transparent hover:border-zinc-600 hover:bg-white/10 text-primary-900 dark:text-white px-4 py-0.5 flex items-center justify-center gap-2 font-semibold transition-colors duration-200 group-hover:bg-[var(--primary-50)]"
+>
+  Read More
+  <ArrowRight className="w-3 h-3 ml-2" />
+</Link>
                 </div>
               </Card>
             ))}
