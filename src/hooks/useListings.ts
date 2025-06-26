@@ -26,23 +26,23 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       let query = (supabase.from('listing') as any)
         .select(`
           id,
-          supplier_id as supplierId,
-          title as name,
+          supplier_id,
+          title,
           description,
-          category,
+          category_id,
           price,
           unit,
-          min_quantity as minOrder,
-          max_quantity as maxOrder,
+          min_quantity,
+          max_quantity,
           images,
-          is_active as isActive,
-          created_at as createdAt,
-          updated_at as updatedAt
+          availability,
+          created_at,
+          updated_at
         `)
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
       if (searchTerm) query = query.ilike('title', `%${searchTerm}%`);
-      if (category) query = query.eq('category', category);
+      if (category) query = query.eq('category_id', category);
       // Sorting
       if (sortBy === 'price-low') query = query.order('price', { ascending: true });
       else if (sortBy === 'price-high') query = query.order('price', { ascending: false });
@@ -50,7 +50,22 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       // Default: relevance or fallback
       const { data, error } = await query;
       if (error) throw error;
-      return (data as Listing[]) || [];
+      // Map DB fields to Listing type
+      return (data || []).map((item: any) => ({
+        id: item.id,
+        supplierId: item.supplier_id,
+        name: item.title,
+        description: item.description,
+        category: item.category_id,
+        price: Number(item.price),
+        unit: item.unit,
+        minOrder: Number(item.min_quantity),
+        maxOrder: Number(item.max_quantity),
+        images: item.images || [],
+        isActive: item.availability === 'available' || item.availability === true,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+      }));
     },
   });
 }
@@ -83,15 +98,43 @@ export function useFeaturedListings() {
   return useQuery<Listing[], Error>({
     queryKey: ['listings', 'featured'],
     queryFn: async () => {
-      // If you add a 'featured' column to Listing table, use .eq('featured', true)
       const { data, error } = await supabase
         .from('listing')
-        .select('*')
-        
+        .select(`
+          id,
+          supplier_id,
+          title,
+          description,
+          category_id,
+          price,
+          unit,
+          min_quantity,
+          max_quantity,
+          images,
+          availability,
+          created_at,
+          updated_at
+        `)
+        .eq('featured', true)
         .order('created_at', { ascending: true })
         .limit(8);
       if (error) throw error;
-      return data || [];
+      // Map DB fields to Listing type
+      return (data || []).map((item: any) => ({
+        id: item.id,
+        supplierId: item.supplier_id,
+        name: item.title,
+        description: item.description,
+        category: item.category_id,
+        price: Number(item.price),
+        unit: item.unit,
+        minOrder: Number(item.min_quantity),
+        maxOrder: Number(item.max_quantity),
+        images: item.images || [],
+        isActive: item.availability === 'available' || item.availability === true,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+      }));
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -119,7 +162,7 @@ export function useListing(listingId: string) {
     queryKey: ['listing', listingId],
     queryFn: async () => {
       const { data, error } = await supabase
-        
+        .from('listing')
         .select('*')
         .eq('id', listingId)
         .single();
@@ -137,7 +180,7 @@ export function useCreateListing() {
   return useMutation({
     mutationFn: async (listing: ListingInsert) => {
       const { data, error } = await supabase
-        
+        .from('listing')
         .insert(listing)
         .select()
         .single();
@@ -157,7 +200,7 @@ export function useUpdateListing() {
   return useMutation({
     mutationFn: async ({ id, ...updates }: ListingUpdate & { id: string }) => {
       const { data, error } = await supabase
-        
+        .from('listing')
         .update(updates)
         .eq('id', id)
         .select()
@@ -179,7 +222,7 @@ export function useToggleListingStatus() {
   return useMutation({
     mutationFn: async ({ id, availability }: { id: string; availability: string }) => {
       const { data, error } = await supabase
-        
+        .from('listing')
         .update({ availability })
         .eq('id', id)
         .select()

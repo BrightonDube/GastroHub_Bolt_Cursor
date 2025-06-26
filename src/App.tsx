@@ -89,14 +89,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         const result = await auth.fetchUserProfile(session.user);
         if (result.error) {
           setProfileError(result.error);
-          setUser({ id, email, role, profile: null });
+          setUser({ id, email, role, profiles: null });
         } else {
           setProfileError(null);
-          setUser({ id, email, role, profile: result.data });
+          setUser({ id, email, role, profiles: result.data });
         }
       } catch (err) {
         setProfileError('Unexpected error fetching profile');
-        setUser({ id, email, role, profile: null });
+        setUser({ id, email, role, profiles: null });
       }
     } else {
       setUser(null);
@@ -119,29 +119,45 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     setProfileError(null);
     console.log('[AuthProvider] useEffect (mount): fetching initial session');
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session && session.user) {
-        console.log('[AuthProvider] Initial session found:', session);
-        setSession(session);
-        await fetchAndSetUserProfile(session);
-      } else {
-        console.log('[AuthProvider] No initial session');
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && session.user) {
+          console.log('[AuthProvider] Initial session found:', session);
+          setSession(session);
+          await fetchAndSetUserProfile(session);
+        } else {
+          console.log('[AuthProvider] No initial session');
+          setSession(null);
+          setUser(null);
+        }
+      } catch (e) {
+        setProfileError('Unexpected error fetching session');
         setSession(null);
         setUser(null);
+        console.error('[AuthProvider] Error in initial session fetch:', e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    })();
     const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
-      if (event === "SIGNED_IN" && session?.user) {
-        setSession(session);
-        await fetchAndSetUserProfile(session);
-        setLoading(false);
-      } else if (event === "SIGNED_OUT") {
+      try {
+        if (event === "SIGNED_IN" && session?.user) {
+          setSession(session);
+          await fetchAndSetUserProfile(session);
+        } else if (event === "SIGNED_OUT") {
+          setSession(null);
+          setUser(null);
+          console.log('[AuthProvider] SIGNED_OUT: user and session cleared, loading set to false');
+        }
+      } catch (e) {
+        setProfileError('Unexpected error during auth state change');
         setSession(null);
         setUser(null);
-        setLoading(false); // Ensure loading is always false after logout
-        console.log('[AuthProvider] SIGNED_OUT: user and session cleared, loading set to false');
+        console.error('[AuthProvider] Error in onAuthStateChange:', e);
+      } finally {
+        setLoading(false); // Always set loading to false
       }
     });
     unsubscribe = () => {
