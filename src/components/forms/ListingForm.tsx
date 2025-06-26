@@ -12,7 +12,7 @@ import { Upload, X, AlertCircle } from 'lucide-react';
 const listingSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(100, 'Name must be less than 100 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  category: z.string().min(1, 'Category is required'),
+  category_id: z.string().min(1, 'Category is required'),
   subcategory: z.string().optional(),
   price: z.number().min(0.01, 'Price must be greater than 0'),
   unit: z.string().min(1, 'Unit is required'),
@@ -28,7 +28,6 @@ type ListingFormData = z.infer<typeof listingSchema>;
 interface ListingFormProps {
   initialData?: Partial<ListingFormData>;
   onSubmit: (data: ListingFormData & { images: string[] }) => Promise<void>;
-  loading?: boolean;
   mode: 'create' | 'edit';
 }
 
@@ -63,8 +62,8 @@ const availabilityOptions = [
   { value: 'out_of_stock', label: 'Out of Stock' },
 ];
 
-export function ListingForm({ initialData, onSubmit, loading = false, mode }: ListingFormProps) {
-  const [images, setImages] = useState<string[]>(initialData?.images || []);
+export function ListingForm({ initialData, onSubmit, mode }: ListingFormProps) {
+  const [images, setImages] = useState<string[]>([]);
   const [imageUploading, setImageUploading] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
@@ -209,8 +208,8 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
           <Select
             label="Category"
             options={categories}
-            {...register('category')}
-            error={errors.category?.message}
+            {...register('category_id')}
+            error={errors.category_id?.message}
           />
 
           <Input
@@ -374,7 +373,7 @@ export function ListingForm({ initialData, onSubmit, loading = false, mode }: Li
         <Button type="button" onClick={() => reset()}>
           Reset
         </Button>
-        <Button type="submit" loading={loading}>
+        <Button type="submit">
           {mode === 'create' ? 'Create Listing' : 'Update Listing'}
         </Button>
       </div>

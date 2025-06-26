@@ -28,7 +28,7 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
           id,
           product_code,
           supplier_id,
-          profiles(full_name),
+          supplier:profiles(full_name),
           title,
           description,
           category_id,
@@ -57,7 +57,7 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
         id: item.id,
         productCode: item.product_code,
         supplierId: item.supplier_id,
-        supplierName: item.profiles?.full_name || '',
+        supplierName: item.supplier?.full_name || '',
         name: item.title,
         description: item.description,
         category: item.category_id,
@@ -108,7 +108,7 @@ export function useFeaturedListings() {
           id,
           product_code,
           supplier_id,
-          profiles(full_name),
+          supplier:profiles(full_name),
           title,
           description,
           category_id,
@@ -130,7 +130,7 @@ export function useFeaturedListings() {
         id: item.id,
         productCode: item.product_code,
         supplierId: item.supplier_id,
-        supplierName: item.profiles?.full_name || '',
+        supplierName: item.supplier?.full_name || '',
         name: item.title,
         description: item.description,
         category: item.category_id,
@@ -187,9 +187,20 @@ export function useCreateListing() {
 
   return useMutation({
     mutationFn: async (listing: ListingInsert) => {
+      // Ensure category_id is used and product_code is set
+      let payload = { ...listing };
+      // If product_code is missing, generate from id (if present) or will be set by DB trigger
+      if (!payload.product_code && payload.id) {
+        payload.product_code = payload.id.replace(/-/g, '').substring(0, 8);
+      }
+      // If category is present but category_id is expected, map it
+      if ((payload as any).category) {
+        payload.category_id = (payload as any).category;
+        delete (payload as any).category;
+      }
       const { data, error } = await supabase
         .from('listing')
-        .insert(listing)
+        .insert(payload)
         .select()
         .single();
 
