@@ -409,12 +409,14 @@ export type Database = {
           category_id: string | null
           created_at: string | null
           description: string | null
+          featured: boolean | null
           id: string
           images: string[] | null
           location: string | null
           max_quantity: number | null
           min_quantity: number | null
           price: number
+          product_code: string | null
           stock_quantity: number | null
           supplier_id: string | null
           title: string
@@ -426,12 +428,14 @@ export type Database = {
           category_id?: string | null
           created_at?: string | null
           description?: string | null
+          featured?: boolean | null
           id?: string
           images?: string[] | null
           location?: string | null
           max_quantity?: number | null
           min_quantity?: number | null
           price: number
+          product_code?: string | null
           stock_quantity?: number | null
           supplier_id?: string | null
           title: string
@@ -443,19 +447,29 @@ export type Database = {
           category_id?: string | null
           created_at?: string | null
           description?: string | null
+          featured?: boolean | null
           id?: string
           images?: string[] | null
           location?: string | null
           max_quantity?: number | null
           min_quantity?: number | null
           price?: number
+          product_code?: string | null
           stock_quantity?: number | null
           supplier_id?: string | null
           title?: string
           unit?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "listing_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       message: {
         Row: {

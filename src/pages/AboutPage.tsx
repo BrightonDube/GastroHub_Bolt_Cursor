@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
@@ -15,13 +15,31 @@ import {
   Star,
   Quote
 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export function AboutPage() {
+  const [activeUsers, setActiveUsers] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchActiveUsers() {
+      const { count, error } = await supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .in('role', ['SUPPLIER', 'BUYER']);
+      if (!error && typeof count === 'number') {
+        setActiveUsers(count);
+      } else {
+        setActiveUsers(0);
+      }
+    }
+    fetchActiveUsers();
+  }, []);
+
   const stats = [
-    { label: 'Active Users', value: '10,000+', icon: <Users className="w-6 h-6" /> },
-    { label: 'Countries Served', value: '25+', icon: <Globe className="w-6 h-6" /> },
-    { label: 'Orders Processed', value: '500K+', icon: <TrendingUp className="w-6 h-6" /> },
-    { label: 'Customer Rating', value: '4.9/5', icon: <Star className="w-6 h-6" /> }
+    { label: 'Active Users', value: activeUsers !== null ? activeUsers.toLocaleString() : '...', icon: <Users className="w-6 h-6" /> },
+    { label: 'Provinces Served', value: '9', icon: <Globe className="w-6 h-6" /> },
+    { label: 'Orders Processed', value: '0', icon: <TrendingUp className="w-6 h-6" /> },
+    { label: 'Customer Rating', value: '5/5', icon: <Star className="w-6 h-6" /> }
   ];
 
   const values = [
@@ -49,42 +67,25 @@ export function AboutPage() {
 
   const team = [
     {
-      name: 'Sarah Johnson',
-      role: 'CEO & Co-Founder',
-      bio: 'Former restaurant owner with 15+ years in the food industry',
-      image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300'
+      name: 'Brighton Dube',
+      role: 'CEO & Founder',
+      bio: 'Restaurant manager with 15+ years of experience in the South African food industry',
+      image: 'https://imgur.com/a/84h1HA8'
     },
-    {
-      name: 'Michael Chen',
-      role: 'CTO & Co-Founder',
-      bio: 'Tech veteran with expertise in marketplace platforms and logistics',
-      image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=300'
-    },
-    {
-      name: 'Emily Rodriguez',
-      role: 'Head of Operations',
-      bio: 'Supply chain expert focused on optimizing food distribution networks',
-      image: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300'
-    },
-    {
-      name: 'David Kim',
-      role: 'Head of Product',
-      bio: 'Product strategist passionate about creating user-centric solutions',
-      image: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=300'
-    }
+    
   ];
 
   const testimonials = [
     {
       quote: "GastroHub has transformed how we source ingredients. The platform is intuitive and the supplier network is exceptional.",
-      author: "Maria Santos",
-      role: "Executive Chef, Bella Vista Restaurant",
+      author: "Octavia Mathebula",
+      role: "Executive Chef, La Belle Restaurant",
       image: "https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=100"
     },
     {
       quote: "As a small farm, GastroHub gave us access to restaurants we never could have reached before. Our business has grown 300%.",
-      author: "Tom Wilson",
-      role: "Owner, Green Valley Farm",
+      author: "Xolani Mkhize",
+      role: "Owner, KwaMkhize Farm",
       image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100"
     }
   ];
@@ -104,8 +105,8 @@ export function AboutPage() {
               About GastroHub
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-[var(--primary-100)] max-w-3xl mx-auto">
-              We're revolutionizing the food industry by connecting buyers, suppliers, and delivery partners 
-              in one powerful B2B marketplace.
+              We're revolutionizing the South African food industry by connecting local buyers, suppliers, and delivery partners 
+              in one powerful B2B marketplace based in Cape Town.
             </p>
           </div>
         </div>
@@ -121,7 +122,7 @@ export function AboutPage() {
                   {stat.icon}
                 </div>
                 <div className="text-3xl font-bold text-neutral-900 mb-2">{stat.value}</div>
-                <div className="text-neutral-600">{stat.label}</div>
+                <div className="text-neutral-200">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -138,20 +139,20 @@ export function AboutPage() {
               </h2>
               <div className="space-y-4 text-[var(--muted-foreground)]">
                 <p>
-                  GastroHub was born from a simple observation: the food industry was fragmented, 
-                  with suppliers and buyers struggling to connect efficiently. Traditional procurement 
+                  GastroHub was born from a simple observation: the South African food industry was fragmented, 
+                  with local suppliers and buyers struggling to connect efficiently. Traditional procurement 
                   methods were outdated, time-consuming, and often unreliable.
                 </p>
                 <p>
-                  Founded in 2020 by a team of food industry veterans and technology experts, 
-                  we set out to create a platform that would streamline the entire food supply chain. 
-                  Our mission is to make quality food more accessible while supporting local suppliers 
+                  Founded in 2025 in Cape Town by an experienced industry veteran and technology expert, 
+                  we set out to create a platform that would streamline the entire food supply chain in South Africa. 
+                  Our mission is to make quality food more accessible while supporting local South African suppliers 
                   and sustainable practices.
                 </p>
                 <p>
                   Today, GastroHub serves thousands of restaurants, cafes, hotels, and food service 
-                  businesses across 25+ countries, facilitating millions of dollars in transactions 
-                  and helping food businesses thrive in an increasingly competitive market.
+                  businesses across all 9 provinces of South Africa, facilitating millions of rands in transactions 
+                  and helping local food businesses thrive in an increasingly competitive market.
                 </p>
               </div>
             </div>
@@ -166,7 +167,7 @@ export function AboutPage() {
                   <Award className="w-8 h-8 text-secondary-400" />
                   <div>
                     <div className="font-semibold text-neutral-900">Industry Leader</div>
-                    <div className="text-sm text-[var(--muted-foreground)]">Food Tech Innovation 2023</div>
+                    <div className="text-sm text-[var(--muted-foreground)]">Food Tech Innovation 2025</div>
                   </div>
                 </div>
               </div>
