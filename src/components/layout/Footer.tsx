@@ -1,7 +1,32 @@
 import { Link } from 'react-router-dom';
 import { ChefHat } from 'lucide-react';
+import { useAuthContext } from '../../App';
 
 export function Footer() {
+  const { user } = useAuthContext();
+
+  // Helper function to get role-specific analytics path
+  const getAnalyticsPath = () => {
+    if (!user) return '/analytics';
+    
+    const role = user.profiles?.role || user.role;
+    if (!role) return '/analytics';
+    
+    // Map role to role-specific analytics path
+    switch (role) {
+      case 'buyer':
+        return '/buyer/analytics';
+      case 'supplier':
+        return '/supplier/analytics';
+      case 'delivery_partner':
+        return '/delivery/analytics';
+      case 'super_admin':
+        return '/super-admin/analytics';
+      default:
+        return '/analytics';
+    }
+  };
+
   return (
     <footer className="bg-background text-foreground py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +44,17 @@ export function Footer() {
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Platform</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
               <li><Link to="/marketplace" className="hover:text-primary-600 dark:hover:text-white">Marketplace</Link></li>
-              <li><Link to="/analytics" className="hover:text-primary-600 dark:hover:text-white">Analytics</Link></li>
+              {/* Only show analytics link for logged-in users with roles */}
+              {user && (user.profiles?.role || user.role) && (
+                <li>
+                  <Link 
+                    to={getAnalyticsPath()} 
+                    className="hover:text-primary-600 dark:hover:text-white"
+                  >
+                    Analytics
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
           <div>
