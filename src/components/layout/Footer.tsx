@@ -12,15 +12,13 @@ export function Footer() {
               <span className="text-xl font-heading font-bold text-primary-900 dark:text-white">GastroHub</span>
             </div>
             <p className="text-neutral-600 dark:text-neutral-400">
-              The leading B2B marketplace for the food industry.
+              The leading B2B marketplace for the food & beverage industry.
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Platform</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
               <li><Link to="/marketplace" className="hover:text-primary-600 dark:hover:text-white">Marketplace</Link></li>
-              <li><Link to="/suppliers" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Suppliers (Coming Soon)</Link></li>
-              <li><Link to="/delivery" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Delivery (Coming Soon)</Link></li>
               <li><Link to="/analytics" className="hover:text-primary-600 dark:hover:text-white">Analytics</Link></li>
             </ul>
           </div>

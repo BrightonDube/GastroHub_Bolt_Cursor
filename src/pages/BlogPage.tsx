@@ -324,9 +324,9 @@ export function BlogPage() {
           </div>
 
           <div className="text-center mt-12">
-            <Button variant="ghost" size="lg" className="bg-neutral-900 text-white hover:bg-neutral-800">
+            {/* <Button variant="solid" size="lg" className="bg-dark-900 text-white hover:bg-neutral-800">
               Load More Articles
-            </Button>
+            </Button> */}
           </div>
         </div>
       </section>
