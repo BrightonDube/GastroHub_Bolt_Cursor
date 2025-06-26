@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import DOMPurify from 'dompurify';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
+import { supabase } from '../lib/supabase';
 import { 
   ChefHat, 
   Mail, 
@@ -16,20 +21,59 @@ import {
   CheckCircle,
   Users,
   Headphones,
-  FileText
+  FileText,
+  AlertTriangle
 } from 'lucide-react';
 
+// Validation schema with security measures
+const contactSchema = z.object({
+  name: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must not exceed 100 characters')
+    .regex(/^[a-zA-Z\s\-'\.]+$/, 'Name contains invalid characters'),
+  email: z.string()
+    .email('Please enter a valid email address')
+    .max(255, 'Email must not exceed 255 characters'),
+  company: z.string()
+    .max(100, 'Company name must not exceed 100 characters')
+    .regex(/^[a-zA-Z0-9\s\-&'\.]+$/, 'Company name contains invalid characters')
+    .optional()
+    .or(z.literal('')),
+  subject: z.string()
+    .min(5, 'Subject must be at least 5 characters')
+    .max(200, 'Subject must not exceed 200 characters'),
+  message: z.string()
+    .min(20, 'Message must be at least 20 characters')
+    .max(2000, 'Message must not exceed 2000 characters'),
+  inquiryType: z.enum(['general', 'sales', 'support', 'billing', 'feedback']),
+  newsletter: z.boolean().optional()
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
 function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    subject: '',
-    message: '',
-    inquiryType: 'general'
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      company: '',
+      subject: '',
+      message: '',
+      inquiryType: 'general',
+      newsletter: false
+    }
+  });
 
   const inquiryTypes = [
     { value: 'general', label: 'General Inquiry' },
@@ -72,19 +116,103 @@ function ContactPage() {
     }
   ];
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  // Sanitize form data before sending
+  const sanitizeFormData = (data: ContactFormData) => {
+    return {
+      name: DOMPurify.sanitize(data.name.trim()),
+      email: DOMPurify.sanitize(data.email.trim().toLowerCase()),
+      company: data.company ? DOMPurify.sanitize(data.company.trim()) : '',
+      subject: DOMPurify.sanitize(data.subject.trim()),
+      message: DOMPurify.sanitize(data.message.trim()),
+      inquiryType: data.inquiryType,
+      newsletter: data.newsletter || false,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      // Add simple honeypot field for bot detection
+      source: 'contact_form'
+    };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    try {
+      // Sanitize the form data
+      const sanitizedData = sanitizeFormData(data);
+
+      // Call Supabase Edge Function to send email
+      const { data: result, error } = await supabase.functions.invoke('send-contact-email', {
+        body: sanitizedData
+      });
+
+      if (error) {
+        console.error('Error sending email:', error);
+        throw new Error(error.message || 'Failed to send message');
+      }
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      // Success
+      setIsSubmitted(true);
+      reset();
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to send message. Please try again or contact us directly.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Alternative: Use Netlify Forms (simpler, no API keys needed)
+  const onSubmitNetlify = async (data: ContactFormData) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError('');
+
+      // Sanitize form data
+      const sanitizedData = sanitizeFormData(data);
+
+      // Create form data for Netlify
+      const formData = new FormData();
+      formData.append('form-name', 'contact');
+      formData.append('name', sanitizedData.name);
+      formData.append('email', sanitizedData.email);
+      formData.append('company', sanitizedData.company || '');
+      formData.append('inquiryType', sanitizedData.inquiryType);
+      formData.append('subject', sanitizedData.subject);
+      formData.append('message', sanitizedData.message);
+      formData.append('newsletter', sanitizedData.newsletter ? 'Yes' : 'No');
+
+      // Submit to Netlify
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
+      setIsSubmitted(true);
+      reset();
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to send message. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -100,9 +228,15 @@ function ContactPage() {
               Message Sent Successfully!
             </h2>
             <p className="text-[var(--muted-foreground)] mb-6">
-              Thank you for contacting us. We'll get back to you within 24 hours.
+              Thank you for contacting us. We'll get back to you within 24 hours at the email address you provided.
             </p>
-            <Button onClick={() => setIsSubmitted(false)} className="w-full">
+            <Button 
+              onClick={() => {
+                setIsSubmitted(false);
+                setSubmitError(null);
+              }} 
+              className="w-full"
+            >
               Send Another Message
             </Button>
           </Card>
@@ -176,72 +310,126 @@ function ContactPage() {
               Send Us a Message
             </h2>
             <p className="text-xl text-[var(--muted-foreground)]">
-              Fill out the form below and we'll get back to you soon
+              Fill out the form below and we'll get back to you within 24 hours
             </p>
           </div>
 
           <Card padding="lg">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {submitError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
+                <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                <div>
+                  <h4 className="text-red-800 font-medium">Error sending message</h4>
+                  <p className="text-red-700 text-sm mt-1">{submitError}</p>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  label="Full Name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                  placeholder="Your full name"
-                />
-                <Input
-                  label="Email Address"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  required
-                  placeholder="your.email@company.com"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    {...register('name')}
+                    className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                    placeholder="Your full name"
+                  />
+                  {errors.name && (
+                    <p className="text-red-600 text-xs mt-1">{errors.name.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    {...register('email')}
+                    className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                    placeholder="your.email@company.com"
+                  />
+                  {errors.email && (
+                    <p className="text-red-600 text-xs mt-1">{errors.email.message}</p>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  label="Company Name"
-                  value={formData.company}
-                  onChange={(e) => handleInputChange('company', e.target.value)}
-                  placeholder="Your company name"
-                />
-                <Select
-                  label="Inquiry Type"
-                  options={inquiryTypes}
-                  value={formData.inquiryType}
-                  onChange={(e) => handleInputChange('inquiryType', e.target.value)}
-                  required
-                />
+                <div>
+                  <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    {...register('company')}
+                    className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                    placeholder="Your company name"
+                  />
+                  {errors.company && (
+                    <p className="text-red-600 text-xs mt-1">{errors.company.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
+                    Inquiry Type *
+                  </label>
+                  <select
+                    {...register('inquiryType')}
+                    className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                  >
+                    {inquiryTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.inquiryType && (
+                    <p className="text-red-600 text-xs mt-1">{errors.inquiryType.message}</p>
+                  )}
+                </div>
               </div>
-
-              <Input
-                label="Subject"
-                value={formData.subject}
-                onChange={(e) => handleInputChange('subject', e.target.value)}
-                required
-                placeholder="Brief description of your inquiry"
-              />
 
               <div>
                 <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
-                  Message
+                  Subject *
+                </label>
+                <input
+                  type="text"
+                  {...register('subject')}
+                  className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                  placeholder="Brief description of your inquiry"
+                />
+                {errors.subject && (
+                  <p className="text-red-600 text-xs mt-1">{errors.subject.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--muted-foreground)] mb-1">
+                  Message *
                 </label>
                 <textarea
-                  value={formData.message}
-                  onChange={(e) => handleInputChange('message', e.target.value)}
-                  required
+                  {...register('message')}
                   rows={6}
                   className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
                   placeholder="Please provide details about your inquiry..."
                 />
+                {errors.message && (
+                  <p className="text-red-600 text-xs mt-1">{errors.message.message}</p>
+                )}
+                <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                  {watch('message')?.length || 0}/2000 characters
+                </p>
               </div>
 
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   id="newsletter"
+                  {...register('newsletter')}
                   className="h-4 w-4 text-[var(--primary-600)] focus:ring-primary-500 border-neutral-300 rounded"
                 />
                 <label htmlFor="newsletter" className="text-sm text-neutral-700">
@@ -251,13 +439,16 @@ function ContactPage() {
 
               <Button
                 type="submit"
-                loading={isSubmitting}
                 className="w-full"
-                size="lg"
+                disabled={isSubmitting}
               >
                 <Send className="w-5 h-5 mr-2" />
-                Send Message
+                {isSubmitting ? 'Sending Message...' : 'Send Message'}
               </Button>
+
+              <p className="text-xs text-[var(--muted-foreground)] text-center">
+                By submitting this form, you agree that your data will be processed securely and used only to respond to your inquiry.
+              </p>
             </form>
           </Card>
         </div>
