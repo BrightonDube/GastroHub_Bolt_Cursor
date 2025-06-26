@@ -202,7 +202,10 @@ const listings: any[] = data?.pages?.flat() ?? [];
                       {product.name}
                     </h3>
                     <p className="text-sm mb-2" >
-                      Supplier: {product.supplierId}
+                      Supplier: {product.supplierName}
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Product Code: {product.productCode}
                     </p>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-lg font-bold" >
@@ -262,10 +265,10 @@ const listings: any[] = data?.pages?.flat() ?? [];
                 <div className="relative">
                   <img
                     src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/400x300?text=No+Image'}
-                    alt={product.title}
+                    alt={product.name}
                     className="w-full h-48 object-cover rounded-t-xl"
                   />
-                  {product.availability === 'out_of_stock' && (
+                  {!product.isActive && (
                     <div className="absolute top-2 left-2">
                       <Badge variant="error" size="sm" >
                         Out of Stock
@@ -275,10 +278,13 @@ const listings: any[] = data?.pages?.flat() ?? [];
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold mb-1 line-clamp-2" >
-                    {product.title}
+                    {product.name}
                   </h3>
                   <p className="text-sm mb-2" >
-                    Supplier: {product.supplier_id}
+                    Supplier: {product.supplierName}
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Product Code: {product.productCode}
                   </p>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-lg font-bold" >
@@ -291,19 +297,19 @@ const listings: any[] = data?.pages?.flat() ?? [];
                   <div className="flex items-center justify-between text-xs mb-4" >
                     <div className="flex items-center space-x-1">
                       <Package className="w-3 h-3" />
-                      <span>Min: {product.min_quantity} {product.unit}(s)</span>
+                      <span>Min: {product.minOrder} {product.unit}(s)</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Badge variant="secondary" size="sm">{product.category_id}</Badge>
+                      <Badge variant="secondary" size="sm">{product.category}</Badge>
                     </div>
                   </div>
                   <Button
                     className="w-full"
-                    disabled={product.availability === 'out_of_stock'}
+                    disabled={!product.isActive}
                     size="sm"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    {product.availability === 'in_stock' ? 'Add to Cart' : 'Out of Stock'}
+                    {product.isActive ? 'Add to Cart' : 'Out of Stock'}
                   </Button>
                 </div>
               </Card>

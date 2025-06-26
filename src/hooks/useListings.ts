@@ -26,7 +26,9 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       let query = (supabase.from('listing') as any)
         .select(`
           id,
+          product_code,
           supplier_id,
+          profiles(full_name),
           title,
           description,
           category_id,
@@ -53,7 +55,9 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       // Map DB fields to Listing type
       return (data || []).map((item: any) => ({
         id: item.id,
+        productCode: item.product_code,
         supplierId: item.supplier_id,
+        supplierName: item.profiles?.full_name || '',
         name: item.title,
         description: item.description,
         category: item.category_id,
@@ -62,10 +66,10 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
         minOrder: Number(item.min_quantity),
         maxOrder: Number(item.max_quantity),
         images: item.images || [],
-        isActive: item.availability === 'available' || item.availability === true,
+        isActive: item.availability === 'in_stock' || item.availability === true,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-      }));
+      })) as Listing[];
     },
   });
 }
@@ -102,7 +106,9 @@ export function useFeaturedListings() {
         .from('listing')
         .select(`
           id,
+          product_code,
           supplier_id,
+          profiles(full_name),
           title,
           description,
           category_id,
@@ -122,7 +128,9 @@ export function useFeaturedListings() {
       // Map DB fields to Listing type
       return (data || []).map((item: any) => ({
         id: item.id,
+        productCode: item.product_code,
         supplierId: item.supplier_id,
+        supplierName: item.profiles?.full_name || '',
         name: item.title,
         description: item.description,
         category: item.category_id,
@@ -131,10 +139,10 @@ export function useFeaturedListings() {
         minOrder: Number(item.min_quantity),
         maxOrder: Number(item.max_quantity),
         images: item.images || [],
-        isActive: item.availability === 'available' || item.availability === true,
+        isActive: item.availability === 'in_stock' || item.availability === true,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-      }));
+      })) as Listing[];
     },
     staleTime: 5 * 60 * 1000,
   });
