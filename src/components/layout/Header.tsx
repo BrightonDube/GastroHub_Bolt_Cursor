@@ -127,11 +127,10 @@ export function Header() {
     { to: '/about', label: 'About' },
     { to: '/blog', label: 'Blog' },
     { to: '/careers', label: 'Careers' },
-    // Legal dropdown handled separately
-    // Orders only for logged-in users
-    ...(user ? [{ to: '/orders', label: 'Orders', role: appRole }] : []),
-    { to: '/supplier/listings', label: 'My Listings', role: 'supplier' },
-    { to: '/deliveries', label: 'Deliveries', role: 'delivery_partner' },
+    // Role-specific links - only add if user has the right role or is super admin
+    ...(user && (appRole === 'buyer' || isSuperAdmin(user)) ? [{ to: '/orders', label: 'Orders', role: 'buyer' }] : []),
+    ...(user && (appRole === 'supplier' || isSuperAdmin(user)) ? [{ to: '/supplier/listings', label: 'My Listings', role: 'supplier' }] : []),
+    ...(user && (appRole === 'delivery_partner' || isSuperAdmin(user)) ? [{ to: '/deliveries', label: 'Deliveries', role: 'delivery_partner' }] : []),
   ];
 
   // Super admin sees all links, others see by role

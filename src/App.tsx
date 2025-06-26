@@ -37,6 +37,7 @@ const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 const CreateArticlePage = React.lazy(() => import('./pages/CreateArticlePage'));
 const UnauthorizedPage = React.lazy(() => import('./pages/UnauthorizedPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
 
 // Create a client
@@ -345,6 +346,7 @@ function App() {
             <Route path="/careers" element={<React.Suspense fallback={<div>Loading...</div>}><CareersPage /></React.Suspense>} />
             <Route path="/privacy-policy" element={<React.Suspense fallback={<div>Loading...</div>}><PrivacyPolicyPage /></React.Suspense>} />
             <Route path="/terms" element={<React.Suspense fallback={<div>Loading...</div>}><TermsPage /></React.Suspense>} />
+            <Route path="/contact" element={<React.Suspense fallback={<div>Loading...</div>}><ContactPage /></React.Suspense>} />
             
             {/* Marketplace - No Authentication Required */}
             <Route 

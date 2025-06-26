@@ -16,6 +16,7 @@ import {
   Quote
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { Link } from 'react-router-dom';
 
 export function AboutPage() {
   const [activeUsers, setActiveUsers] = useState<number | null>(null);
@@ -298,10 +299,10 @@ export function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="default">
-              Get Started Today
+              <Link to="/register" className="block w-full h-full">Get Started Today</Link>
             </Button>
             <Button size="lg" variant="ghost" className="text-[var(--foreground,#fff)] border-white hover:bg-primary-800 hover:text-white dark:hover:bg-primary-700 dark:hover:text-white">
-              Contact Our Team
+              <Link to="/contact" className="block w-full h-full">Contact Our Team</Link>
             </Button>
           </div>
         </div>

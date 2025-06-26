@@ -19,7 +19,7 @@ import {
   FileText
 } from 'lucide-react';
 
-export function ContactPage() {
+function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,15 +51,15 @@ export function ContactPage() {
       icon: <Phone className="w-6 h-6" />,
       title: 'Phone Support',
       description: 'Speak with our team',
-      contact: '+1 (555) 123-4567',
-      responseTime: 'Mon-Fri, 9AM-6PM EST'
+      contact: '+27 21 123 4567',
+      responseTime: 'Mon-Fri, 9AM-6PM SAST'
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
       title: 'Live Chat',
       description: 'Chat with us in real-time',
       contact: 'Available in app',
-      responseTime: 'Mon-Fri, 9AM-6PM EST'
+      responseTime: 'Mon-Fri, 9AM-6PM SAST'
     }
   ];
 
@@ -264,38 +264,51 @@ export function ContactPage() {
       </section>
 
       {/* Office Locations */}
-      <section className="py-20 bg-[var(--card-muted,#f9fafb)]">
+      <section className="py-20 bg-gray-900 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
+            <h2 className="text-3xl font-heading font-bold text-white dark:text-gray-100 mb-4">
               Our Offices
             </h2>
-            <p className="text-xl text-[var(--muted-foreground)]">
+            <p className="text-xl text-gray-300 dark:text-gray-400">
               Visit us at one of our global locations
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={`${offices.length === 1 
+            ? 'flex justify-center' 
+            : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+          }`}>
             {offices.map((office, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow" padding="lg">
+              <Card 
+                key={index} 
+                className={`
+                  hover:shadow-2xl hover:scale-105 transition-all duration-300 
+                  bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 
+                  border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500
+                  shadow-xl hover:shadow-blue-500/20 dark:hover:shadow-blue-400/20
+                  ${offices.length === 1 ? 'w-full max-w-lg' : ''}
+                `} 
+                padding="lg"
+              >
                 <div className="flex items-center space-x-3 mb-4">
-                  <MapPin className="w-6 h-6 text-[var(--primary-600)]" />
-                  <h3 className="text-xl font-semibold text-[var(--foreground)]">
+                  <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                     {office.city}
                   </h3>
                 </div>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm font-medium text-neutral-700 mb-1">Address:</p>
-                    <p className="text-[var(--muted-foreground)] whitespace-pre-line">{office.address}</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Address:</p>
+                    <p className="text-gray-600 dark:text-gray-400 whitespace-pre-line">{office.address}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-neutral-700 mb-1">Phone:</p>
-                    <p className="text-[var(--muted-foreground)]">{office.phone}</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone:</p>
+                    <p className="text-gray-600 dark:text-gray-400">{office.phone}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-neutral-700 mb-1">Email:</p>
-                    <p className="text-[var(--primary-600)]">{office.email}</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email:</p>
+                    <p className="text-blue-600 dark:text-blue-400">{office.email}</p>
                   </div>
                 </div>
               </Card>
@@ -332,7 +345,7 @@ export function ContactPage() {
                 What are your payment terms?
               </h3>
               <p className="text-[var(--muted-foreground)]">
-                We offer flexible payment terms including net 30, credit card, and bank transfer options. 
+                We offer flexible payment terms including EFT, SnapScan, Zapper, credit/debit cards, and 30-day accounts. 
                 Contact our sales team for custom payment arrangements.
               </p>
             </Card>
@@ -348,7 +361,7 @@ export function ContactPage() {
             </Card>
           </div>
 
-          <div className="text-center mt-12">
+          {/* <div className="text-center mt-12">
             <p className="text-[var(--muted-foreground)] mb-4">
               Can't find what you're looking for?
             </p>
@@ -356,7 +369,7 @@ export function ContactPage() {
               <FileText className="w-4 h-4 mr-2" />
               Visit Help Center
             </Button>
-          </div>
+          </div> */}
         </div>
       </section>
 
