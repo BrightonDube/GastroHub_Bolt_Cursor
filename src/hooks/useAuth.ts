@@ -1,86 +1,35 @@
 // WARNING: Do NOT use useAuth directly in components.
 // useAuth is ONLY for use inside AuthProvider. All components/pages/hooks must use useAuthContext from App.tsx instead.
 // Debug: If you see this in a component, you are using it incorrectly.
-// import { useEffect, useState } from 'react';
-import { useEffect, useState } from 'react';
-import bcrypt from 'bcryptjs';
+import { useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
-import { Profile, AuthUser } from '../types';
+import { Profiles, AuthUser } from '../types';
 
 export function useAuth() {
   // DEBUG: useAuth initialized
   console.log('[useAuth] Initialized');
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      console.log('[useAuth] getInitialSession called');
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log('[useAuth] getSession result:', session);
-      if (session?.user) {
-        await fetchUserProfile(session.user);
-      }
-    };
-
-    console.log('[useAuth] Before getInitialSession');
-    getInitialSession();
-    console.log('[useAuth] After getInitialSession');
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('[useAuth] onAuthStateChange event:', event, 'session:', session);
-        try {
-          if (session?.user) {
-            await fetchUserProfile(session.user);
-          } else {
-            setUser(null);
-          }
-          setLoading(false);
-        } catch (error) {
-          console.error('[useAuth] Error in onAuthStateChange:', error);
-        }
-      }
-    );
-
-    return () => { console.log('[useAuth] Unsubscribing from auth state change'); subscription.unsubscribe(); };
-  }, []);
-
-  const fetchUserProfile = async (authUser: User) => {
-    console.log('[fetchUserProfile] Called with:', authUser);
-    console.log('[useAuth] fetchUserProfile called for', authUser);
+  const fetchUserProfile = async (user: User): Promise<{ data: Profiles | null; error: string | null }> => {
+    console.log('[fetchUserProfile] Called for user:', user.id);
     try {
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', authUser.id)
+        .eq('id', user.id)
         .single();
-      console.log('[fetchUserProfile] Supabase select result:', { profile, error });
-
-      // If profile is missing, do NOT attempt to insert it manually. Supabase auth triggers handle this.
-      // Just return an error for the UI to display. This avoids duplicate key errors and RLS issues.
-      if ((!profile && (!error || (error && error.code === 'PGRST116'))) || (error && error.code === 'PGRST116')) {
-        console.error('[fetchUserProfile] Profile missing after auth. Supabase trigger should create it.');
-        return { error: 'Profile not found. Please contact support if this persists.', data: null };
-      }
 
       if (error) {
         console.error('[fetchUserProfile] Error fetching profile:', error);
-        // Return error up the stack for UI display
-        return { error: error?.message || 'Failed to fetch profile', data: null };
+        return { data: null, error: error.message };
       }
 
-      if (profile) {
-        console.log('[fetchUserProfile] Profile exists, setting user:', profile);
-        return { error: null, data: profile };
-      }
+      console.log('[fetchUserProfile] Profile fetched successfully:', profile);
+      return { data: profile, error: null };
     } catch (error) {
-      console.error('[fetchUserProfile] Exception thrown:', error);
-      // Return error up the stack for UI display
-      return { error: error instanceof Error ? error.message : 'Unexpected error', data: null };
+      console.error('[fetchUserProfile] Exception:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { data: null, error: errorMessage };
     }
   };
 
@@ -143,7 +92,6 @@ export function useAuth() {
     }
   };
 
-
   const signInWithGoogle = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -164,38 +112,35 @@ export function useAuth() {
 
   const signOut = async () => {
     try {
+      console.log('[signOut] Starting logout process...');
       // 1. Supabase sign out
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      // 2. Clear all auth tokens from localStorage/sessionStorage
-      localStorage.clear();
-      sessionStorage.clear();
-      // 3. Remove all cookies (including Supabase cookies)
-      document.cookie.split(';').forEach((c) => {
-        const eqPos = c.indexOf('=');
-        const name = eqPos > -1 ? c.substr(0, eqPos).trim() : c.trim();
-        // Remove for current path
-        document.cookie = name + '=;expires=' + new Date(0).toUTCString() + ';path=/';
-        // Remove for root
-        document.cookie = name + '=;expires=' + new Date(0).toUTCString() + ';path=/;domain=' + window.location.hostname;
+      
+      // 2. Clear auth-related storage only (more targeted approach)
+      const authKeys = ['sb-access-token', 'sb-refresh-token', 'supabase.auth.token'];
+      authKeys.forEach(key => {
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
       });
-      setUser(null);
-      // Debug: List cookies after clearing
-      setTimeout(() => {
-        console.log('[signOut] Cookies after clearing:', document.cookie);
-      }, 200);
+      
+      // 3. Clear only Supabase auth cookies (more targeted approach)
+      const authCookies = ['sb-access-token', 'sb-refresh-token'];
+      authCookies.forEach(cookieName => {
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+      });
+      
+      console.log('[signOut] Logout completed successfully');
       return { error: null };
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      console.error('[signOut] Logout error:', errorMessage);
       return { error: errorMessage };
     }
   };
 
-  // signIn returns error if credentials are invalid or there is a problem. Navigation is handled by the LoginForm.
-
   return {
-    user,
-    loading,
     signUp,
     signIn,
     signInWithGoogle,

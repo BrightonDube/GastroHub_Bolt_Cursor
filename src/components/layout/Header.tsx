@@ -47,32 +47,32 @@ export function Header() {
 
   const handleSignOut = async () => {
     console.log('[Header] handleSignOut called');
-    let finished = false;
-    setTimeout(() => {
-      if (!finished) {
-        console.warn('[Header] signOut still pending after 2s');
-      }
-    }, 2000);
     try {
       console.log('[Header] About to await signOut');
       const result = await signOut();
-      finished = true;
       console.log('[Header] signOut result:', result);
-      setTimeout(() => {
-        console.log('[Header] Cookies after signOut:', document.cookie);
-      }, 200);
-      // Prefer SPA navigation to login for a smoother UX
-      try {
-        navigate('/login', { replace: true });
-        console.log('[Header] Navigated to /login using navigate()');
-      } catch (err) {
-        // Fallback: force a hard reload if navigation fails
-        console.warn('[Header] navigate() failed, falling back to window.location.replace');
-        window.location.replace('/login');
+      
+      if (result.error) {
+        console.error('[Header] signOut error:', result.error);
+        alert('Logout failed: ' + result.error);
+        return;
       }
+      
+      console.log('[Header] signOut successful, navigating to login');
+      
+      // Give a brief moment for auth state to clear
+      setTimeout(() => {
+        try {
+          navigate('/login', { replace: true });
+          console.log('[Header] Navigated to /login using navigate()');
+        } catch (err) {
+          console.warn('[Header] navigate() failed, falling back to window.location.replace');
+          window.location.replace('/login');
+        }
+      }, 100);
+      
     } catch (err) {
-      finished = true;
-      console.error('[Header] signOut error:', err);
+      console.error('[Header] signOut exception:', err);
       alert('Logout failed: ' + (err instanceof Error ? err.message : String(err)));
     }
   };

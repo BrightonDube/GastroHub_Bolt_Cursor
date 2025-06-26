@@ -45,23 +45,38 @@ export function LoginForm() {
     setLoading(true);
     setError('');
     console.log('[LoginForm] Attempting login for', email);
-    const { error, data } = await signIn(email, password);
-    if (error) {
-      setError(typeof error === 'string' ? error : (error && typeof error === 'object' && 'message' in error ? (error as any).message : 'Login failed'));
-      setLoading(false);
-      return;
-    }
-    // Try to get user role from returned data or context
-    let role: string | undefined = data?.user?.profiles?.role;
-    // Fallback: try context
+    
     try {
-      const ctx = useAuthContext();
-      role = role || ctx?.user?.profiles?.role;
-    } catch {}
-    const dashboardPath = getDashboardPathByRole(role as any);
-    console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
-    navigate(dashboardPath);
-    setLoading(false);
+      const { error, data } = await signIn(email, password);
+      if (error) {
+        console.error('[LoginForm] Login error:', error);
+        setError(typeof error === 'string' ? error : (error && typeof error === 'object' && 'message' in error ? (error as any).message : 'Login failed'));
+        setLoading(false);
+        return;
+      }
+      
+      // Try to get user role from returned data or context
+      let role: string | undefined = data?.user?.profiles?.role;
+      // Fallback: try context
+      try {
+        const ctx = useAuthContext();
+        role = role || ctx?.user?.profiles?.role;
+      } catch {}
+      
+      const dashboardPath = getDashboardPathByRole(role as any);
+      console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
+      
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        navigate(dashboardPath);
+      }, 100);
+      
+    } catch (err) {
+      console.error('[LoginForm] Login exception:', err);
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignIn = async () => {

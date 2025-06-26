@@ -7,6 +7,7 @@ import { Select } from '../ui/Select';
 import { ChefHat, Mail, Lock, User, Building, Phone, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getDashboardPathByRole } from '../../utils/dashboardPaths';
+import { UserRole } from '../../types';
 
 // Placeholder for the animated map. Replace with a real animated map if desired.
 function AnimatedMap() {

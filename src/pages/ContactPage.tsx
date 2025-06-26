@@ -233,7 +233,7 @@ function ContactPage() {
                   onChange={(e) => handleInputChange('message', e.target.value)}
                   required
                   rows={6}
-                  className="w-full px-3 py-2 border border-[var(--stroke)] text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[var(--stroke)] bg-background text-[var(--foreground)] rounded-lg text-sm placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:border-transparent"
                   placeholder="Please provide details about your inquiry..."
                 />
               </div>

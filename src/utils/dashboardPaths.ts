@@ -1,4 +1,4 @@
-import { UserRole } from '../types/auth';
+import { UserRole } from '../types/index';
 
 /**
  * Get the default dashboard path for a user based on their role

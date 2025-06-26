@@ -4,19 +4,16 @@ import { Database } from './database';
 export type Profiles = Database['public']['Tables']['profiles']['Row'];
 export type Listing = Database['public']['Tables']['listing']['Row'];
 export type Order = Database['public']['Tables']['order']['Row'];
-export type DeliveryTask = Database['public']['Tables']['delivery_task']['Row'];
 
 // Insert types
 export type ProfilesInsert = Database['public']['Tables']['profiles']['Insert'];
 export type ListingInsert = Database['public']['Tables']['listing']['Insert'];
 export type OrderInsert = Database['public']['Tables']['order']['Insert'];
-export type DeliveryTaskInsert = Database['public']['Tables']['delivery_task']['Insert'];
 
 // Update types
 export type ProfilesUpdate = Database['public']['Tables']['profiles']['Update'];
 export type ListingUpdate = Database['public']['Tables']['listing']['Update'];
 export type OrderUpdate = Database['public']['Tables']['order']['Update'];
-export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_task']['Update'];
 
 // Enum types
 export type UserRole = 'buyer' | 'supplier' | 'delivery_partner' | 'super_admin';
@@ -35,17 +32,23 @@ export interface OrderWithDetails extends Order {
   delivery_partner?: Profiles;
 }
 
-export interface DeliveryTaskWithDetails extends DeliveryTask {
-  order: OrderWithDetails;
-  delivery_partner: Profiles;
+// Auth types
+export interface Profile {
+  id: string;
+  email: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  role: string | null;
+  phone: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
-// Auth types
 export interface AuthUser {
   id: string;
   email: string;
   role: UserRole;
-  profiles: Profiless;
+  profiles: Profiles | null;
 }
 
 // Form types

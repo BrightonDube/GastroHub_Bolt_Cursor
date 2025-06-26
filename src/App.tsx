@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthUser } from './types';
 import { Toaster } from 'sonner';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import { useAuth } from './hooks/useAuth'; // Only used inside AuthProvider
 import { HomePage } from './pages/HomePage';
@@ -73,6 +73,7 @@ export function useAuthContext() {
 
 import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
+import { getDashboardPathByRole } from './utils/dashboardPaths';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   console.log('[AuthProvider] Render');
@@ -84,23 +85,31 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Helper to fetch and set user profile
   const fetchAndSetUserProfile = async (session: any) => {
-    if (session && session.user) {
-      const { id, email, role } = session.user;
-      try {
-        const result = await auth.fetchUserProfile(session.user);
-        if (result.error) {
-          setProfileError(result.error);
-          setUser({ id, email, role, profiles: null });
-        } else {
-          setProfileError(null);
-          setUser({ id, email, role, profiles: result.data });
-        }
-      } catch (err) {
-        setProfileError('Unexpected error fetching profile');
-        setUser({ id, email, role, profiles: null });
-      }
-    } else {
+    if (!session?.user) {
+      console.warn('[fetchAndSetUserProfile] No session or user provided');
       setUser(null);
+      return;
+    }
+    
+    const { id, email, role } = session.user;
+    console.log('[fetchAndSetUserProfile] Fetching profile for user:', id);
+    
+    try {
+      const result = await auth.fetchUserProfile(session.user);
+      if (result.error) {
+        console.error('[fetchAndSetUserProfile] Profile fetch error:', result.error);
+        setProfileError(result.error);
+        // Still set basic user info even if profile fetch fails
+        setUser({ id, email, role, profiles: null });
+      } else {
+        console.log('[fetchAndSetUserProfile] Profile fetched successfully');
+        setProfileError(null);
+        setUser({ id, email, role, profiles: result.data });
+      }
+    } catch (err) {
+      console.error('[fetchAndSetUserProfile] Exception:', err);
+      setProfileError('Unexpected error fetching profile');
+      setUser({ id, email, role, profiles: null });
     }
   };
 
@@ -145,12 +154,32 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
       try {
         if (event === "SIGNED_IN" && session?.user) {
+          setLoading(true);
           setSession(session);
           await fetchAndSetUserProfile(session);
         } else if (event === "SIGNED_OUT") {
+          console.log('[AuthProvider] SIGNED_OUT: clearing all auth state');
+          setLoading(true);
           setSession(null);
           setUser(null);
-          console.log('[AuthProvider] SIGNED_OUT: user and session cleared, loading set to false');
+          setProfileError(null);
+          
+          // Additional cleanup - clear any stale auth data
+          try {
+            localStorage.removeItem('sb-access-token');
+            localStorage.removeItem('sb-refresh-token');
+            sessionStorage.removeItem('sb-access-token');
+            sessionStorage.removeItem('sb-refresh-token');
+            console.log('[AuthProvider] SIGNED_OUT: cleaned up storage');
+          } catch (err) {
+            console.warn('[AuthProvider] Storage cleanup failed:', err);
+          }
+          
+          console.log('[AuthProvider] SIGNED_OUT: user and session cleared');
+        } else if (event === "TOKEN_REFRESHED" && session?.user) {
+          console.log('[AuthProvider] TOKEN_REFRESHED: updating session');
+          setSession(session);
+          // Don't refetch profile on token refresh, just update session
         }
       } catch (e) {
         setProfileError('Unexpected error during auth state change');
@@ -223,7 +252,11 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    // Redirect to role-specific dashboard instead of generic /dashboard
+    const role = user?.profiles?.role || user?.role;
+    const dashboardPath = getDashboardPathByRole(role as any);
+    console.log('[PublicRoute] User authenticated, redirecting to:', dashboardPath);
+    return <Navigate to={dashboardPath} replace />;
   }
 
   return <>{children}</>;
