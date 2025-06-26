@@ -1,6 +1,6 @@
 # GastroHub: Full Project Specification & Bolt.dev Implementation Plan (React + Vite Edition)
 **Version**: 1.0  
-**Date**: June 13, 2025  
+**Date**: June 15, 2025  
 
 ## Table of Contents
 - [Project Overview](#project-overview)

@@ -38,7 +38,7 @@ export function BlogPage() {
     title: 'The Future of Food Supply Chain: Trends to Watch in 2024',
     excerpt: 'Explore the latest innovations and trends shaping the food industry, from AI-powered logistics to sustainable sourcing practices.',
     author: 'Sarah Johnson',
-    date: '2024-01-15',
+    date: '2025-06-15',
     readTime: '8 min read',
     category: 'Industry News',
     image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',

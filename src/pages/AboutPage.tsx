@@ -70,7 +70,7 @@ export function AboutPage() {
       name: 'Brighton Dube',
       role: 'CEO & Founder',
       bio: 'Restaurant manager with 15+ years of experience in the South African food industry',
-      image: 'https://imgur.com/a/84h1HA8'
+      image: 'https://res.cloudinary.com/dvsbl9nik/image/upload/v1750973046/profile_picture_s1p4k0.jpg'
     },
     
   ];
@@ -113,16 +113,16 @@ export function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-[var(--card-muted,#f9fafb)]">
+      <section className="py-16 bg-[var(--card-muted,#f9fafb)] dark:bg-neutral-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex p-3 bg-primary-100 text-primary-600 rounded-xl mb-4">
+                <div className="inline-flex p-3 bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-200 rounded-xl mb-4">
                   {stat.icon}
                 </div>
-                <div className="text-3xl font-bold text-neutral-900 mb-2">{stat.value}</div>
-                <div className="text-neutral-200">{stat.label}</div>
+                <div className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{stat.value}</div>
+                <div className="text-neutral-600 dark:text-neutral-300">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -217,14 +217,27 @@ export function AboutPage() {
               The passionate people behind GastroHub
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            className={
+              team.length === 1
+                ? 'flex flex-col items-center justify-center'
+                : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center'
+            }
+          >
             {team.map((member, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow" padding="lg">
+              <Card
+                key={index}
+                className={
+                  team.length === 1
+                    ? 'w-full max-w-xs mx-auto text-center hover:shadow-lg transition-shadow'
+                    : 'text-center hover:shadow-lg transition-shadow'
+                }
+                padding="lg"
+              >
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+                  className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-primary-200 dark:border-primary-700 shadow-md"
                 />
                 <h3 className="text-lg font-semibold mb-1 text-[var(--foreground)]">
                   {member.name}
@@ -284,10 +297,10 @@ export function AboutPage() {
             Whether you're a buyer, supplier, or delivery partner, we'd love to have you on board.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
+            <Button size="lg" variant="default">
               Get Started Today
             </Button>
-            <Button size="lg" variant="ghost" className="text-[var(--foreground,#fff)] border-white hover:bg-[var(--background)] hover:text-primary-900">
+            <Button size="lg" variant="ghost" className="text-[var(--foreground,#fff)] border-white hover:bg-primary-800 hover:text-white dark:hover:bg-primary-700 dark:hover:text-white">
               Contact Our Team
             </Button>
           </div>

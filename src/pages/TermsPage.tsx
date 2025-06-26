@@ -191,9 +191,7 @@ const lastUpdated = getLastUpdatedDate();
                 </p>
                 <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
                   <p><strong>Email:</strong> legal@gastrohub.com</p>
-                  <p><strong>Address:</strong> GastroHub Legal Department</p>
-                  <p>123 Market Street, Suite 400</p>
-                  <p>San Francisco, CA 94105</p>
+                  <p><strong>Address:</strong> GastroHub, 12 Loop Street, Cape Town, 8001, South Africa</p>
                 </div>
               </div>
             </Card>

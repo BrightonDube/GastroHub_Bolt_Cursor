@@ -23,6 +23,7 @@ import {
   Briefcase,
   GraduationCap
 } from 'lucide-react';
+import { getDaysAgoString } from '../utils/dateUtils';
 
 export function CareersPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,9 +43,9 @@ export function CareersPage() {
 
   const locations = [
     { value: '', label: 'All Locations' },
-    { value: 'san-francisco', label: 'San Francisco, CA' },
-    { value: 'new-york', label: 'New York, NY' },
-    { value: 'london', label: 'London, UK' },
+    { value: 'cape-town', label: 'Cape Town, South Africa' },
+    { value: 'durban', label: 'Durban, South Africa' },
+    { value: 'johannesburg', label: 'Johannesburg, South Africa' },
     { value: 'remote', label: 'Remote' },
   ];
 
@@ -104,73 +105,23 @@ export function CareersPage() {
     }
   ];
 
+  // Calculate days since publish date (e.g., June 1, 2025)
+  const publishDate = new Date('2025-06-01');
+  const postedString = getDaysAgoString(publishDate);
+
   const openPositions = [
     {
       id: '1',
       title: 'Senior Full Stack Engineer',
       department: 'Engineering',
-      location: 'San Francisco, CA',
+      location: 'Cape Town, South Africa',
       type: 'Full-time',
       experience: 'Senior',
       description: 'Build scalable web applications and APIs for our B2B marketplace platform.',
       requirements: ['5+ years experience', 'React/Node.js', 'PostgreSQL', 'AWS'],
-      posted: '2 days ago'
+      posted: postedString
     },
-    {
-      id: '2',
-      title: 'Product Manager',
-      department: 'Product',
-      location: 'Remote',
-      type: 'Full-time',
-      experience: 'Mid-level',
-      description: 'Drive product strategy and roadmap for our supplier management tools.',
-      requirements: ['3+ years PM experience', 'B2B SaaS', 'Data-driven', 'Agile'],
-      posted: '1 week ago'
-    },
-    {
-      id: '3',
-      title: 'UX/UI Designer',
-      department: 'Design',
-      location: 'New York, NY',
-      type: 'Full-time',
-      experience: 'Mid-level',
-      description: 'Design intuitive user experiences for our marketplace platform.',
-      requirements: ['4+ years design experience', 'Figma', 'Design systems', 'User research'],
-      posted: '3 days ago'
-    },
-    {
-      id: '4',
-      title: 'Sales Development Representative',
-      department: 'Sales',
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      experience: 'Entry-level',
-      description: 'Generate qualified leads and build relationships with potential customers.',
-      requirements: ['1+ years sales experience', 'B2B sales', 'CRM tools', 'Communication skills'],
-      posted: '5 days ago'
-    },
-    {
-      id: '5',
-      title: 'DevOps Engineer',
-      department: 'Engineering',
-      location: 'London, UK',
-      type: 'Full-time',
-      experience: 'Senior',
-      description: 'Manage infrastructure, CI/CD pipelines, and platform reliability.',
-      requirements: ['5+ years DevOps', 'Kubernetes', 'AWS/GCP', 'Monitoring'],
-      posted: '1 week ago'
-    },
-    {
-      id: '6',
-      title: 'Customer Success Manager',
-      department: 'Customer Success',
-      location: 'Remote',
-      type: 'Full-time',
-      experience: 'Mid-level',
-      description: 'Ensure customer satisfaction and drive product adoption.',
-      requirements: ['3+ years CS experience', 'B2B SaaS', 'Account management', 'Analytics'],
-      posted: '4 days ago'
-    }
+    
   ];
 
   const getExperienceColor = (experience: string) => {
@@ -217,15 +168,15 @@ export function CareersPage() {
             <div className="flex items-center justify-center space-x-6 text-[var(--primary-200)]">
               <div className="flex items-center space-x-2">
                 <Users className="w-5 h-5" />
-                <span>150+ Team Members</span>
+                <span>1+ Team Members</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Globe className="w-5 h-5" />
-                <span>4 Global Offices</span>
+                <span>1 Global Office</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Briefcase className="w-5 h-5" />
-                <span>20+ Open Roles</span>
+                <span>1+ Open Roles</span>
               </div>
             </div>
           </div>
@@ -440,8 +391,8 @@ export function CareersPage() {
               <div className="w-16 h-16 bg-[var(--primary-100)] text-[var(--primary-600)] rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-xl font-bold">2</span>
               </div>
-              <h3 className="font-semibold text-[var(--foreground)] mb-2">Phone Screen</h3>
-              <p className="text-sm text-[var(--muted-foreground)]">30-minute call to discuss your background and the role</p>
+              <h3 className="font-semibold text-[var(--foreground)] mb-2">Video Interview</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">30-minute video call to discuss your background and the role</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[var(--primary-100)] text-[var(--primary-600)] rounded-full flex items-center justify-center mx-auto mb-4">
@@ -471,10 +422,10 @@ export function CareersPage() {
             Join us in building the future of food commerce and help transform how the industry operates.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
+            <Button linkTo="/careers" size="lg" variant="secondary">
               View Open Positions
             </Button>
-            <Button size="lg" variant="ghost" className="text-[var(--foreground)] border-[var(--foreground)] hover:bg-[var(--background)] hover:text-[var(--primary-900)]">
+            <Button linkTo="/about" size="lg" variant="ghost" className="text-[var(--foreground)] border-[var(--foreground)] hover:bg-[var(--background)] hover:text-[var(--primary-900)]">
               Learn About Our Culture
             </Button>
           </div>

@@ -77,7 +77,8 @@ export function Header() {
     }
   };
 
-
+  // Use the business role from profiles if available
+  const appRole = user?.profiles?.role || user?.role;
 
   const getRoleIcon = (role: string, user: any) => {
     if (user && isSuperAdmin(user)) {
@@ -128,7 +129,7 @@ export function Header() {
     { to: '/careers', label: 'Careers' },
     // Legal dropdown handled separately
     // Orders only for logged-in users
-    ...(user ? [{ to: '/orders', label: 'Orders', role: user.role }] : []),
+    ...(user ? [{ to: '/orders', label: 'Orders', role: appRole }] : []),
     { to: '/supplier/listings', label: 'My Listings', role: 'supplier' },
     { to: '/deliveries', label: 'Deliveries', role: 'delivery_partner' },
   ];
@@ -137,7 +138,7 @@ export function Header() {
   const showLink = (link: any) => {
     if (!link.role) return true;
     if (user && isSuperAdmin(user)) return true;
-    return user?.role === link.role;
+    return appRole === link.role;
   };
 
   return (
@@ -220,13 +221,13 @@ export function Header() {
                   </p>
                   <div className="flex items-center justify-end space-x-1">
                     <Badge 
-                      variant={getRoleColor(user.role, user) as 'primary' | 'secondary' | 'success' | 'default'}
+                      variant={getRoleColor(appRole || '', user) as 'primary' | 'secondary' | 'success' | 'default'}
                       size="sm"
                     >
                       <span className="flex items-center space-x-1">
-                        {getRoleIcon(user.role, user)}
+                        {getRoleIcon(appRole || '', user)}
                         <span className="capitalize">
-                          {isSuperAdmin(user) ? 'Super Admin' : user.role.replace('_', ' ')}
+                          {isSuperAdmin(user) ? 'Super Admin' : (appRole || '').replace('_', ' ')}
                         </span>
                       </span>
                     </Badge>

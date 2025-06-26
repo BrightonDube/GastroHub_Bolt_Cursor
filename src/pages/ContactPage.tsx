@@ -65,22 +65,10 @@ export function ContactPage() {
 
   const offices = [
     {
-      city: 'San Francisco',
-      address: '123 Market Street, Suite 400\nSan Francisco, CA 94105',
-      phone: '+1 (555) 123-4567',
-      email: 'sf@gastrohub.com'
-    },
-    {
-      city: 'New York',
-      address: '456 Broadway, Floor 12\nNew York, NY 10013',
-      phone: '+1 (555) 987-6543',
-      email: 'ny@gastrohub.com'
-    },
-    {
-      city: 'London',
-      address: '789 Oxford Street\nLondon W1C 1DX, UK',
-      phone: '+44 20 7123 4567',
-      email: 'london@gastrohub.com'
+      city: 'Cape Town',
+      address: 'GastroHub, 12 Loop Street, Cape Town, 8001, South Africa',
+      phone: '+27 21 123 4567',
+      email: 'info@gastrohub.com'
     }
   ];
 

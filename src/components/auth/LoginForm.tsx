@@ -52,15 +52,11 @@ export function LoginForm() {
       return;
     }
     // Try to get user role from returned data or context
-    let role: string | undefined = data?.user?.role;
-    if (!role && data?.user && data.user.id) {
-      // Try to get role from profiles if available
-      role = data.user.role || data.user.profiles?.role;
-    }
+    let role: string | undefined = data?.user?.profiles?.role;
     // Fallback: try context
     try {
       const ctx = useAuthContext();
-      role = role || ctx?.user?.role;
+      role = role || ctx?.user?.profiles?.role;
     } catch {}
     const dashboardPath = getDashboardPathByRole(role as any);
     console.log('[LoginForm] Login successful, redirecting to', dashboardPath);

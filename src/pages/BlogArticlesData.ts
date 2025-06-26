@@ -4,10 +4,10 @@ export const ARTICLES = [
     id: '1',
     title: 'The Future of Food Supply Chain: Trends to Watch in 2024',
     author: 'Brighton Dube',
-    date: '2024-01-15',
+    date: '2025-06-15',
     image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',
     content: [
-      'The food supply chain is undergoing a profound transformation as we move into 2024. With the integration of advanced technologies and a growing emphasis on sustainability, businesses are rethinking every link in the chain.',
+      'The food supply chain is undergoing a profound transformation as we move into 2025. With the integration of advanced technologies and a growing emphasis on sustainability, businesses are rethinking every link in the chain.',
       'Automation and artificial intelligence are at the forefront of this change. Smart warehouses powered by robotics and predictive analytics are reducing waste, optimizing inventory, and ensuring timely deliveries. These innovations not only streamline operations but also help companies adapt to fluctuating market demands.',
       'Sustainable sourcing is another major trend. More companies are prioritizing eco-friendly practices, such as reducing carbon footprints and supporting local producers. Transparent supply chains, enabled by blockchain and digital tracking, allow consumers and partners to verify the origins and ethical standards of their food.',
       'Digital marketplaces like GastroHub are bridging the gap between buyers and suppliers. By leveraging these platforms, businesses can discover new partners, negotiate better deals, and respond quickly to market shifts.',
@@ -21,10 +21,10 @@ export const ARTICLES = [
     date: '2024-01-12',
     image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
     content: [
-      'In today’s fast-paced digital landscape, building and maintaining strong supplier relationships is more important than ever. Trust and transparency are the cornerstones of successful partnerships.',
+      'In today's fast-paced digital landscape, building and maintaining strong supplier relationships is more important than ever. Trust and transparency are the cornerstones of successful partnerships.',
       'Regular communication is key. Digital platforms enable real-time updates, performance tracking, and instant issue resolution. By sharing forecasts and feedback openly, both parties can plan better and avoid misunderstandings.',
       'Embracing digital tools also allows for automated order processing, shared dashboards, and collaborative planning. These features foster a sense of partnership and shared responsibility for outcomes.',
-      'Finally, reliability and mutual respect are essential. Deliver on your promises, recognize your suppliers’ contributions, and work together to overcome challenges. Strong relationships lead to better pricing, improved quality, and long-term business growth.'
+      'Finally, reliability and mutual respect are essential. Deliver on your promises, recognize your suppliers' contributions, and work together to overcome challenges. Strong relationships lead to better pricing, improved quality, and long-term business growth.'
     ]
   },
   {
@@ -34,7 +34,7 @@ export const ARTICLES = [
     date: '2024-01-10',
     image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
     content: [
-      'Sustainability is no longer a buzzword—it’s a necessity for modern restaurants. Consumers are increasingly choosing businesses that demonstrate environmental responsibility and ethical sourcing.',
+      'Sustainability is no longer a buzzword—it's a necessity for modern restaurants. Consumers are increasingly choosing businesses that demonstrate environmental responsibility and ethical sourcing.',
       'Start by selecting local and seasonal ingredients. This reduces transportation emissions and supports your community. Partner with suppliers who share your values and can provide certifications or evidence of sustainable practices.',
       'Waste reduction is equally important. Use inventory management tools to minimize spoilage, and get creative with menu planning to utilize every part of your ingredients.',
       'By making sustainability a core part of your business, you not only help the planet but also attract loyal, eco-conscious customers.'
@@ -47,7 +47,7 @@ export const ARTICLES = [
     date: '2024-01-08',
     image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=400',
     content: [
-      'Bella Vista Restaurant faced rising costs and supply chain inefficiencies. By adopting GastroHub’s digital procurement platform, they were able to analyze their purchasing patterns and identify areas of waste.',
+      'Bella Vista Restaurant faced rising costs and supply chain inefficiencies. By adopting GastroHub's digital procurement platform, they were able to analyze their purchasing patterns and identify areas of waste.',
       'The transition to digital ordering streamlined communication with suppliers, reduced manual errors, and improved order accuracy. Bella Vista also leveraged data analytics to negotiate better prices and optimize their inventory levels.',
       'Within six months, the restaurant saw a 30% reduction in procurement costs and established more reliable supplier relationships. This case demonstrates the power of technology-driven transformation in the foodservice industry.'
     ]

@@ -25,15 +25,15 @@ export function RequireRoleGuard({ children, requiredRole }: { children?: React.
     return children ? <>{children}</> : <Outlet />;
   }
 
-  // If role is missing or empty, redirect to role selection
-  if (!user.role) {
-    console.log('[RequireRoleGuard] User has no role, redirecting to /select-role');
+  const appRole = user?.profiles?.role || user?.role;
+  if (!appRole) {
+    console.log('[RequireRoleGuard] User has no app role, redirecting to /select-role');
     return <Navigate to="/select-role" replace />;
   }
 
   // If requiredRole is set, enforce it
-  if (requiredRole && user.role !== requiredRole) {
-    console.log('[RequireRoleGuard] User role mismatch, redirecting to /unauthorized');
+  if (requiredRole && appRole !== requiredRole) {
+    console.log('[RequireRoleGuard] User app role mismatch, redirecting to /unauthorized');
     return <Navigate to="/unauthorized" replace />;
   }
 

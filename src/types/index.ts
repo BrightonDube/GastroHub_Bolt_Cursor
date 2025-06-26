@@ -19,7 +19,7 @@ export type OrderUpdate = Database['public']['Tables']['order']['Update'];
 export type DeliveryTaskUpdate = Database['public']['Tables']['delivery_task']['Update'];
 
 // Enum types
-export type UserRole = 'buyer' | 'supplier' | 'delivery_partner';
+export type UserRole = 'buyer' | 'supplier' | 'delivery_partner' | 'super_admin';
 export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready_for_pickup' | 'in_transit' | 'delivered' | 'cancelled';
 export type DeliveryStatus = 'assigned' | 'picked_up' | 'in_transit' | 'delivered' | 'failed';
 

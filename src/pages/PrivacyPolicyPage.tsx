@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export function PrivacyPolicyPage() {
-  const lastUpdated = 'January 1, 2024';
+  const lastUpdated = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const sections = [
     {
@@ -244,9 +244,7 @@ export function PrivacyPolicyPage() {
     <div className="space-y-2 text-sm text-[var(--muted-foreground)]">
       <p><strong>Email:</strong> privacy@gastrohub.com</p>
       <p><strong>Data Protection Officer:</strong> dpo@gastrohub.com</p>
-      <p><strong>Address:</strong> GastroHub Privacy Team</p>
-      <p>123 Market Street, Suite 400</p>
-      <p>San Francisco, CA 94105</p>
+      <p><strong>Address:</strong> GastroHub, 12 Loop Street, Cape Town, 8001, South Africa</p>
     </div>
   </div>
 </Card>
