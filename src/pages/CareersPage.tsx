@@ -184,7 +184,7 @@ export function CareersPage() {
       </section>
 
       {/* Company Values */}
-      <section className="py-16 bg-[var(--neutral-50)]">
+      <section id="company-culture" className="py-16 bg-[var(--neutral-50)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
@@ -248,7 +248,7 @@ export function CareersPage() {
       </section>
 
       {/* Open Positions */}
-      <section className="py-16 bg-[var(--neutral-50)]">
+      <section id="open-positions" className="py-16 bg-[var(--neutral-50)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-heading font-bold text-[var(--foreground)] mb-4">
@@ -422,10 +422,19 @@ export function CareersPage() {
             Join us in building the future of food commerce and help transform how the industry operates.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button linkTo="/careers" size="lg" variant="secondary">
+            <Button 
+              onClick={() => document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' })}
+              size="lg" 
+              variant="default"
+            >
               View Open Positions
             </Button>
-            <Button linkTo="/about" size="lg" variant="ghost" className="text-[var(--foreground)] border-[var(--foreground)] hover:bg-[var(--background)] hover:text-[var(--primary-900)]">
+            <Button 
+              onClick={() => document.getElementById('company-culture')?.scrollIntoView({ behavior: 'smooth' })}
+              size="lg" 
+              variant="ghost" 
+              className="text-[var(--foreground)] border-[var(--foreground)] hover:bg-[var(--background)] hover:text-[var(--primary-900)]"
+            >
               Learn About Our Culture
             </Button>
           </div>
