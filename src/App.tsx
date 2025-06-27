@@ -74,6 +74,7 @@ export function useAuthContext() {
 import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
 import { getDashboardPathByRole } from './utils/dashboardPaths';
+import { LocalizationProvider } from './context/LocalizationProvider';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   console.log('[AuthProvider] Render');
@@ -265,9 +266,10 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <ThemeProvider>
-      <Toaster position="top-right" />
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
+      <LocalizationProvider>
+        <Toaster position="top-right" />
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
           <Router>
             <Routes>
             {/* Public Routes */}
@@ -441,6 +443,7 @@ function App() {
         </Router>
       </AuthProvider>
     </QueryClientProvider>
+      </LocalizationProvider>
   </ThemeProvider>
   );
 }
