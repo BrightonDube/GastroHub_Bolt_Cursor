@@ -9,8 +9,55 @@ export const CURRENCY_CONFIGS: Record<string, CurrencyConfig> = {
   ZAR: { code: 'ZAR', symbol: 'R', locale: 'en-ZA' }
 };
 
-export const DEFAULT_CURRENCY = 'USD'; // Keep USD as default for safety
+export const DEFAULT_CURRENCY = 'ZAR'; // ZAR is now the primary currency for South African market
 export const TARGET_CURRENCY = 'ZAR';
+
+// South African VAT rate
+export const SA_VAT_RATE = 0.15; // 15%
+
+// VAT calculation utilities
+export function calculateVAT(amount: number, vatRate: number = SA_VAT_RATE): number {
+  return amount * vatRate;
+}
+
+export function addVAT(amount: number, vatRate: number = SA_VAT_RATE): number {
+  return amount * (1 + vatRate);
+}
+
+export function removeVAT(amountWithVAT: number, vatRate: number = SA_VAT_RATE): number {
+  return amountWithVAT / (1 + vatRate);
+}
+
+export function getVATFromTotal(amountWithVAT: number, vatRate: number = SA_VAT_RATE): number {
+  return amountWithVAT - removeVAT(amountWithVAT, vatRate);
+}
+
+// Format currency with VAT information
+export function formatCurrencyWithVAT(amount: number, options?: {
+  currencyCode?: string;
+  showVATBreakdown?: boolean;
+  includeVAT?: boolean;
+}): string {
+  const {
+    currencyCode = DEFAULT_CURRENCY,
+    showVATBreakdown = false,
+    includeVAT = true
+  } = options || {};
+
+  const baseAmount = includeVAT ? amount : addVAT(amount);
+  const vatAmount = getVATFromTotal(baseAmount);
+  const exVATAmount = removeVAT(baseAmount);
+
+  const formattedTotal = formatCurrency(baseAmount, currencyCode);
+
+  if (showVATBreakdown) {
+    const formattedVAT = formatCurrency(vatAmount, currencyCode);
+    const formattedExVAT = formatCurrency(exVATAmount, currencyCode);
+    return `${formattedTotal} (incl. VAT ${formattedVAT}, ex-VAT ${formattedExVAT})`;
+  }
+
+  return `${formattedTotal} ${includeVAT ? 'incl. VAT' : 'excl. VAT'}`;
+}
 
 export function formatCurrency(amount: number, currencyCode: string = DEFAULT_CURRENCY, sourceAmount?: { value: number, currency: 'USD' | 'ZAR' }): string {
   const config = CURRENCY_CONFIGS[currencyCode];

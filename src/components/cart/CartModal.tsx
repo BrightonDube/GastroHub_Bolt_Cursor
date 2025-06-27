@@ -22,7 +22,7 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
     if (!user) {
       // Save current cart and redirect to login
       onClose();
-      navigate('/auth/login?redirect=/checkout');
+      navigate('/login?redirect=/checkout');
     } else {
       // User is logged in, go to checkout
       onClose();
