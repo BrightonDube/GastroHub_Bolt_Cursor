@@ -7,6 +7,8 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+import { CurrencyDisplay } from '../ui/CurrencyDisplay';
+import { DateDisplay } from '../ui/DateDisplay';
 import { OrderService } from '../../services/orderService';
 import { OrderRequest } from '../../types/order';
 import { 
@@ -99,6 +101,7 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
 
   const currencies = [
     { value: 'USD', label: 'USD - US Dollar' },
+    { value: 'ZAR', label: 'ZAR - South African Rand' },
     { value: 'EUR', label: 'EUR - Euro' },
     { value: 'GBP', label: 'GBP - British Pound' },
   ];

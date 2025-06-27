@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../App';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LocalizationToggle } from '../ui/LocalizationToggle';
 import { isSuperAdmin } from '../../utils/superAdmin';
 import { 
   ChefHat, 
@@ -12,7 +13,8 @@ import {
   Settings,
   ShoppingCart,
   Package,
-  Truck
+  Truck,
+  Globe
 } from 'lucide-react';
 import { NavLink } from '../ui/NavLink';
 import { Button } from '../ui/Button';
@@ -21,6 +23,8 @@ export function Header() {
   const [legalOpen, setLegalOpen] = React.useState(false);
   const legalRef = React.useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [localizationOpen, setLocalizationOpen] = React.useState(false);
+  const localizationRef = React.useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
   React.useEffect(() => {
@@ -28,14 +32,17 @@ export function Header() {
       if (legalRef.current && !legalRef.current.contains(e.target as Node)) {
         setLegalOpen(false);
       }
+      if (localizationRef.current && !localizationRef.current.contains(e.target as Node)) {
+        setLocalizationOpen(false);
+      }
     }
-    if (legalOpen) {
+    if (legalOpen || localizationOpen) {
       document.addEventListener('mousedown', handleClick);
     } else {
       document.removeEventListener('mousedown', handleClick);
     }
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [legalOpen]);
+  }, [legalOpen, localizationOpen]);
   console.log('[Header] Render');
   const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
@@ -214,6 +221,24 @@ export function Header() {
               {/* User Menu */}
               <div className="flex items-center space-x-3">
                 <ThemeToggle />
+                
+                {/* Localization Toggle */}
+                <div className="relative" ref={localizationRef}>
+                  <button
+                    onClick={() => setLocalizationOpen(!localizationOpen)}
+                    className="p-2 rounded-lg transition-colors bg-neutral-100 text-primary-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-yellow-400 dark:hover:bg-neutral-700"
+                    aria-label="Localization settings"
+                  >
+                    <Globe className="w-5 h-5" />
+                  </button>
+                  
+                  {localizationOpen && (
+                    <div className="absolute right-0 mt-2 z-50">
+                      <LocalizationToggle />
+                    </div>
+                  )}
+                </div>
+                
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground">
                     {user?.profiles?.full_name || user?.email || 'User'}
@@ -254,6 +279,24 @@ export function Header() {
           ) : (
             <div className="flex items-center space-x-4">
               <ThemeToggle />
+              
+              {/* Localization Toggle for non-authenticated users */}
+              <div className="relative" ref={localizationRef}>
+                <button
+                  onClick={() => setLocalizationOpen(!localizationOpen)}
+                  className="p-2 rounded-lg transition-colors bg-neutral-100 text-primary-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-yellow-400 dark:hover:bg-neutral-700"
+                  aria-label="Localization settings"
+                >
+                  <Globe className="w-5 h-5" />
+                </button>
+                
+                {localizationOpen && (
+                  <div className="absolute right-0 mt-2 z-50">
+                    <LocalizationToggle />
+                  </div>
+                )}
+              </div>
+              
               <Link
                 to="/login"
                 className="text-neutral-600 hover:text-primary-900 font-medium transition-colors"
