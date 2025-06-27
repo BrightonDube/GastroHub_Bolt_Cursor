@@ -4,6 +4,9 @@ import { DashboardStats } from '../../components/dashboard/DashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
+import { CurrencyDisplay } from '../../components/ui/CurrencyDisplay';
+import { DateDisplay } from '../../components/ui/DateDisplay';
+import { useLocalization } from '../../context/LocalizationProvider';
 import { 
   ShoppingCart, 
   Users, 
@@ -21,6 +24,7 @@ export function BuyerDashboard() {
   console.log('[BuyerDashboard] Render');
   // Fetch all dashboard data from backend
   const { data, isLoading, error } = useBuyerDashboardStats();
+  const { isZARMode } = useLocalization();
 
   // Defensive null checks
   const stats = data?.stats || [];
@@ -56,11 +60,11 @@ export function BuyerDashboard() {
             </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 md:mt-0">
-            <Button variant="outline" size="sm">
+            <Button variant="default" size="sm">
               <Search className="w-6 h-6 text-primary-600 mr-2" />
               Browse Marketplace
             </Button>
-            <Button variant="primary" size="sm">
+            <Button variant="solid" size="sm">
               <Plus className="w-6 h-6 text-primary-600 mr-2" />
               New Order
             </Button>
@@ -94,8 +98,15 @@ export function BuyerDashboard() {
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-1">Supplier: {order.supplier_id}</p>
-                      <p className="text-xs text-muted-foreground">Amount: {order.amount}</p>
-                      <p className="text-xs text-muted-foreground">Date: {order.created_at?.slice(0, 10)}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Amount: <CurrencyDisplay 
+                          amount={parseFloat(order.amount) || 0} 
+                          showBothCurrencies={isZARMode}
+                        />
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Date: <DateDisplay date={order.created_at} format="short" />
+                      </p>
                     </div>
                   </div>
                 ))}

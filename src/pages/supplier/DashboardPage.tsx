@@ -4,6 +4,8 @@ import { DashboardStats } from '../../components/dashboard/DashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
+import { CurrencyDisplay } from '../../components/ui/CurrencyDisplay';
+import { useLocalization } from '../../context/LocalizationProvider';
 import { 
   Package, 
   ShoppingCart, 
@@ -19,13 +21,15 @@ import { useSupplierDashboardStats } from '../../hooks/useSupplierDashboardStats
 
 export function SupplierDashboard() {
   const { data: stats = [], isLoading: statsLoading } = useSupplierDashboardStats();
+  const { isZARMode } = useLocalization();
 
   const recentListings = [
     {
       id: '1',
       name: 'Organic Tomatoes',
       category: 'Fresh Produce',
-      price: '$4.50/kg',
+      priceAmount: 4.50, // Store as number for localization
+      priceUnit: 'kg',
       status: 'active',
       orders: 12
     },
@@ -33,7 +37,8 @@ export function SupplierDashboard() {
       id: '2',
       name: 'Fresh Salmon Fillets',
       category: 'Seafood',
-      price: '$18.00/kg',
+      priceAmount: 18.00,
+      priceUnit: 'kg',
       status: 'active',
       orders: 8
     },
@@ -41,7 +46,8 @@ export function SupplierDashboard() {
       id: '3',
       name: 'Premium Olive Oil',
       category: 'Pantry Staples',
-      price: '$12.00/bottle',
+      priceAmount: 12.00,
+      priceUnit: 'bottle',
       status: 'low_stock',
       orders: 5
     }
@@ -110,7 +116,12 @@ export function SupplierDashboard() {
                       <p className="text-xs text-muted-foreground">{listing.orders} orders this month</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-foreground">{listing.price}</p>
+                      <p className="font-semibold text-foreground">
+                        <CurrencyDisplay 
+                          amount={listing.priceAmount} 
+                          showBothCurrencies={isZARMode} 
+                        />/{listing.priceUnit}
+                      </p>
                       <Button>
                         <Edit className="w-6 h-6 text-primary-600" />
                       </Button>

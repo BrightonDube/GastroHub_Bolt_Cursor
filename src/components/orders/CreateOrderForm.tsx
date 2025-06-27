@@ -7,6 +7,9 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+import { CurrencyDisplay } from '../ui/CurrencyDisplay';
+import { DateDisplay } from '../ui/DateDisplay';
+import { useLocalization } from '../../context/LocalizationProvider';
 import { OrderService } from '../../services/orderService';
 import { OrderRequest } from '../../types/order';
 import { 
@@ -50,6 +53,7 @@ interface CreateOrderFormProps {
 
 export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isZARMode } = useLocalization();
   const [orderResult, setOrderResult] = useState<{
     success: boolean;
     data?: {
@@ -76,10 +80,10 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
       items: [{ productId: '', quantity: 1, unitPrice: 0 }],
       paymentDetails: {
         method: 'credit_card',
-        currency: 'USD',
+        currency: isZARMode ? 'ZAR' : 'USD',
       },
       shippingAddress: {
-        country: 'US',
+        country: isZARMode ? 'ZA' : 'US',
       },
     },
   });
@@ -99,6 +103,7 @@ export function CreateOrderForm({ onOrderCreated, onCancel }: CreateOrderFormPro
 
   const currencies = [
     { value: 'USD', label: 'USD - US Dollar' },
+    { value: 'ZAR', label: 'ZAR - South African Rand' },
     { value: 'EUR', label: 'EUR - Euro' },
     { value: 'GBP', label: 'GBP - British Pound' },
   ];
