@@ -6,7 +6,6 @@ import { Select } from '../components/ui/Select';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { CurrencyDisplay } from '../components/ui/CurrencyDisplay';
-import { useLocalization } from '../context/LocalizationProvider';
 import { Search, Filter, ShoppingCart, Package } from 'lucide-react';
 import { useListingsInfinite, useFeaturedListings } from '../hooks/useListings';
 import { useCategories } from '../hooks/useCategories';
@@ -18,7 +17,6 @@ export function MarketplacePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState('relevance');
-  const { isZARMode } = useLocalization();
 
   // --- REMOVE DUPLICATE/INLINE IMPORTS AND LOGIC ---
   // (All imports are at the top. FlattenCategories and categoryOptions are defined only once below.)
@@ -213,8 +211,7 @@ const listings: any[] = data?.pages?.flat() ?? [];
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-lg font-bold" >
                         <CurrencyDisplay 
-                          amount={product.price} 
-                          showBothCurrencies={isZARMode}
+                          amount={product.price}
                         />
                       </span>
                       <span className="text-sm" >
@@ -294,9 +291,8 @@ const listings: any[] = data?.pages?.flat() ?? [];
                   </p>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-lg font-bold" >
-                      <CurrencyDisplay 
-                        amount={product.price || 0} 
-                        showBothCurrencies={isZARMode}
+                                             <CurrencyDisplay 
+                        amount={product.price || 0}
                       />
                     </span>
                     <span className="text-sm" >

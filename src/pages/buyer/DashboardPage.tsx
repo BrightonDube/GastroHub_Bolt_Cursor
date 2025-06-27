@@ -6,7 +6,6 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { CurrencyDisplay } from '../../components/ui/CurrencyDisplay';
 import { DateDisplay } from '../../components/ui/DateDisplay';
-import { useLocalization } from '../../context/LocalizationProvider';
 import { 
   ShoppingCart, 
   Users, 
@@ -24,7 +23,6 @@ export function BuyerDashboard() {
   console.log('[BuyerDashboard] Render');
   // Fetch all dashboard data from backend
   const { data, isLoading, error } = useBuyerDashboardStats();
-  const { isZARMode } = useLocalization();
 
   // Defensive null checks
   const stats = data?.stats || [];
@@ -100,8 +98,7 @@ export function BuyerDashboard() {
                       <p className="text-sm text-muted-foreground mb-1">Supplier: {order.supplier_id}</p>
                       <p className="text-xs text-muted-foreground">
                         Amount: <CurrencyDisplay 
-                          amount={parseFloat(order.amount) || 0} 
-                          showBothCurrencies={isZARMode}
+                          amount={parseFloat(order.amount) || 0}
                         />
                       </p>
                       <p className="text-xs text-muted-foreground">

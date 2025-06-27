@@ -5,7 +5,6 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { CurrencyDisplay } from '../../components/ui/CurrencyDisplay';
-import { useLocalization } from '../../context/LocalizationProvider';
 import { 
   Package, 
   ShoppingCart, 
@@ -21,7 +20,6 @@ import { useSupplierDashboardStats } from '../../hooks/useSupplierDashboardStats
 
 export function SupplierDashboard() {
   const { data: stats = [], isLoading: statsLoading } = useSupplierDashboardStats();
-  const { isZARMode } = useLocalization();
 
   const recentListings = [
     {
@@ -117,9 +115,8 @@ export function SupplierDashboard() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-foreground">
-                        <CurrencyDisplay 
-                          amount={listing.priceAmount} 
-                          showBothCurrencies={isZARMode} 
+                                                <CurrencyDisplay 
+                          amount={listing.priceAmount}
                         />/{listing.priceUnit}
                       </p>
                       <Button>
