@@ -12,14 +12,33 @@ export const CURRENCY_CONFIGS: Record<string, CurrencyConfig> = {
 export const DEFAULT_CURRENCY = 'USD'; // Keep USD as default for safety
 export const TARGET_CURRENCY = 'ZAR';
 
-export function formatCurrency(amount: number, currencyCode: string = DEFAULT_CURRENCY): string {
+export function formatCurrency(amount: number, currencyCode: string = DEFAULT_CURRENCY, sourceAmount?: { value: number, currency: 'USD' | 'ZAR' }): string {
   const config = CURRENCY_CONFIGS[currencyCode];
   if (!config) return `${amount}`; // Fallback for safety
+  
+  // If we have source currency info, convert the amount
+  let displayAmount = amount;
+  
+  if (sourceAmount) {
+    // Convert based on source currency
+    if (sourceAmount.currency === 'USD' && currencyCode === 'ZAR') {
+      displayAmount = convertUSDToZAR(sourceAmount.value);
+    } else if (sourceAmount.currency === 'ZAR' && currencyCode === 'USD') {
+      displayAmount = convertZARToUSD(sourceAmount.value);
+    } else if (sourceAmount.currency === currencyCode) {
+      displayAmount = sourceAmount.value;
+    }
+  } else {
+    // Assume input amount is in USD and convert if displaying ZAR
+    if (currencyCode === 'ZAR') {
+      displayAmount = convertUSDToZAR(amount);
+    }
+  }
   
   return new Intl.NumberFormat(config.locale, {
     style: 'currency',
     currency: config.code,
-  }).format(amount);
+  }).format(displayAmount);
 }
 
 // Keep existing function for backward compatibility

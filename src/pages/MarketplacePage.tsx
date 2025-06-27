@@ -6,6 +6,7 @@ import { Select } from '../components/ui/Select';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { CurrencyDisplay } from '../components/ui/CurrencyDisplay';
+import { CartButton } from '../components/ui/CartButton';
 import { Search, Filter, ShoppingCart, Package } from 'lucide-react';
 import { useListingsInfinite, useFeaturedListings } from '../hooks/useListings';
 import { useCategories } from '../hooks/useCategories';
@@ -203,10 +204,10 @@ const listings: any[] = data?.pages?.flat() ?? [];
                       {product.name}
                     </h3>
                     <p className="text-sm mb-2" >
-                      Supplier: {product.supplierName}
+                      Supplier: {(product as any).supplierName}
                     </p>
                     <p className="text-xs text-muted-foreground mb-2">
-                      Product Code: {product.productCode}
+                      Product Code: {(product as any).productCode}
                     </p>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-lg font-bold" >
@@ -227,15 +228,29 @@ const listings: any[] = data?.pages?.flat() ?? [];
                         <Badge variant="secondary" size="sm">{product.category}</Badge>
                       </div>
                     </div>
-                    <Button
-                      className="w-full"
-                      disabled={!product.isActive}
-                      size="sm"
-                      
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      {product.isActive ? 'Add to Cart' : 'Out of Stock'}
-                    </Button>
+                    {product.isActive ? (
+                      <CartButton
+                        productId={product.id}
+                        productName={product.name}
+                        productImage={product.images?.[0]}
+                        supplierName={(product as any).supplierName}
+                        unitPrice={product.price}
+                        unit={product.unit}
+                        minQuantity={product.minOrder}
+                        maxQuantity={product.maxOrder}
+                        className="w-full"
+                        size="sm"
+                      />
+                    ) : (
+                      <Button
+                        className="w-full"
+                        disabled
+                        size="sm"
+                      >
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Out of Stock
+                      </Button>
+                    )}
                   </div>
                 </Card>
               ))}
@@ -284,10 +299,10 @@ const listings: any[] = data?.pages?.flat() ?? [];
                     {product.name}
                   </h3>
                   <p className="text-sm mb-2" >
-                    Supplier: {product.supplierName}
+                    Supplier: {(product as any).supplierName}
                   </p>
                   <p className="text-xs text-muted-foreground mb-2">
-                    Product Code: {product.productCode}
+                    Product Code: {(product as any).productCode}
                   </p>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-lg font-bold" >
@@ -308,14 +323,29 @@ const listings: any[] = data?.pages?.flat() ?? [];
                       <Badge variant="secondary" size="sm">{product.category}</Badge>
                     </div>
                   </div>
-                  <Button
-                    className="w-full"
-                    disabled={!product.isActive}
-                    size="sm"
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    {product.isActive ? 'Add to Cart' : 'Out of Stock'}
-                  </Button>
+                  {product.isActive ? (
+                    <CartButton
+                      productId={product.id}
+                      productName={product.name}
+                      productImage={product.images?.[0]}
+                      supplierName={(product as any).supplierName}
+                      unitPrice={product.price}
+                      unit={product.unit}
+                      minQuantity={product.minOrder}
+                      maxQuantity={product.maxOrder}
+                      className="w-full"
+                      size="sm"
+                    />
+                  ) : (
+                    <Button
+                      className="w-full"
+                      disabled
+                      size="sm"
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Out of Stock
+                    </Button>
+                  )}
                 </div>
               </Card>
             ))}

@@ -18,12 +18,15 @@ import {
 } from 'lucide-react';
 import { NavLink } from '../ui/NavLink';
 import { Button } from '../ui/Button';
+import { CartIcon } from '../ui/CartIcon';
+import { CartModal } from '../cart/CartModal';
 
 export function Header() {
   const [legalOpen, setLegalOpen] = React.useState(false);
   const legalRef = React.useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [localizationOpen, setLocalizationOpen] = React.useState(false);
+  const [cartOpen, setCartOpen] = React.useState(false);
   const localizationRef = React.useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
@@ -207,6 +210,9 @@ export function Header() {
           {/* User Section */}
           {user ? (
             <div className="flex items-center space-x-4">
+              {/* Cart */}
+              <CartIcon onClick={() => setCartOpen(true)} />
+              
               {/* Notifications */}
               <button
                 className="relative p-2 text-neutral-400 hover:text-primary-600 dark:text-neutral-500 dark:hover:text-primary-400 transition-colors"
@@ -278,6 +284,9 @@ export function Header() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
+              {/* Cart for non-authenticated users */}
+              <CartIcon onClick={() => setCartOpen(true)} />
+              
               <ThemeToggle />
               
               {/* Localization Toggle for non-authenticated users */}
@@ -313,6 +322,9 @@ export function Header() {
           )}
         </div>
       </div>
+      
+      {/* Cart Modal */}
+      <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }
