@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthContext } from '../../App';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -39,6 +39,8 @@ export function LoginForm() {
   
   const { signIn, signInWithGoogle } = useAuthContext();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get('redirect');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,12 +65,13 @@ export function LoginForm() {
         role = role || ctx?.user?.profiles?.role;
       } catch {}
       
-      const dashboardPath = getDashboardPathByRole(role as any);
-      console.log('[LoginForm] Login successful, redirecting to', dashboardPath);
+      const defaultPath = getDashboardPathByRole(role as any);
+      const targetPath = redirectPath || defaultPath;
+      console.log('[LoginForm] Login successful, redirecting to', targetPath);
       
       // Small delay to ensure auth state is updated
       setTimeout(() => {
-        navigate(dashboardPath);
+        navigate(targetPath);
       }, 100);
       
     } catch (err) {
@@ -139,10 +142,10 @@ export function LoginForm() {
             {/* Google Sign In */}
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               className="w-full flex items-center justify-center gap-2 min-h-[37.33px] px-4"
               onClick={handleGoogleSignIn}
-              loading={googleLoading}
+              disabled={googleLoading}
             >
               <Chrome className="w-5 h-5" />
               <span className="inline-block">Continue with Google</span>
@@ -205,7 +208,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 className="w-full"
-                loading={loading}
+                disabled={loading}
                 size="lg"
               >
                 Sign in

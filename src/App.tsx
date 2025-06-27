@@ -27,6 +27,7 @@ import DeliveryDashboard from './pages/delivery/DashboardPage';
 import SuperAdminDashboard from './pages/superAdmin/DashboardPage';
 import MarketplacePage from './pages/MarketplacePage';
 import Footer from './components/layout/Footer';
+import { CheckoutPage } from './pages/CheckoutPage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -75,6 +76,7 @@ import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
 import { getDashboardPathByRole } from './utils/dashboardPaths';
 import { LocalizationProvider } from './context/LocalizationProvider';
+import { CartProvider } from './context/CartProvider';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   console.log('[AuthProvider] Render');
@@ -267,9 +269,10 @@ function App() {
   return (
     <ThemeProvider>
       <LocalizationProvider>
-        <Toaster position="top-right" />
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
+        <CartProvider>
+          <Toaster position="top-right" />
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
           <Router>
             <Routes>
             {/* Public Routes */}
@@ -388,6 +391,16 @@ function App() {
               path="/marketplace" 
               element={<MarketplacePage />} 
             />
+            
+            {/* Checkout - Authentication Required */}
+            <Route 
+              path="/checkout" 
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/orders" 
               element={
@@ -441,10 +454,11 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
-      </AuthProvider>
-    </QueryClientProvider>
+            </AuthProvider>
+          </QueryClientProvider>
+        </CartProvider>
       </LocalizationProvider>
-  </ThemeProvider>
+    </ThemeProvider>
   );
 }
 
