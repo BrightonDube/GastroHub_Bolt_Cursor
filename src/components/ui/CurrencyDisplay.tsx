@@ -7,13 +7,15 @@ interface CurrencyDisplayProps {
   className?: string;
   showBothCurrencies?: boolean; // Show USD + ZAR conversion during transition
   forceCurrency?: 'USD' | 'ZAR'; // Override the context currency
+  sourceCurrency?: 'USD' | 'ZAR'; // Specify what currency the input amount is in (defaults to USD)
 }
 
 export function CurrencyDisplay({ 
   amount, 
   className = '',
   showBothCurrencies = false,
-  forceCurrency 
+  forceCurrency,
+  sourceCurrency = 'USD' // Default assumption: input amounts are in USD
 }: CurrencyDisplayProps) {
   const { currency } = useLocalization();
   
@@ -31,7 +33,7 @@ export function CurrencyDisplay({
   
   return (
     <span className={className}>
-      {formatCurrency(amount, currentCurrency)}
+      {formatCurrency(amount, currentCurrency, { value: amount, currency: sourceCurrency })}
     </span>
   );
 }
