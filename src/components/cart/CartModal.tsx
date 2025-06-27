@@ -72,7 +72,10 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
                 <ShoppingBag className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">Your cart is empty</p>
                 <Button 
-                  onClick={onClose}
+                  onClick={() => {
+                    onClose();
+                    navigate('/marketplace');
+                  }}
                   className="mt-4"
                 >
                   Continue Shopping

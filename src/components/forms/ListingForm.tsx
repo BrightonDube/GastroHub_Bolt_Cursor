@@ -46,14 +46,19 @@ const categories = [
 const units = [
   { value: 'kg', label: 'Kilogram (kg)' },
   { value: 'g', label: 'Gram (g)' },
-  { value: 'lb', label: 'Pound (lb)' },
-  { value: 'oz', label: 'Ounce (oz)' },
+  { value: 't', label: 'Tonne (t)' },
+  { value: 'l', label: 'Litre (L)' },
+  { value: 'ml', label: 'Millilitre (mL)' },
   { value: 'piece', label: 'Piece' },
   { value: 'dozen', label: 'Dozen' },
   { value: 'box', label: 'Box' },
   { value: 'case', label: 'Case' },
-  { value: 'liter', label: 'Liter (L)' },
-  { value: 'ml', label: 'Milliliter (ml)' },
+  { value: 'pack', label: 'Pack' },
+  { value: 'bag', label: 'Bag' },
+  { value: 'bottle', label: 'Bottle' },
+  { value: 'jar', label: 'Jar' },
+  { value: 'can', label: 'Can' },
+  { value: 'pallet', label: 'Pallet' },
 ];
 
 const availabilityOptions = [

@@ -70,37 +70,37 @@ ON CONFLICT DO NOTHING;
 
 -- Insert sample listings
 INSERT INTO "Listing" ("supplierId", name, description, category, price, unit, "minOrder", "maxOrder", images, "isActive", "createdAt", "updatedAt") VALUES
-(gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes from local farm', 'Fresh Produce', 4.50, 'lb', 5, 50, ARRAY['tomatoes1.jpg', 'tomatoes2.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(gen_random_uuid(), 'Fresh Salmon Fillet', 'Wild-caught Atlantic salmon fillet', 'Meat & Seafood', 18.99, 'lb', 2, 20, ARRAY['salmon1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes from local farm', 'Fresh Produce', 9.92, 'kg', 2, 25, ARRAY['tomatoes1.jpg', 'tomatoes2.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Fresh Salmon Fillet', 'Wild-caught Atlantic salmon fillet', 'Meat & Seafood', 41.88, 'kg', 1, 10, ARRAY['salmon1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Artisan Sourdough Bread', 'Hand-crafted sourdough bread', 'Dry Goods', 6.50, 'loaf', 1, 10, ARRAY['bread1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Local Honey', 'Raw unfiltered local honey', 'Spices & Condiments', 12.00, 'jar', 1, 25, ARRAY['honey1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(gen_random_uuid(), 'Grass-Fed Ground Beef', 'Premium grass-fed ground beef', 'Meat & Seafood', 8.99, 'lb', 3, 30, ARRAY['beef1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Grass-Fed Ground Beef', 'Premium grass-fed ground beef', 'Meat & Seafood', 19.82, 'kg', 1, 15, ARRAY['beef1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Organic Mixed Greens', 'Fresh organic salad mix', 'Fresh Produce', 3.25, 'bag', 2, 40, ARRAY['greens1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Farm Fresh Eggs', 'Free-range chicken eggs', 'Dairy & Eggs', 5.50, 'dozen', 1, 20, ARRAY['eggs1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Craft Beer Selection', 'Local brewery craft beer pack', 'Beverages', 24.99, '6-pack', 1, 15, ARRAY['beer1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(gen_random_uuid(), 'Artisan Pasta', 'Handmade fresh pasta', 'Dry Goods', 7.25, 'lb', 2, 25, ARRAY['pasta1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Artisan Pasta', 'Handmade fresh pasta', 'Dry Goods', 15.98, 'kg', 1, 12, ARRAY['pasta1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Seasonal Fruit Box', 'Mixed seasonal fruit selection', 'Fresh Produce', 15.00, 'box', 1, 12, ARRAY['fruits1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Premium Olive Oil', 'Extra virgin cold-pressed olive oil', 'Spices & Condiments', 18.50, 'bottle', 1, 20, ARRAY['oil1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(gen_random_uuid(), 'Organic Chicken Breast', 'Free-range organic chicken breast', 'Meat & Seafood', 12.99, 'lb', 2, 25, ARRAY['chicken1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Organic Chicken Breast', 'Free-range organic chicken breast', 'Meat & Seafood', 28.64, 'kg', 1, 12, ARRAY['chicken1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Whole Grain Flour', 'Stone-ground whole wheat flour', 'Dry Goods', 4.25, 'bag', 3, 30, ARRAY['flour1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(gen_random_uuid(), 'Fresh Mozzarella', 'House-made fresh mozzarella cheese', 'Dairy & Eggs', 8.75, 'lb', 1, 15, ARRAY['mozzarella1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(gen_random_uuid(), 'Fresh Mozzarella', 'House-made fresh mozzarella cheese', 'Dairy & Eggs', 19.29, 'kg', 500, 7500, ARRAY['mozzarella1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (gen_random_uuid(), 'Seasonal Vegetables', 'Mixed seasonal vegetable box', 'Fresh Produce', 22.00, 'box', 1, 10, ARRAY['vegbox1.jpg'], true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT DO NOTHING;
 
 -- Insert inventory data
 INSERT INTO inventory (supplier_id, product_name, description, current_stock, minimum_stock, unit_price, unit_type, is_available) VALUES
-(gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes', 150.0, 25.0, 4.50, 'lbs', true),
-(gen_random_uuid(), 'Fresh Salmon', 'Wild-caught salmon fillets', 45.0, 10.0, 18.99, 'lbs', true),
+(gen_random_uuid(), 'Organic Tomatoes', 'Fresh organic tomatoes', 68.0, 11.0, 9.92, 'kg', true),
+(gen_random_uuid(), 'Fresh Salmon', 'Wild-caught salmon fillets', 20.0, 4.5, 41.88, 'kg', true),
 (gen_random_uuid(), 'Sourdough Bread', 'Artisan sourdough loaves', 25.0, 5.0, 6.50, 'loaves', true),
 (gen_random_uuid(), 'Local Honey', 'Raw unfiltered honey', 40.0, 8.0, 12.00, 'jars', true),
-(gen_random_uuid(), 'Ground Beef', 'Grass-fed ground beef', 80.0, 15.0, 8.99, 'lbs', true),
+(gen_random_uuid(), 'Ground Beef', 'Grass-fed ground beef', 36.0, 6.8, 19.82, 'kg', true),
 (gen_random_uuid(), 'Mixed Greens', 'Organic salad mix', 60.0, 12.0, 3.25, 'bags', true),
 (gen_random_uuid(), 'Farm Eggs', 'Free-range eggs', 50.0, 10.0, 5.50, 'dozens', true),
 (gen_random_uuid(), 'Craft Beer', 'Local brewery selection', 30.0, 6.0, 24.99, '6-packs', true),
 (gen_random_uuid(), 'Olive Oil', 'Premium extra virgin olive oil', 35.0, 8.0, 18.50, 'bottles', true),
-(gen_random_uuid(), 'Chicken Breast', 'Organic free-range chicken', 65.0, 12.0, 12.99, 'lbs', true),
+(gen_random_uuid(), 'Chicken Breast', 'Organic free-range chicken', 29.0, 5.4, 28.64, 'kg', true),
 (gen_random_uuid(), 'Whole Wheat Flour', 'Stone-ground flour', 45.0, 10.0, 4.25, 'bags', true),
-(gen_random_uuid(), 'Fresh Mozzarella', 'House-made mozzarella', 20.0, 5.0, 8.75, 'lbs', true)
+(gen_random_uuid(), 'Fresh Mozzarella', 'House-made mozzarella', 9.0, 2.3, 19.29, 'kg', true)
 ON CONFLICT DO NOTHING;
 
 -- Insert sample orders
