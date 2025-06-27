@@ -3,7 +3,7 @@ import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { CurrencyDisplay } from '../ui/CurrencyDisplay';
 import { useCart } from '../../context/CartProvider';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 
 interface CartModalProps {
@@ -13,7 +13,7 @@ interface CartModalProps {
 
 export function CartModal({ isOpen, onClose }: CartModalProps) {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   if (!isOpen) return null;

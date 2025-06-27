@@ -5,35 +5,58 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { CurrencyDisplay } from '../components/ui/CurrencyDisplay';
 import { useCart } from '../context/CartProvider';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthContext } from '../App';
 import { ShoppingBag, ArrowLeft, Truck, CreditCard } from 'lucide-react';
 
 export function CheckoutPage() {
   const { cart, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, loading } = useAuthContext();
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = React.useState(false);
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated (but wait for auth to load)
   React.useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate('/auth/login?redirect=/checkout');
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleCreateOrder = async () => {
+    setIsProcessing(true);
     try {
-      // TODO: Implement order creation logic
+      // TODO: Implement order creation logic with RevenueCat integration
       console.log('Creating order with cart items:', cart.items);
+      console.log('User creating order:', user);
+      
+      // Simulate order processing delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       // For now, just clear cart and show success
       clearCart();
-      alert('Order created successfully!');
+      alert('Order created successfully! You will receive confirmation via email.');
       navigate('/orders');
     } catch (error) {
       console.error('Failed to create order:', error);
       alert('Failed to create order. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
   };
+
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading checkout...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return null; // Will redirect to login
@@ -125,8 +148,30 @@ export function CheckoutPage() {
                 <h2 className="text-lg font-semibold">Delivery Information</h2>
               </div>
               
-              <div className="text-sm text-muted-foreground">
-                <p>Delivery details will be coordinated with suppliers after order confirmation.</p>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-medium mb-2">Delivery Options:</h3>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Standard delivery within Gauteng: 2-3 business days</li>
+                    <li>• Express delivery (Johannesburg/Cape Town): 1-2 business days</li>
+                    <li>• National delivery: 3-5 business days</li>
+                    <li>• Collection from supplier facilities available</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 className="font-medium mb-2">Fresh Products:</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Temperature-controlled delivery available for perishable items.
+                    Delivery times may vary based on product requirements.
+                  </p>
+                </div>
+                
+                <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
+                  <p className="font-medium mb-1">Note:</p>
+                  <p>Delivery details will be coordinated with suppliers after order confirmation. 
+                     You'll receive tracking information via SMS and email.</p>
+                </div>
               </div>
             </Card>
           </div>
@@ -146,8 +191,8 @@ export function CheckoutPage() {
                   <span>Calculated at delivery</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>VAT</span>
-                  <span>Included</span>
+                  <span>VAT (15%)</span>
+                  <span>Included in prices</span>
                 </div>
                 <div className="border-t pt-3">
                   <div className="flex justify-between font-semibold text-lg">
@@ -161,9 +206,19 @@ export function CheckoutPage() {
                 onClick={handleCreateOrder}
                 className="w-full"
                 size="lg"
+                disabled={isProcessing}
               >
-                <CreditCard className="h-4 w-4 mr-2" />
-                Place Order
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+                    Processing Order...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Place Order
+                  </>
+                )}
               </Button>
 
               <p className="text-xs text-muted-foreground mt-4 text-center">
