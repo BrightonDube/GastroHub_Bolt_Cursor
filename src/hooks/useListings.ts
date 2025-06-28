@@ -23,23 +23,11 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
     // Fix: pageParam is unknown, must cast to number
     queryFn: async ({ pageParam = 0 }) => {
       const page = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
-      let query = (supabase.from('listing') as any)
+      let query = supabase
+        .from('listing')
         .select(`
-          id,
-          product_code,
-          supplier_id,
-          supplier:profiles(full_name),
-          title,
-          description,
-          category_id,
-          price,
-          unit,
-          min_quantity,
-          max_quantity,
-          images,
-          availability,
-          created_at,
-          updated_at
+          *,
+          supplier:profiles!supplier_id(full_name)
         `)
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);

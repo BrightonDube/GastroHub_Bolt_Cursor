@@ -164,9 +164,19 @@ const listings: any[] = data?.pages?.flat() ?? [];
 
         {/* Featured Section */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold mb-2" >
-            Featured Products
-          </h2>
+          <div className="flex items-center mb-6">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                ⭐ Featured Products
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Hand-picked quality products from our top suppliers
+              </p>
+            </div>
+            <Badge variant="secondary" className="bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300">
+              Featured
+            </Badge>
+          </div>
           {featuredLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
@@ -184,15 +194,20 @@ const listings: any[] = data?.pages?.flat() ?? [];
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {featuredListings.map((product) => (
-                <Card key={product.id} className="group hover:shadow-lg transition-shadow" padding="none" >
+                <Card key={product.id} className="group hover:shadow-lg transition-shadow border-2 border-primary-200 dark:border-primary-700 bg-gradient-to-br from-primary-50 to-white dark:from-primary-950 dark:to-background" padding="none" >
                   <div className="relative">
                     <img
                       src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/400x300?text=No+Image'}
                       alt={product.name}
                       className="w-full h-48 object-cover rounded-t-xl"
                     />
+                    <div className="absolute top-2 left-2">
+                      <Badge variant="secondary" className="bg-yellow-400 text-yellow-900 font-semibold">
+                        ⭐ Featured
+                      </Badge>
+                    </div>
                     {!product.isActive && (
-                      <div className="absolute top-2 left-2">
+                      <div className="absolute top-2 right-2">
                         <Badge variant="error" size="sm" >
                           Out of Stock
                         </Badge>
@@ -228,34 +243,44 @@ const listings: any[] = data?.pages?.flat() ?? [];
                         <Badge variant="secondary" size="sm">{product.category}</Badge>
                       </div>
                     </div>
-                    {product.isActive ? (
-                      <CartButton
-                        productId={product.id}
-                        productName={product.name}
-                        productImage={product.images?.[0]}
-                        supplierName={(product as any).supplierName}
-                        unitPrice={product.price}
-                        unit={product.unit}
-                        minQuantity={product.minOrder}
-                        maxQuantity={product.maxOrder}
-                        className="w-full"
-                        size="sm"
-                      />
-                    ) : (
-                      <Button
-                        className="w-full"
-                        disabled
-                        size="sm"
-                      >
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        Out of Stock
-                      </Button>
-                    )}
+                    <CartButton 
+                      productId={product.id}
+                      productName={product.name}
+                      unitPrice={product.price}
+                      unit={product.unit}
+                      productImage={product.images && product.images.length > 0 ? product.images[0] : undefined}
+                      supplierName={(product as any).supplierName}
+                      minQuantity={product.minOrder}
+                      maxQuantity={product.maxOrder}
+                      className="w-full"
+                    />
                   </div>
                 </Card>
               ))}
             </div>
           )}
+        </div>
+
+        {/* Decorative Divider */}
+        <div className="relative mb-8">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t-2 border-dashed border-neutral-300 dark:border-neutral-600" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-6 py-2 bg-background border-2 border-neutral-200 dark:border-neutral-700 rounded-full text-neutral-600 dark:text-neutral-400 font-medium">
+              All Products
+            </span>
+          </div>
+        </div>
+
+        {/* All Products Section */}
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+            Browse All Products
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Discover our complete range of quality food products
+          </p>
         </div>
 
         {/* Product Grid */}
@@ -323,29 +348,17 @@ const listings: any[] = data?.pages?.flat() ?? [];
                       <Badge variant="secondary" size="sm">{product.category}</Badge>
                     </div>
                   </div>
-                  {product.isActive ? (
-                    <CartButton
-                      productId={product.id}
-                      productName={product.name}
-                      productImage={product.images?.[0]}
-                      supplierName={(product as any).supplierName}
-                      unitPrice={product.price}
-                      unit={product.unit}
-                      minQuantity={product.minOrder}
-                      maxQuantity={product.maxOrder}
-                      className="w-full"
-                      size="sm"
-                    />
-                  ) : (
-                    <Button
-                      className="w-full"
-                      disabled
-                      size="sm"
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Out of Stock
-                    </Button>
-                  )}
+                  <CartButton 
+                    productId={product.id}
+                    productName={product.name}
+                    unitPrice={product.price || 0}
+                    unit={product.unit}
+                    productImage={product.images && product.images.length > 0 ? product.images[0] : undefined}
+                    supplierName={(product as any).supplierName}
+                    minQuantity={product.minOrder}
+                    maxQuantity={product.maxOrder}
+                    className="w-full"
+                  />
                 </div>
               </Card>
             ))}

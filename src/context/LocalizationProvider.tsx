@@ -12,23 +12,23 @@ interface LocalizationContextType {
 const LocalizationContext = createContext<LocalizationContextType | null>(null);
 
 export function LocalizationProvider({ children }: { children: React.ReactNode }) {
-  // Start with USD/UTC for backward compatibility - NO BREAKING CHANGES
+  // Start with ZAR/SAST for South African market
   const [currency, setCurrency] = useState<'USD' | 'ZAR'>(() => {
-    // Try to get from localStorage, default to USD
+    // Try to get from localStorage, default to ZAR for SA market
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('gastrohub-currency');
-      return (saved === 'ZAR' || saved === 'USD') ? saved : 'USD';
+      return (saved === 'ZAR' || saved === 'USD') ? saved : 'ZAR';
     }
-    return 'USD';
+    return 'ZAR';
   });
   
   const [timezone, setTimezone] = useState<'UTC' | 'SAST'>(() => {
-    // Try to get from localStorage, default to UTC
+    // Try to get from localStorage, default to SAST for SA market
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('gastrohub-timezone');
-      return (saved === 'SAST' || saved === 'UTC') ? saved : 'UTC';
+      return (saved === 'SAST' || saved === 'UTC') ? saved : 'SAST';
     }
-    return 'UTC';
+    return 'SAST';
   });
 
   // Persist preferences to localStorage

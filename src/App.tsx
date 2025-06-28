@@ -7,16 +7,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
-
 import RequireRoleGuard from './components/auth/RequireRoleGuard';
 import LogoutPage from './pages/LogoutPage';
 import CallbackPage from './pages/auth/CallbackPage';
-import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
-import { OrdersPage } from './pages/supplier/OrdersPage';
-import SupplierMessages from './pages/supplier/SupplierMessages';
-import { CreateOrderPage } from './pages/orders/CreateOrderPage';
-import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
-import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
 import NewListingPage from './pages/supplier/NewListingPage';
 import EditListingPage from './pages/supplier/EditListingPage';
 import { ThemeProvider } from './context/ThemeProvider';
@@ -28,6 +21,17 @@ import SuperAdminDashboard from './pages/superAdmin/DashboardPage';
 import MarketplacePage from './pages/MarketplacePage';
 import Footer from './components/layout/Footer';
 import { CheckoutPage } from './pages/CheckoutPage';
+import BuyerAnalyticsPage from './pages/buyer/AnalyticsPage';
+import SupplierAnalyticsPage from './pages/supplier/AnalyticsPage';
+import ListingsPage from './pages/supplier/ListingsPage';
+import OrdersPage from './pages/supplier/OrdersPage';
+import OrderDetailPage from './pages/supplier/OrderDetailPage';
+import SupplierMessagesPage from './pages/supplier/SupplierMessages';
+import DeliveryAnalyticsPage from './pages/delivery/AnalyticsPage';
+import SuperAdminAnalyticsPage from './pages/superAdmin/AnalyticsPage';
+import { CreateOrderPage } from './pages/orders/CreateOrderPage';
+import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
+import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -314,60 +318,29 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/buyer/dashboard" element={<ProtectedRoute><RequireRoleGuard><BuyerDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/supplier/dashboard" element={<ProtectedRoute><RequireRoleGuard><SupplierDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/delivery/dashboard" element={<ProtectedRoute><RequireRoleGuard><DeliveryDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/buyer/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="buyer"><BuyerDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/buyer/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="buyer"><BuyerAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+            
+            {/* Supplier Routes */}
+            <Route path="/supplier/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><ListingsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings/new" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><NewListingPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings/:id/edit" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><EditListingPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/orders" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><OrdersPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/orders/:id" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><OrderDetailPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/messages" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierMessagesPage /></RequireRoleGuard></ProtectedRoute>} />
+
+            {/* Delivery Routes */}
+            <Route path="/delivery/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="delivery_partner"><DeliveryDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/delivery/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="delivery_partner"><DeliveryAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+
+            {/* Super Admin Routes */}
+            <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/super-admin/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Onboarding: Role Profile Form */}
             <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />
-
-            {/* Supplier Routes */}
-            <Route 
-              path="/supplier/listings" 
-              element={
-                <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">Supplier Listings</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
-                  </div>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/listings/new" 
-              element={
-                <ProtectedRoute>
-                  <NewListingPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/listings/edit/:id" 
-              element={
-                <ProtectedRoute>
-                  <EditListingPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/orders" 
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/orders/:id" 
-              element={
-                <ProtectedRoute>
-                  <OrderDetailPage />
-                </ProtectedRoute>
-              } 
-            />
 
             {/* Public Pages - No Authentication Required */}
             <Route path="/about" element={<React.Suspense fallback={<div>Loading...</div>}><AboutPage /></React.Suspense>} />
@@ -443,14 +416,6 @@ function App() {
             />
 
             {/* Catch all - redirect to home */}
-            <Route 
-              path="/supplier/messages" 
-              element={
-                <ProtectedRoute>
-                  <SupplierMessages />
-                </ProtectedRoute>
-              } 
-            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>

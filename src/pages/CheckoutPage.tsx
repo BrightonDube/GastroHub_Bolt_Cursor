@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { CurrencyDisplay } from '../components/ui/CurrencyDisplay';
+import { CurrencyDisplay, VATDisplay } from '../components/ui/CurrencyDisplay';
+import { calculateVAT, removeVAT } from '../utils/currency';
 import { useCart } from '../context/CartProvider';
 import { useAuthContext } from '../App';
 import { ShoppingBag, ArrowLeft, Truck, CreditCard } from 'lucide-react';
-
 export function CheckoutPage() {
   const { cart, clearCart } = useCart();
   const { user, loading } = useAuthContext();
@@ -17,7 +17,7 @@ export function CheckoutPage() {
   // Redirect to login if not authenticated (but wait for auth to load)
   React.useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth/login?redirect=/checkout');
+      navigate('/login?redirect=/checkout');
     }
   }, [user, loading, navigate]);
 
@@ -183,21 +183,21 @@ export function CheckoutPage() {
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <CurrencyDisplay amount={cart.totalAmount} />
+                  <span>Subtotal (excl. VAT)</span>
+                  <CurrencyDisplay amount={removeVAT(cart.totalAmount)} />
+                </div>
+                <div className="flex justify-between">
+                  <span>VAT (15%)</span>
+                  <CurrencyDisplay amount={calculateVAT(removeVAT(cart.totalAmount))} />
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Delivery</span>
                   <span>Calculated at delivery</span>
                 </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>VAT (15%)</span>
-                  <span>Included in prices</span>
-                </div>
                 <div className="border-t pt-3">
                   <div className="flex justify-between font-semibold text-lg">
-                    <span>Total</span>
-                    <CurrencyDisplay amount={cart.totalAmount} />
+                    <span>Total (incl. VAT)</span>
+                    <VATDisplay amount={cart.totalAmount} showBreakdown={false} />
                   </div>
                 </div>
               </div>
