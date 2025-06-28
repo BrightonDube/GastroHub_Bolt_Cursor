@@ -253,6 +253,7 @@ export type Database = {
           is_active: boolean | null
           max_delivery_distance: number | null
           postal_codes: string[] | null
+          province_id: string | null
           supplier_id: string | null
           updated_at: string | null
           zone_name: string
@@ -267,6 +268,7 @@ export type Database = {
           is_active?: boolean | null
           max_delivery_distance?: number | null
           postal_codes?: string[] | null
+          province_id?: string | null
           supplier_id?: string | null
           updated_at?: string | null
           zone_name: string
@@ -281,11 +283,20 @@ export type Database = {
           is_active?: boolean | null
           max_delivery_distance?: number | null
           postal_codes?: string[] | null
+          province_id?: string | null
           supplier_id?: string | null
           updated_at?: string | null
           zone_name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "delivery_zone_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: false
+            referencedRelation: "provinces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       favorite: {
         Row: {
@@ -699,6 +710,39 @@ export type Database = {
           id?: string
           phone?: string | null
           role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      provinces: {
+        Row: {
+          capital_city: string
+          code: string
+          created_at: string | null
+          id: string
+          major_cities: string[] | null
+          name: string
+          postal_code_ranges: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          capital_city: string
+          code: string
+          created_at?: string | null
+          id?: string
+          major_cities?: string[] | null
+          name: string
+          postal_code_ranges?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          capital_city?: string
+          code?: string
+          created_at?: string | null
+          id?: string
+          major_cities?: string[] | null
+          name?: string
+          postal_code_ranges?: string[] | null
           updated_at?: string | null
         }
         Relationships: []
