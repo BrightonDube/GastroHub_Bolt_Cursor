@@ -25,7 +25,10 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
       const page = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
       let query = supabase
         .from('listing')
-        .select('*')
+        .select(`
+          *,
+          supplier:profiles!supplier_id(full_name)
+        `)
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
       if (searchTerm) query = query.ilike('title', `%${searchTerm}%`);
@@ -42,7 +45,7 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
         id: item.id,
         productCode: item.product_code,
         supplierId: item.supplier_id,
-        supplierName: '', // Will fetch separately
+        supplierName: item.supplier?.full_name || '',
         name: item.title,
         description: item.description,
         category: item.category_id,
