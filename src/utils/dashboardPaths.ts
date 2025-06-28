@@ -13,7 +13,13 @@ export function getDashboardPathByRole(role: UserRole | string): string {
       return '/delivery/dashboard';
     case 'super_admin':
       return '/super-admin/dashboard';
+    case 'authenticated':
+    case null:
+    case undefined:
+      // If user doesn't have a proper role, send to role selection
+      return '/select-role';
     default:
-      return '/dashboard';
+      // For any unrecognized role, also send to role selection
+      return '/select-role';
   }
 }

@@ -94,7 +94,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    const { id, email, role } = session.user;
+    const { id, email } = session.user;
     
     try {
       const result = await auth.fetchUserProfile(session.user);
@@ -102,13 +102,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       if (result.error) {
         console.warn('[Auth] Profile fetch error:', result.error);
         // Set basic user info even if profile fetch fails
-        setUser({ id, email, role, profiles: null });
+        setUser({ id, email, role: 'authenticated', profiles: null });
       } else {
-        setUser({ id, email, role, profiles: result.data });
+        // Use the role from profiles, not from session.user
+        const userRole = result.data?.role || 'authenticated';
+        setUser({ id, email, role: userRole, profiles: result.data });
       }
     } catch (err) {
       console.error('[Auth] Exception fetching profile:', err);
-      setUser({ id, email, role, profiles: null });
+      setUser({ id, email, role: 'authenticated', profiles: null });
     }
   };
 
@@ -116,8 +118,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     // **CRITICAL: Use ONLY onAuthStateChange - no manual getSession()**
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('[Auth] Event:', event, 'Session:', !!session);
-
         switch (event) {
           case 'INITIAL_SESSION':
             // Handle initial session on app load/refresh
