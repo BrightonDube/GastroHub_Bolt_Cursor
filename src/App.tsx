@@ -29,6 +29,7 @@ import OrderDetailPage from './pages/supplier/OrderDetailPage';
 import SupplierMessagesPage from './pages/supplier/SupplierMessages';
 import DeliveryAnalyticsPage from './pages/delivery/AnalyticsPage';
 import SuperAdminAnalyticsPage from './pages/superAdmin/AnalyticsPage';
+import DeliveryManagementPage from './pages/super-admin/DeliveryManagementPage';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
@@ -305,6 +306,7 @@ function App() {
             {/* Super Admin Routes */}
             <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
             <Route path="/super-admin/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/super-admin/delivery" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><DeliveryManagementPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Onboarding: Role Profile Form */}
             <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />
