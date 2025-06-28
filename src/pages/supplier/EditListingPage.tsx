@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuthContext } from '../../App';
 import { useListing, useUpdateListing } from '../../hooks/useListings';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { ListingForm } from '../../components/forms/ListingForm';
@@ -10,6 +11,7 @@ import { ArrowLeft, CheckCircle, AlertCircle, AlertTriangle } from 'lucide-react
 export function EditListingPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { user, loading: authLoading } = useAuthContext();
   const { data: listing, isLoading, error } = useListing(id!);
   const updateListingMutation = useUpdateListing();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -35,11 +37,11 @@ export function EditListingPage() {
     }
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-96">
-          <LoadingSpinner size="lg" text="Loading listing..." />
+          <LoadingSpinner size="lg" text="Loading..." />
         </div>
       </DashboardLayout>
     );
@@ -112,14 +114,16 @@ export function EditListingPage() {
         {/* Form */}
         <ListingForm
           initialData={{
-            name: listing.name,
+            name: listing.title || '',
             description: listing.description || '',
-            is_organic: listing.is_organic || false,
-            tags: listing.tags || [],
-            images: listing.images || [],
+            category_id: listing.category_id || '',
+            price: listing.price || 0,
+            unit: listing.unit || '',
+            min_order_quantity: listing.min_quantity || 0,
+            max_order_quantity: listing.max_quantity || 0,
+            availability: (listing.availability as 'available' | 'limited' | 'out_of_stock') || 'available',
           }}
           onSubmit={handleSubmit}
-          loading={updateListingMutation.isPending}
           mode="edit"
         />
       </div>

@@ -11,14 +11,22 @@ import { Profiles } from '../../types/index';
  * - Delivery Partner: driver's license, vehicle license, roadworthy, police clearance
  */
 export default function RoleProfilesInsertForm() {
-  const { user } = useAuthContext();
+  const { user, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
   const [form, setForm] = useState<Profiles>({});
   const [files, setFiles] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!user || !user.role) {
+  if (authLoading) {
+    return (
+      <div className="max-w-xl mx-auto py-8">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user || !user.profiles?.role) {
     // Should not happen, but guard
     navigate('/select-role');
     return null;

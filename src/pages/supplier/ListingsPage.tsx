@@ -22,7 +22,7 @@ import {
 import { useCategories } from '../../hooks/useCategories';
 
 export function ListingsPage() {
-  const { user } = useAuthContext();
+  const { user, loading: authLoading } = useAuthContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -56,7 +56,7 @@ export function ListingsPage() {
   ];
 
   const filteredListings = listings?.filter(listing => {
-    const matchesSearch = listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = listing.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          listing.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !categoryFilter || listing.category_id === categoryFilter;
     const matchesStatus = !statusFilter || listing.availability === statusFilter;
@@ -95,7 +95,7 @@ export function ListingsPage() {
     return mockStock < 10;
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-96">
@@ -223,7 +223,7 @@ export function ListingsPage() {
                 <div className="relative">
                   <img
                     src={listing.images?.[0] || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400'}
-                    alt={listing.title}
+                    alt={listing.title || 'Product image'}
                     className="w-full h-48 object-cover rounded-t-xl"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400';
@@ -238,8 +238,8 @@ export function ListingsPage() {
                     </div>
                   )}
                   <div className="absolute top-2 right-2">
-                    <Badge variant={getStatusColor(listing.availability) as any} size="sm">
-                      {listing.availability.replace('_', ' ')}
+                    <Badge variant={getStatusColor(listing.availability || '') as any} size="sm">
+                      {(listing.availability || '').replace('_', ' ')}
                     </Badge>
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export function ListingsPage() {
                       </Link>
                     </Button>
                     <Button
-                      onClick={() => handleToggleStatus(listing.id, listing.availability)}
+                      onClick={() => handleToggleStatus(listing.id, listing.availability || '')}
                     >
                       {listing.availability === 'available' ? 'Deactivate' : 'Activate'}
                     </Button>

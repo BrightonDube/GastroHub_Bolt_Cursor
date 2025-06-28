@@ -95,6 +95,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!session?.user) {
       console.warn('[fetchAndSetUserProfile] No session or user provided');
       setUser(null);
+      setLoading(false);
       return;
     }
     
@@ -117,6 +118,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('[fetchAndSetUserProfile] Exception:', err);
       setProfileError('Unexpected error fetching profile');
       setUser({ id, email, role, profiles: null });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,7 +164,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
       try {
         if (event === "SIGNED_IN" && session?.user) {
-          setLoading(true);
           setSession(session);
           await fetchAndSetUserProfile(session);
         } else if (event === "SIGNED_OUT") {
@@ -192,9 +194,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         setProfileError('Unexpected error during auth state change');
         setSession(null);
         setUser(null);
+        setLoading(false);
         console.error('[AuthProvider] Error in onAuthStateChange:', e);
-      } finally {
-        setLoading(false); // Always set loading to false
       }
     });
     unsubscribe = () => {
@@ -375,26 +376,10 @@ function App() {
               } 
             />
             <Route 
-              path="/orders" 
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/orders/new" 
               element={
                 <ProtectedRoute>
                   <CreateOrderPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/orders/:id" 
-              element={
-                <ProtectedRoute>
-                  <OrderDetailPage />
                 </ProtectedRoute>
               } 
             />

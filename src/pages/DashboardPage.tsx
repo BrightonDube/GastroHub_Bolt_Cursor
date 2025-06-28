@@ -59,10 +59,10 @@ function getStats() {
 // Deprecated: This file is no longer used. See role-based dashboards instead.
 
 // Deprecated: This file is no longer used. See role-based dashboards instead.
-  const { user } = useAuthContext();
+  const { user, loading: authLoading } = useAuthContext();
 
   // Guard: Show loading or fallback if user/profile is missing
-  if (!user || !user.profile) {
+  if (authLoading || !user || !user.profiles) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
