@@ -1,10 +1,12 @@
-import React from 'react';
-import { useAuthContext } from '../App';
+import React, { useState, useEffect } from 'react';
+import { useAuthContext } from '../context/AuthProvider';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
+import { getStats } from '../utils/dashboardUtils';
+import ProgressiveLoading from '../components/ui/ProgressiveLoading';
 import { 
   ShoppingCart, 
   Package, 
@@ -22,51 +24,71 @@ import {
 
 
 
-function getStats() {
-  // TODO: Replace with real data fetching (e.g., from Supabase or backend API)
-  return [
-    {
-      title: 'Total Orders',
-      value: '1,250',
-      change: { value: 5, type: 'increase' },
-      icon: <ShoppingCart className="w-6 h-6 text-primary-600" />,
-      color: 'primary',
-    },
-    {
-      title: 'Active Listings',
-      value: '87',
-      change: { value: -2, type: 'decrease' },
-      icon: <Package className="w-6 h-6 text-primary-600" />,
-      color: 'secondary',
-    },
-    {
-      title: 'Total Revenue',
-      value: '$42,000',
-      change: { value: 12, type: 'increase' },
-      icon: <DollarSign className="w-6 h-6 text-primary-600" />,
-      color: 'success',
-    },
-    {
-      title: 'Completed Deliveries',
-      value: '1,100',
-      change: { value: 3, type: 'increase' },
-      icon: <Truck className="w-6 h-6 text-primary-600" />,
-      color: 'warning',
-    },
-  ];
-}
+// Dashboard component for GastroHub_Bolt platform
+export default function DashboardPage() {
+  const { user, loading: authLoading, error: authError } = useAuthContext();
+  const [stats, setStats] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Fetch dashboard stats when user is authenticated
+  useEffect(() => {
+    async function fetchDashboardStats() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        const dashboardStats = await getStats(user);
+        setStats(dashboardStats);
+        setError(null);
+      } catch (err) {
+        console.error('[Dashboard] Error fetching stats:', err);
+        setError('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchDashboardStats();
+  }, [user]);
 
-// Deprecated: This file is no longer used. See role-based dashboards instead.
-
-// Deprecated: This file is no longer used. See role-based dashboards instead.
-  const { user, loading: authLoading } = useAuthContext();
-
-  // Guard: Show loading or fallback if user/profile is missing
-  if (authLoading || !user || !user.profiles) {
+  // Show appropriate loading or error states
+  if (authLoading) {
+    return (
+      <ProgressiveLoading 
+        fallback={
+          <DashboardLayout>
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <div className="text-lg text-muted-foreground">Loading your dashboard data...</div>
+            </div>
+          </DashboardLayout>
+        }
+        recoveryTimeout={15000}
+      />
+    );
+  }
+  
+  // Show auth error
+  if (authError) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-lg text-muted-foreground">Loading your dashboard...</div>
+          <div className="bg-red-50 border border-red-200 p-6 rounded-lg max-w-md">
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Authentication Error</h3>
+            <p className="text-red-700 mb-4">{authError instanceof Error ? authError.message : 'Failed to authenticate'}</p>
+            <Button onClick={() => window.location.href = '/login'}>Go to Login</Button>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // Guard: Show loading or fallback if user/profile is missing
+  if (!user || !user.profile) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-lg text-muted-foreground">User profile not found. Please login again.</div>
         </div>
       </DashboardLayout>
     );
@@ -75,7 +97,8 @@ function getStats() {
   const getWelcomeMessage = () => {
     const timeOfDay = new Date().getHours() < 12 ? 'morning' : 
                      new Date().getHours() < 18 ? 'afternoon' : 'evening';
-    return `Good ${timeOfDay}, ${user.profile.full_name || 'there'}!`;
+    const name = user?.profile?.full_name || user?.profile?.username || 'there';
+    return `Good ${timeOfDay}, ${name}!`;
   };
 
   const getQuickActions = () => {
@@ -122,18 +145,11 @@ function getStats() {
     <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-3xl font-heading font-bold text-foreground">
-              {getWelcomeMessage()}
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Here's what's happening with your {(user?.role || '').replace('_', ' ')} account today.
-            </p>
-          </div>
-          <div className="flex items-center space-x-3 mt-4 md:mt-0">
-            {getQuickActions().map((action, index) => (
-              <Button
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-neutral-900">{getWelcomeMessage()}</h1>
+          <p className="text-muted-foreground">
+            Here's what's happening with your account today.
+          </p>
                 key={index}
                 variant={index === 0 ? 'primary' : 'outline'}
                 size="sm"
