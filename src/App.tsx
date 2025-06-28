@@ -28,6 +28,14 @@ import SuperAdminDashboard from './pages/superAdmin/DashboardPage';
 import MarketplacePage from './pages/MarketplacePage';
 import Footer from './components/layout/Footer';
 import { CheckoutPage } from './pages/CheckoutPage';
+import BuyerAnalyticsPage from './pages/buyer/AnalyticsPage';
+import SupplierAnalyticsPage from './pages/supplier/AnalyticsPage';
+import SupplierListingsPage from './pages/supplier/SupplierListingsPage';
+import SupplierOrdersPage from './pages/supplier/SupplierOrdersPage';
+import SupplierOrderDetailPage from './pages/supplier/SupplierOrderDetailPage';
+import SupplierMessagesPage from './pages/supplier/SupplierMessagesPage';
+import DeliveryAnalyticsPage from './pages/delivery/AnalyticsPage';
+import AnalyticsPage from './pages/superAdmin/AnalyticsPage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -314,60 +322,29 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/buyer/dashboard" element={<ProtectedRoute><RequireRoleGuard><BuyerDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/supplier/dashboard" element={<ProtectedRoute><RequireRoleGuard><SupplierDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/delivery/dashboard" element={<ProtectedRoute><RequireRoleGuard><DeliveryDashboard /></RequireRoleGuard></ProtectedRoute>} />
-            <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/buyer/dashboard" element={<RequireRole allowedRoles={['buyer']}><BuyerDashboard /></RequireRole>} />
+            <Route path="/buyer/analytics" element={<RequireRole allowedRoles={['buyer']}><BuyerAnalyticsPage /></RequireRole>} />
+            
+            {/* Supplier Routes */}
+            <Route path="/supplier/dashboard" element={<RequireRole allowedRoles={['supplier']}><SupplierDashboard /></RequireRole>} />
+            <Route path="/supplier/analytics" element={<RequireRole allowedRoles={['supplier']}><SupplierAnalyticsPage /></RequireRole>} />
+            <Route path="/supplier/listings" element={<RequireRole allowedRoles={['supplier']}><SupplierListingsPage /></RequireRole>} />
+            <Route path="/supplier/listings/new" element={<RequireRole allowedRoles={['supplier']}><NewListingPage /></RequireRole>} />
+            <Route path="/supplier/listings/:id/edit" element={<RequireRole allowedRoles={['supplier']}><EditListingPage /></RequireRole>} />
+            <Route path="/supplier/orders" element={<RequireRole allowedRoles={['supplier']}><SupplierOrdersPage /></RequireRole>} />
+            <Route path="/supplier/orders/:id" element={<RequireRole allowedRoles={['supplier']}><SupplierOrderDetailPage /></RequireRole>} />
+            <Route path="/supplier/messages" element={<RequireRole allowedRoles={['supplier']}><SupplierMessagesPage /></RequireRole>} />
+
+            {/* Delivery Routes */}
+            <Route path="/delivery/dashboard" element={<RequireRole allowedRoles={['delivery_partner']}><DeliveryDashboard /></RequireRole>} />
+            <Route path="/delivery/analytics" element={<RequireRole allowedRoles={['delivery_partner']}><DeliveryAnalyticsPage /></RequireRole>} />
+
+            {/* Super Admin Routes */}
+            <Route path="/super-admin/dashboard" element={<RequireRole allowedRoles={['super_admin']}><SuperAdminDashboard /></RequireRole>} />
+            <Route path="/super-admin/analytics" element={<RequireRole allowedRoles={['super_admin']}><AnalyticsPage /></RequireRole>} />
 
             {/* Onboarding: Role Profile Form */}
             <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />
-
-            {/* Supplier Routes */}
-            <Route 
-              path="/supplier/listings" 
-              element={
-                <ProtectedRoute>
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-2xl font-bold text-neutral-900 mb-4">Supplier Listings</h1>
-                      <p className="text-neutral-600">This page is under construction.</p>
-                    </div>
-                  </div>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/listings/new" 
-              element={
-                <ProtectedRoute>
-                  <NewListingPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/listings/edit/:id" 
-              element={
-                <ProtectedRoute>
-                  <EditListingPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/orders" 
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/supplier/orders/:id" 
-              element={
-                <ProtectedRoute>
-                  <OrderDetailPage />
-                </ProtectedRoute>
-              } 
-            />
 
             {/* Public Pages - No Authentication Required */}
             <Route path="/about" element={<React.Suspense fallback={<div>Loading...</div>}><AboutPage /></React.Suspense>} />
@@ -443,14 +420,6 @@ function App() {
             />
 
             {/* Catch all - redirect to home */}
-            <Route 
-              path="/supplier/messages" 
-              element={
-                <ProtectedRoute>
-                  <SupplierMessages />
-                </ProtectedRoute>
-              } 
-            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
