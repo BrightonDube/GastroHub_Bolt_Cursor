@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChefHat } from 'lucide-react';
-import { useAuthContext } from '../../App';
+import { useAuthContext } from '../../context/AuthProvider';
 
 export function Footer() {
   const { user } = useAuthContext();
@@ -60,18 +60,72 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Company</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-              <li><Link to="/about" className="hover:text-primary-600 dark:hover:text-white">About</Link></li>
-              <li><Link to="/careers" className="hover:text-primary-600 dark:hover:text-white">Careers</Link></li>
-              <li><Link to="/contact" className="hover:text-primary-600 dark:hover:text-white">Contact</Link></li>
-              <li><Link to="/blog" className="hover:text-primary-600 dark:hover:text-white">Blog</Link></li>
+              <li>
+                <Link 
+                  to="/about" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/careers" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/contact" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/blog" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Support</h3>
             <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
               <li><Link to="/help" className="hover:text-primary-600 dark:hover:text-white" tabIndex={-1} aria-disabled="true" style={{pointerEvents: 'none', opacity: 0.5}}>Help Center (Coming Soon)</Link></li>
-              <li><Link to="/terms" className="hover:text-primary-600 dark:hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy-policy" className="hover:text-primary-600 dark:hover:text-white">Privacy Policy</Link></li>
+              <li>
+                <Link 
+                  to="/terms" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  Terms
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/privacy-policy" 
+                  className="hover:text-primary-600 dark:hover:text-white"
+                  target={user ? "_blank" : "_self"}
+                  rel={user ? "noopener noreferrer" : ""}
+                >
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -368,8 +368,86 @@ function App() {
               } 
             />
 
-            {/* Catch all - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* New Routes - Fix Navigation Issues */}
+            
+            {/* Cross-Role Portal Pages */}
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <div className="min-h-screen bg-background p-8">
+                        <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
+                        <div className="bg-card p-6 rounded-lg border">
+                          <p>Settings page - manage your profile and preferences here.</p>
+                        </div>
+                      </div>
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/messaging" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <MessagingPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/orders" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <div className="min-h-screen bg-background p-8">
+                        <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+                        <div className="bg-card p-6 rounded-lg border">
+                          <p>Orders page - view your order history here.</p>
+                        </div>
+                      </div>
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/deliveries" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <DeliveryPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/suppliers" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <SuppliersPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Catch all - redirect intelligently based on auth state */}
+            <Route path="*" element={<CatchAllRedirect />} />
           </Routes>
         </Router>
             </AuthProvider>
@@ -378,6 +456,29 @@ function App() {
       </LocalizationProvider>
     </ThemeProvider>
   );
+}
+
+// Catch all component that intelligently redirects based on auth state
+function CatchAllRedirect() {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
+      </div>
+    );
+  }
+
+  if (user) {
+    // Redirect authenticated users to their dashboard
+    const role = user?.profiles?.role || user?.role;
+    const dashboardPath = getDashboardPathByRole(role as any);
+    return <Navigate to={dashboardPath} replace />;
+  }
+
+  // Redirect unauthenticated users to home
+  return <Navigate to="/" replace />;
 }
 
 export default App;

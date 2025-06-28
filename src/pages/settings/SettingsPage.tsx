@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Badge } from '../components/ui/Badge';
-import { useAuthContext } from '../context/AuthProvider';
-import { supabase } from '../lib/supabase';
+import { DashboardLayout } from '../../components/layout/DashboardLayout';
+import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Badge } from '../../components/ui/Badge';
+import { useAuthContext } from '../../context/AuthProvider';
+import { supabase } from '../../lib/supabase';
 import { 
   User, 
   Mail, 
   Phone, 
   Building, 
-  MapPin, 
   Shield, 
   Bell, 
   Eye, 
@@ -22,7 +21,7 @@ import {
   Settings
 } from 'lucide-react';
 
-export function ProfilePage() {
+export function SettingsPage() {
   const { user, recoverSession } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -35,16 +34,7 @@ export function ProfilePage() {
     email: user?.email || '',
   });
 
-  const [preferences, setPreferences] = useState({
-    email_notifications: true,
-    sms_notifications: false,
-    marketing_emails: false,
-    order_updates: true,
-    security_alerts: true,
-  });
-
   const [passwordData, setPasswordData] = useState({
-    current_password: '',
     new_password: '',
     confirm_password: '',
   });
@@ -72,7 +62,6 @@ export function ProfilePage() {
 
       if (error) throw error;
 
-      // Refresh user data
       await recoverSession();
       showMessage('success', 'Profile updated successfully!');
     } catch (error) {
@@ -105,7 +94,6 @@ export function ProfilePage() {
       if (error) throw error;
 
       setPasswordData({
-        current_password: '',
         new_password: '',
         confirm_password: '',
       });
@@ -113,29 +101,6 @@ export function ProfilePage() {
     } catch (error) {
       console.error('Password update error:', error);
       showMessage('error', 'Failed to update password. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePreferencesUpdate = async () => {
-    if (!user) return;
-
-    setLoading(true);
-    try {
-      const { error } = await supabase
-        .from('user_preferences')
-        .upsert({
-          user_id: user.id,
-          ...preferences,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (error) throw error;
-      showMessage('success', 'Preferences updated successfully!');
-    } catch (error) {
-      console.error('Preferences update error:', error);
-      showMessage('error', 'Failed to update preferences. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -160,17 +125,15 @@ export function ProfilePage() {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
         <div>
           <h1 className="text-3xl font-heading font-bold text-foreground">
-            Profile Settings
+            Account Settings
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage your account settings and preferences
           </p>
         </div>
 
-        {/* Message Alert */}
         {message && (
           <div className={`p-4 rounded-lg border flex items-center space-x-3 ${
             message.type === 'success' 
@@ -186,9 +149,7 @@ export function ProfilePage() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Information */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Basic Profile */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -254,12 +215,11 @@ export function ProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Security Settings */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Lock className="w-5 h-5" />
-                  <span>Security Settings</span>
+                  <span>Change Password</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -297,59 +257,9 @@ export function ProfilePage() {
                 </form>
               </CardContent>
             </Card>
-
-            {/* Notification Preferences */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Bell className="w-5 h-5" />
-                  <span>Notification Preferences</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { key: 'email_notifications', label: 'Email Notifications', description: 'Receive notifications via email' },
-                    { key: 'sms_notifications', label: 'SMS Notifications', description: 'Receive notifications via SMS' },
-                    { key: 'marketing_emails', label: 'Marketing Emails', description: 'Receive promotional and marketing emails' },
-                    { key: 'order_updates', label: 'Order Updates', description: 'Get notified about order status changes' },
-                    { key: 'security_alerts', label: 'Security Alerts', description: 'Receive security-related notifications' },
-                  ].map((pref) => (
-                    <div key={pref.key} className="flex items-center justify-between p-4 border border-border rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-foreground">{pref.label}</h4>
-                        <p className="text-sm text-muted-foreground">{pref.description}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setPreferences(prev => ({ 
-                          ...prev, 
-                          [pref.key]: !prev[pref.key as keyof typeof prev] 
-                        }))}
-                        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                          preferences[pref.key as keyof typeof preferences] ? 'bg-primary-600' : 'bg-gray-200'
-                        }`}
-                      >
-                        <span
-                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                            preferences[pref.key as keyof typeof preferences] ? 'translate-x-5' : 'translate-x-0'
-                          }`}
-                        />
-                      </button>
-                    </div>
-                  ))}
-                  <Button onClick={handlePreferencesUpdate} disabled={loading} variant="outline" className="w-full">
-                    <Settings className="w-4 h-4 mr-2" />
-                    {loading ? 'Saving...' : 'Save Preferences'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
-          {/* Account Overview Sidebar */}
           <div className="space-y-6">
-            {/* Account Status */}
             <Card>
               <CardHeader>
                 <CardTitle>Account Status</CardTitle>
@@ -371,37 +281,6 @@ export function ProfilePage() {
                     {user?.email_confirmed_at ? 'Verified' : 'Pending'}
                   </Badge>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Member Since</span>
-                  <span className="text-sm text-foreground">
-                    {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="ghost" className="w-full justify-start">
-                  <Eye className="w-4 h-4 mr-3" />
-                  View Activity Log
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  <Shield className="w-4 h-4 mr-3" />
-                  Two-Factor Auth
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  <Mail className="w-4 h-4 mr-3" />
-                  Export Data
-                </Button>
-                <Button variant="ghost" className="w-full justify-start text-error-600 hover:text-error-700">
-                  <AlertCircle className="w-4 h-4 mr-3" />
-                  Delete Account
-                </Button>
               </CardContent>
             </Card>
           </div>
@@ -409,6 +288,4 @@ export function ProfilePage() {
       </div>
     </DashboardLayout>
   );
-}
-
-export default ProfilePage;
+} 

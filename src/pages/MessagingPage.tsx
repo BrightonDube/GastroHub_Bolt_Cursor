@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuthContext } from '../App';
-import MessagingPage from '../components/messaging/MessagingPage';
+import { useAuthContext } from '../context/AuthProvider';
+import { ModernMessagingPage } from './ModernMessagingPage';
 
 const Messaging: React.FC = () => {
   const { user, loading: authLoading } = useAuthContext();
@@ -8,12 +8,12 @@ const Messaging: React.FC = () => {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div>Loading...</div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
       </div>
     );
   }
   
-  return <MessagingPage />;
+  return <ModernMessagingPage />;
 };
 
 export default Messaging;

@@ -22,7 +22,7 @@ import {
   Settings
 } from 'lucide-react';
 
-export function ProfilePage() {
+export function SettingsPage() {
   const { user, recoverSession } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -163,7 +163,7 @@ export function ProfilePage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-heading font-bold text-foreground">
-            Profile Settings
+            Account Settings
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage your account settings and preferences
@@ -409,6 +409,4 @@ export function ProfilePage() {
       </div>
     </DashboardLayout>
   );
-}
-
-export default ProfilePage;
+} 
