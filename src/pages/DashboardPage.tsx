@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthContext } from '../context/AuthProvider';
+import { useAuthContext } from '../App';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';

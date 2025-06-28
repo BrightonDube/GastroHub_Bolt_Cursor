@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../../context/AuthProvider';
+import { useAuthContext } from '../../App';
 import { isSuperAdmin } from '../../utils/superAdmin';
 import ProgressiveLoading, { AuthErrorRecovery } from '../ui/ProgressiveLoading';
 import { DashboardLayout } from '../layout/DashboardLayout';

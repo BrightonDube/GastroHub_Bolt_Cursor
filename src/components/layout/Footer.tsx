@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChefHat } from 'lucide-react';
-import { useAuthContext } from '../../context/AuthProvider';
+import { useAuthContext } from '../../App';
 
 export function Footer() {
   const { user } = useAuthContext();

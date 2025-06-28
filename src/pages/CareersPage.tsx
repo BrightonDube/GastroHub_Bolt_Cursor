@@ -24,11 +24,18 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { getDaysAgoString } from '../utils/dateUtils';
+import { useJobPosts, JobPost } from '../hooks/useJobPosts';
+import { JobApplicationModal } from '../components/careers/JobApplicationModal';
 
 export function CareersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
+  const [selectedJobPost, setSelectedJobPost] = useState<JobPost | null>(null);
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+
+  // Fetch job posts from database
+  const { jobPosts, isLoading, error } = useJobPosts();
 
   const departments = [
     { value: '', label: 'All Departments' },
@@ -105,24 +112,16 @@ export function CareersPage() {
     }
   ];
 
-  // Calculate days since publish date (e.g., June 1, 2025)
-  const publishDate = new Date('2025-06-01');
-  const postedString = getDaysAgoString(publishDate);
+  // Handle job application modal
+  const handleApplyNow = (jobPost: JobPost) => {
+    setSelectedJobPost(jobPost);
+    setIsApplicationModalOpen(true);
+  };
 
-  const openPositions = [
-    {
-      id: '1',
-      title: 'Senior Full Stack Engineer',
-      department: 'Engineering',
-      location: 'Cape Town, South Africa',
-      type: 'Full-time',
-      experience: 'Senior',
-      description: 'Build scalable web applications and APIs for our B2B marketplace platform.',
-      requirements: ['5+ years experience', 'React/Node.js', 'PostgreSQL', 'AWS'],
-      posted: postedString
-    },
-    
-  ];
+  const closeApplicationModal = () => {
+    setSelectedJobPost(null);
+    setIsApplicationModalOpen(false);
+  };
 
   const getExperienceColor = (experience: string) => {
     switch (experience) {
@@ -137,7 +136,7 @@ export function CareersPage() {
     }
   };
 
-  const filteredPositions = openPositions.filter(position => {
+  const filteredPositions = jobPosts.filter((position: JobPost) => {
     const matchesSearch = position.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          position.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = !departmentFilter || position.department.toLowerCase().replace(/\s+/g, '-') === departmentFilter;
@@ -284,18 +283,41 @@ export function CareersPage() {
             </div>
             <div className="flex items-center justify-between mt-4">
               <p className="text-sm text-[var(--muted-foreground)]">
-                Showing {filteredPositions.length} of {openPositions.length} positions
+                Showing {filteredPositions.length} of {jobPosts.length} positions
               </p>
-              <Button variant="outline" size="sm">
+              <Button variant="ghost" size="sm">
                 <Filter className="w-4 h-4 mr-2" />
                 More Filters
               </Button>
             </div>
           </Card>
 
+          {/* Loading State */}
+          {isLoading && (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading job positions...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <Card padding="lg" className="text-center bg-error-50 border-error-200">
+              <div className="text-error-600 mb-4">
+                <Briefcase className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Unable to Load Positions</h3>
+                <p className="text-sm">{error}</p>
+              </div>
+              <Button onClick={() => window.location.reload()}>
+                Try Again
+              </Button>
+            </Card>
+          )}
+
           {/* Positions List */}
-          <div className="space-y-6">
-            {filteredPositions.map((position) => (
+          {!isLoading && !error && (
+            <div className="space-y-6">
+              {filteredPositions.map((position) => (
               <Card key={position.id} className="hover:shadow-md transition-shadow" padding="lg">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex-1">
@@ -315,15 +337,15 @@ export function CareersPage() {
                           </div>
                           <div className="flex items-center space-x-1">
                             <Clock className="w-4 h-4" />
-                            <span>{position.type}</span>
+                            <span>{position.job_type}</span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge variant={getExperienceColor(position.experience) as any}>
-                          {position.experience}
+                        <Badge variant={getExperienceColor(position.experience_level) as 'success' | 'primary' | 'warning' | 'secondary'}>
+                          {position.experience_level}
                         </Badge>
-                        <span className="text-xs text-[var(--muted-foreground)]">{position.posted}</span>
+                        <span className="text-xs text-[var(--muted-foreground)]">{getDaysAgoString(new Date(position.posted_date))}</span>
                       </div>
                     </div>
                     
@@ -333,7 +355,7 @@ export function CareersPage() {
                     
                     <div className="flex flex-wrap gap-2">
                       {position.requirements.map((req, index) => (
-                        <Badge key={index} variant="outline" size="sm">
+                        <Badge key={index} variant="secondary" size="sm">
                           {req}
                         </Badge>
                       ))}
@@ -341,16 +363,15 @@ export function CareersPage() {
                   </div>
                   
                   <div className="mt-4 lg:mt-0 lg:ml-6">
-                    <Button>
+                    <Button onClick={() => handleApplyNow(position)}>
                       Apply Now
                     </Button>
                   </div>
                 </div>
               </Card>
             ))}
-          </div>
 
-          {filteredPositions.length === 0 && (
+            {filteredPositions.length === 0 && (
             <Card padding="lg" className="text-center">
               <Briefcase className="w-16 h-16 text-[var(--muted-foreground)] mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
@@ -359,10 +380,12 @@ export function CareersPage() {
               <p className="text-[var(--muted-foreground)] mb-4">
                 Try adjusting your search criteria or check back later for new opportunities.
               </p>
-              <Button variant="outline">
+              <Button variant="ghost">
                 View All Positions
               </Button>
             </Card>
+            )}
+          </div>
           )}
         </div>
       </section>
@@ -442,6 +465,21 @@ export function CareersPage() {
       </section>
 
       <Footer />
+
+      {/* Job Application Modal */}
+      {selectedJobPost && (
+        <JobApplicationModal
+          isOpen={isApplicationModalOpen}
+          onClose={closeApplicationModal}
+          jobPost={{
+            id: selectedJobPost.id,
+            title: selectedJobPost.title,
+            department: selectedJobPost.department,
+            location: selectedJobPost.location,
+            type: selectedJobPost.job_type,
+          }}
+        />
+      )}
     </div>
   );
 }

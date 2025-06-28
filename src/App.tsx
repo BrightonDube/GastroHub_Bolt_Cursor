@@ -33,6 +33,9 @@ import DeliveryManagementPage from './pages/super-admin/DeliveryManagementPage';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
+import InvoiceListPage from './pages/invoices/InvoiceListPage';
+import InvoiceDetailPage from './pages/invoices/InvoiceDetailPage';
+import CreateInvoicePage from './pages/invoices/CreateInvoicePage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -45,6 +48,10 @@ const CreateArticlePage = React.lazy(() => import('./pages/CreateArticlePage'));
 const UnauthorizedPage = React.lazy(() => import('./pages/UnauthorizedPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
+// Lazy-loaded additional pages
+const MessagingPage = React.lazy(() => import('./pages/MessagingPage'));
+const DeliveryPage = React.lazy(() => import('./pages/DeliveryPage'));
+const SuppliersPage = React.lazy(() => import('./pages/SuppliersPage'));
 
 // Create a client
 const queryClient = new QueryClient({
@@ -364,6 +371,38 @@ function App() {
               element={
                 <ProtectedRoute>
                   <OrderUpdatePage />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Invoice Routes */}
+            <Route 
+              path="/invoices" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <InvoiceListPage />
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/invoices/new" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard requiredRole="supplier">
+                    <CreateInvoicePage />
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/invoices/:invoiceId" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <InvoiceDetailPage />
+                  </RequireRoleGuard>
                 </ProtectedRoute>
               } 
             />

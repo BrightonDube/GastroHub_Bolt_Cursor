@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuthContext } from '../context/AuthProvider';
+import { useAuthContext } from '../App';
 import { ModernMessagingPage } from './ModernMessagingPage';
 
 const Messaging: React.FC = () => {
