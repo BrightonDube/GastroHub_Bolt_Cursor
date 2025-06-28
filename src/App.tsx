@@ -7,16 +7,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HomePage } from './pages/HomePage';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
-
 import RequireRoleGuard from './components/auth/RequireRoleGuard';
 import LogoutPage from './pages/LogoutPage';
 import CallbackPage from './pages/auth/CallbackPage';
-import { OrderDetailPage } from './pages/supplier/OrderDetailPage';
-import { OrdersPage } from './pages/supplier/OrdersPage';
-import SupplierMessages from './pages/supplier/SupplierMessages';
-import { CreateOrderPage } from './pages/orders/CreateOrderPage';
-import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
-import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
 import NewListingPage from './pages/supplier/NewListingPage';
 import EditListingPage from './pages/supplier/EditListingPage';
 import { ThemeProvider } from './context/ThemeProvider';
@@ -30,12 +23,15 @@ import Footer from './components/layout/Footer';
 import { CheckoutPage } from './pages/CheckoutPage';
 import BuyerAnalyticsPage from './pages/buyer/AnalyticsPage';
 import SupplierAnalyticsPage from './pages/supplier/AnalyticsPage';
-import SupplierListingsPage from './pages/supplier/SupplierListingsPage';
-import SupplierOrdersPage from './pages/supplier/SupplierOrdersPage';
-import SupplierOrderDetailPage from './pages/supplier/SupplierOrderDetailPage';
-import SupplierMessagesPage from './pages/supplier/SupplierMessagesPage';
+import ListingsPage from './pages/supplier/ListingsPage';
+import OrdersPage from './pages/supplier/OrdersPage';
+import OrderDetailPage from './pages/supplier/OrderDetailPage';
+import SupplierMessagesPage from './pages/supplier/SupplierMessages';
 import DeliveryAnalyticsPage from './pages/delivery/AnalyticsPage';
-import AnalyticsPage from './pages/superAdmin/AnalyticsPage';
+import SuperAdminAnalyticsPage from './pages/superAdmin/AnalyticsPage';
+import { CreateOrderPage } from './pages/orders/CreateOrderPage';
+import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
+import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -322,26 +318,26 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/buyer/dashboard" element={<RequireRole allowedRoles={['buyer']}><BuyerDashboard /></RequireRole>} />
-            <Route path="/buyer/analytics" element={<RequireRole allowedRoles={['buyer']}><BuyerAnalyticsPage /></RequireRole>} />
+            <Route path="/buyer/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="buyer"><BuyerDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/buyer/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="buyer"><BuyerAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
             
             {/* Supplier Routes */}
-            <Route path="/supplier/dashboard" element={<RequireRole allowedRoles={['supplier']}><SupplierDashboard /></RequireRole>} />
-            <Route path="/supplier/analytics" element={<RequireRole allowedRoles={['supplier']}><SupplierAnalyticsPage /></RequireRole>} />
-            <Route path="/supplier/listings" element={<RequireRole allowedRoles={['supplier']}><SupplierListingsPage /></RequireRole>} />
-            <Route path="/supplier/listings/new" element={<RequireRole allowedRoles={['supplier']}><NewListingPage /></RequireRole>} />
-            <Route path="/supplier/listings/:id/edit" element={<RequireRole allowedRoles={['supplier']}><EditListingPage /></RequireRole>} />
-            <Route path="/supplier/orders" element={<RequireRole allowedRoles={['supplier']}><SupplierOrdersPage /></RequireRole>} />
-            <Route path="/supplier/orders/:id" element={<RequireRole allowedRoles={['supplier']}><SupplierOrderDetailPage /></RequireRole>} />
-            <Route path="/supplier/messages" element={<RequireRole allowedRoles={['supplier']}><SupplierMessagesPage /></RequireRole>} />
+            <Route path="/supplier/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><ListingsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings/new" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><NewListingPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/listings/:id/edit" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><EditListingPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/orders" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><OrdersPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/orders/:id" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><OrderDetailPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/supplier/messages" element={<ProtectedRoute><RequireRoleGuard requiredRole="supplier"><SupplierMessagesPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Delivery Routes */}
-            <Route path="/delivery/dashboard" element={<RequireRole allowedRoles={['delivery_partner']}><DeliveryDashboard /></RequireRole>} />
-            <Route path="/delivery/analytics" element={<RequireRole allowedRoles={['delivery_partner']}><DeliveryAnalyticsPage /></RequireRole>} />
+            <Route path="/delivery/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="delivery_partner"><DeliveryDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/delivery/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="delivery_partner"><DeliveryAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Super Admin Routes */}
-            <Route path="/super-admin/dashboard" element={<RequireRole allowedRoles={['super_admin']}><SuperAdminDashboard /></RequireRole>} />
-            <Route path="/super-admin/analytics" element={<RequireRole allowedRoles={['super_admin']}><AnalyticsPage /></RequireRole>} />
+            <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/super-admin/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Onboarding: Role Profile Form */}
             <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />

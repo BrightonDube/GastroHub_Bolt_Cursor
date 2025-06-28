@@ -23,24 +23,9 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
     // Fix: pageParam is unknown, must cast to number
     queryFn: async ({ pageParam = 0 }) => {
       const page = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
-      let query = (supabase.from('listing') as any)
-        .select(`
-          id,
-          product_code,
-          supplier_id,
-          supplier:profiles(full_name),
-          title,
-          description,
-          category_id,
-          price,
-          unit,
-          min_quantity,
-          max_quantity,
-          images,
-          availability,
-          created_at,
-          updated_at
-        `)
+      let query = supabase
+        .from('listing')
+        .select('*')
         .order('created_at', { ascending: true })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
       if (searchTerm) query = query.ilike('title', `%${searchTerm}%`);
@@ -57,7 +42,7 @@ export function useListingsInfinite({ searchTerm, category, sortBy }: {
         id: item.id,
         productCode: item.product_code,
         supplierId: item.supplier_id,
-        supplierName: item.supplier?.full_name || '',
+        supplierName: '', // Will fetch separately
         name: item.title,
         description: item.description,
         category: item.category_id,

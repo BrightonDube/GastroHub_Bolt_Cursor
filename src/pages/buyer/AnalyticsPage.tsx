@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Select';
 import { Badge } from '../../components/ui/Badge';
 import { CurrencyDisplay } from '../../components/ui/CurrencyDisplay';
+import { InteractiveChart, RevenueChart, CategorySpendingChart } from '../../components/ui/InteractiveChart';
 import { 
   TrendingUp, 
   TrendingDown,
@@ -12,17 +13,14 @@ import {
   Package,
   Users,
   ShoppingCart,
-  Calendar,
   Download,
-  Filter,
+  Target,
+  Star,
   BarChart3,
   PieChart,
   LineChart,
-  Target,
-  Star,
-  Clock,
-  Percent,
-  AlertCircle
+  Eye,
+  Clock
 } from 'lucide-react';
 
 export function BuyerAnalyticsPage() {
@@ -137,6 +135,29 @@ export function BuyerAnalyticsPage() {
     }
   ];
 
+  // Chart data
+  const spendingTrendData = [
+    { name: 'Jan', value: 32400 },
+    { name: 'Feb', value: 35600 },
+    { name: 'Mar', value: 38200 },
+    { name: 'Apr', value: 41800 },
+    { name: 'May', value: 39500 },
+    { name: 'Jun', value: 45250 }
+  ];
+
+  const categoryChartData = spendingCategories.map(cat => ({
+    name: cat.category,
+    value: cat.amount
+  }));
+
+  const orderFrequencyData = [
+    { name: 'Week 1', value: 8 },
+    { name: 'Week 2', value: 12 },
+    { name: 'Week 3', value: 15 },
+    { name: 'Week 4', value: 18 },
+    { name: 'Week 5', value: 14 }
+  ];
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -161,7 +182,7 @@ export function BuyerAnalyticsPage() {
               value={metric}
               onChange={(e) => setMetric(e.target.value)}
             />
-            <Button variant="outline" size="sm">
+            <Button variant="ghost" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
@@ -173,8 +194,8 @@ export function BuyerAnalyticsPage() {
           {buyerKpiData.map((kpi, index) => (
             <Card key={index} className="p-6">
               <div className="flex items-center justify-between">
-                <div className={`p-3 rounded-lg bg-${kpi.color}-100 dark:bg-${kpi.color}-900`}>
-                  <div className={`text-${kpi.color}-600 dark:text-${kpi.color}-400`}>
+                <div className="p-3 rounded-lg bg-primary-100 dark:bg-primary-900">
+                  <div className="text-primary-600 dark:text-primary-400">
                     {kpi.icon}
                   </div>
                 </div>
@@ -215,25 +236,16 @@ export function BuyerAnalyticsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <CategorySpendingChart data={categoryChartData} height={250} />
+              <div className="space-y-2 mt-4">
                 {spendingCategories.map((category, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-medium">{category.category}</span>
-                        <div className="flex items-center gap-2">
-                          <CurrencyDisplay amount={category.amount} />
-                          <Badge variant={category.trend === 'up' ? 'success' : category.trend === 'down' ? 'destructive' : 'secondary'}>
-                            {category.percentage}%
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-primary-600 h-2 rounded-full" 
-                          style={{ width: `${category.percentage}%` }}
-                        ></div>
-                      </div>
+                  <div key={index} className="flex items-center justify-between text-sm">
+                    <span className="font-medium">{category.category}</span>
+                    <div className="flex items-center gap-2">
+                      <CurrencyDisplay amount={category.amount} />
+                      <Badge variant={category.trend === 'up' ? 'default' : category.trend === 'down' ? 'error' : 'secondary'}>
+                        {category.percentage}%
+                      </Badge>
                     </div>
                   </div>
                 ))}
@@ -299,7 +311,7 @@ export function BuyerAnalyticsPage() {
                 <div key={index} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold">{opportunity.type}</h4>
-                    <Badge variant={opportunity.priority === 'high' ? 'destructive' : opportunity.priority === 'medium' ? 'warning' : 'secondary'}>
+                    <Badge variant={opportunity.priority === 'high' ? 'error' : opportunity.priority === 'medium' ? 'warning' : 'secondary'}>
                       {opportunity.priority}
                     </Badge>
                   </div>
@@ -318,24 +330,38 @@ export function BuyerAnalyticsPage() {
           </CardContent>
         </Card>
 
-        {/* Order History Trends */}
-        <Card className="p-6">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <LineChart className="w-5 h-5" />
-              Order History & Trends
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
-              <div className="text-center">
-                <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>Interactive charts will be implemented here</p>
-                <p className="text-sm">Showing order frequency, seasonal patterns, and spending trends</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Spending Trends & Order Frequency */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <Card className="p-6">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <LineChart className="w-5 h-5" />
+                Spending Trends
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RevenueChart data={spendingTrendData} height={250} />
+            </CardContent>
+          </Card>
+
+          <Card className="p-6">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
+                Order Frequency
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <InteractiveChart 
+                type="bar" 
+                data={orderFrequencyData} 
+                height={250}
+                colors={['#3B82F6']}
+                yAxisKey="value"
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </DashboardLayout>
   );
