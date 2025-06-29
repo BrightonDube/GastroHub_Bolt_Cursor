@@ -4,7 +4,6 @@ import { useAuthContext } from '../../App';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { LocalizationToggle } from '../ui/LocalizationToggle';
-import { LocalizationToggle } from '../ui/LocalizationToggle';
 import { isSuperAdmin } from '../../utils/superAdmin';
 import { 
   ChefHat, 
@@ -15,7 +14,6 @@ import {
   ShoppingCart,
   Package,
   Truck,
-  Globe
   Globe
 } from 'lucide-react';
 import { NavLink } from '../ui/NavLink';
@@ -28,8 +26,6 @@ export function Header() {
   const legalRef = React.useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [localizationOpen, setLocalizationOpen] = React.useState(false);
-  const localizationRef = React.useRef<HTMLDivElement>(null);
-  const [localizationOpen, setLocalizationOpen] = React.useState(false);
   const [cartOpen, setCartOpen] = React.useState(false);
   const localizationRef = React.useRef<HTMLDivElement>(null);
 
@@ -38,9 +34,6 @@ export function Header() {
     function handleClick(e: MouseEvent) {
       if (legalRef.current && !legalRef.current.contains(e.target as Node)) {
         setLegalOpen(false);
-      }
-      if (localizationRef.current && !localizationRef.current.contains(e.target as Node)) {
-        setLocalizationOpen(false);
       }
       if (localizationRef.current && !localizationRef.current.contains(e.target as Node)) {
         setLocalizationOpen(false);
@@ -252,23 +245,6 @@ export function Header() {
                   )}
                 </div>
                 
-                {/* Localization Toggle */}
-                <div className="relative" ref={localizationRef}>
-                  <button
-                    onClick={() => setLocalizationOpen(!localizationOpen)}
-                    className="p-2 rounded-lg transition-colors bg-neutral-100 text-primary-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-yellow-400 dark:hover:bg-neutral-700"
-                    aria-label="Localization settings"
-                  >
-                    <Globe className="w-5 h-5" />
-                  </button>
-                  
-                  {localizationOpen && (
-                    <div className="absolute right-0 mt-2 z-50">
-                      <LocalizationToggle />
-                    </div>
-                  )}
-                </div>
-                
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground">
                     {user?.profiles?.full_name || user?.email || 'User'}
@@ -312,23 +288,6 @@ export function Header() {
               <CartIcon onClick={() => setCartOpen(true)} />
               
               <ThemeToggle />
-              
-              {/* Localization Toggle for non-authenticated users */}
-              <div className="relative" ref={localizationRef}>
-                <button
-                  onClick={() => setLocalizationOpen(!localizationOpen)}
-                  className="p-2 rounded-lg transition-colors bg-neutral-100 text-primary-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-yellow-400 dark:hover:bg-neutral-700"
-                  aria-label="Localization settings"
-                >
-                  <Globe className="w-5 h-5" />
-                </button>
-                
-                {localizationOpen && (
-                  <div className="absolute right-0 mt-2 z-50">
-                    <LocalizationToggle />
-                  </div>
-                )}
-              </div>
               
               {/* Localization Toggle for non-authenticated users */}
               <div className="relative" ref={localizationRef}>

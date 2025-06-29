@@ -32,8 +32,6 @@ import SuperAdminAnalyticsPage from './pages/superAdmin/AnalyticsPage';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
-import { LocalizationProvider } from './context/LocalizationProvider';
-import { getDashboardPathByRole } from './utils/dashboardPaths';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -275,7 +273,6 @@ function App() {
   return (
     <ThemeProvider>
       <LocalizationProvider>
-      <LocalizationProvider>
         <CartProvider>
           <Toaster position="top-right" />
           <QueryClientProvider client={queryClient}>
@@ -425,7 +422,6 @@ function App() {
             </AuthProvider>
           </QueryClientProvider>
         </CartProvider>
-      </LocalizationProvider>
       </LocalizationProvider>
     </ThemeProvider>
   );
