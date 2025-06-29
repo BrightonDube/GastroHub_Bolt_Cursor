@@ -10,4 +10,4 @@ export function getDaysAgoString(date: Date): string {
   if (diffDays === 0) return 'Today';
   if (diffDays === 1) return '1 day ago';
   return `${diffDays} days ago`;
-} 
+}

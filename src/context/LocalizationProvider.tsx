@@ -66,4 +66,4 @@ export function useLocalization() {
     throw new Error('useLocalization must be used within LocalizationProvider');
   }
   return context;
-} 
+}

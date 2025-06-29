@@ -85,4 +85,4 @@ export function USDDisplay({ amount, className = '' }: { amount: number; classNa
 
 export function ZARDisplay({ amount, className = '' }: { amount: number; className?: string }) {
   return <CurrencyDisplay amount={amount} className={className} forceCurrency="ZAR" />;
-} 
+}

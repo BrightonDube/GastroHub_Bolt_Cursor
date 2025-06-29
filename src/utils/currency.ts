@@ -120,4 +120,4 @@ export function formatDualCurrency(amount: number, primaryCurrency: 'USD' | 'ZAR
     : formatCurrency(convertZARToUSD(amount), 'USD');
   
   return `${primary} (~${secondary})`;
-} 
+}

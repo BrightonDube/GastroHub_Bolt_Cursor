@@ -96,6 +96,16 @@
   --diced-hero-section-button-fg: #ffffff;
   --diced-hero-section-button-hover-bg: #0ea5e9;
   --diced-hero-section-button-hover-fg: #fff;
+  --diced-hero-section-top-text: #2c3e50;
+  --diced-hero-section-main-gradient-from: #0c4a6e;
+  --diced-hero-section-main-gradient-to: #0ea5e9;
+  --diced-hero-section-main-gradient-foreground: #0D3D56;
+  --diced-hero-section-separator: #0ea5e9;
+  --diced-hero-section-sub-text: #34495e;
+  --diced-hero-section-button-bg: #0D3D56;
+  --diced-hero-section-button-fg: #ffffff;
+  --diced-hero-section-button-hover-bg: #0ea5e9;
+  --diced-hero-section-button-hover-fg: #fff;
 }
 
 .dark {
@@ -180,6 +190,16 @@
   --error-100: 0 63% 31%;
   --error-50: 0 75% 15%;
 
+  --diced-hero-section-top-text: #f7f7ff;
+  --diced-hero-section-main-gradient-from: #0c4a6e;
+  --diced-hero-section-main-gradient-to: #7dd3fc;
+  --diced-hero-section-main-gradient-foreground: #0D3D56;
+  --diced-hero-section-separator: #7dd3fc;
+  --diced-hero-section-sub-text: #f7f7ff;
+  --diced-hero-section-button-bg: #0ea5e9;
+  --diced-hero-section-button-fg: #0A0A0A;
+  --diced-hero-section-button-hover-bg: #0284c7;
+  --diced-hero-section-button-hover-fg: #FFFFFF;
   --diced-hero-section-top-text: #f7f7ff;
   --diced-hero-section-main-gradient-from: #0c4a6e;
   --diced-hero-section-main-gradient-to: #7dd3fc;
