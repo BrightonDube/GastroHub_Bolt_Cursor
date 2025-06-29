@@ -78,9 +78,10 @@ export function useAuthContext() {
 
 import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
-import { getDashboardPathByRole } from './utils/dashboardPaths';
 import { LocalizationProvider } from './context/LocalizationProvider';
 import { CartProvider } from './context/CartProvider';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { PublicRoute } from './components/auth/PublicRoute';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   console.log('[AuthProvider] Render');
@@ -224,49 +225,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const trace = Math.random().toString(36).substr(2, 5); // unique trace for this render
-  const { user, loading } = useAuthContext();
-  console.log(`[ProtectedRoute][${trace}] Render, children:`, !!children);
-  console.log(`[ProtectedRoute] user:`, user, 'loading:', loading);
-  if (loading) {
-    console.log('[ProtectedRoute] Still loading, rendering spinner');
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
-      </div>
-    );
-  }
-  if (!user) {
-    console.log('[ProtectedRoute] No user, redirecting to /login');
-    return <Navigate to="/login" replace />;
-  }
-  console.log('[ProtectedRoute] User authenticated, rendering children');
-  return children ? <>{children}</> : <Outlet />;
-}
-
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuthContext();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
-      </div>
-    );
-  }
-
-  if (user) {
-    // Redirect to role-specific dashboard instead of generic /dashboard
-    const role = user?.profiles?.role || user?.role;
-    const dashboardPath = getDashboardPathByRole(role as any);
-    console.log('[PublicRoute] User authenticated, redirecting to:', dashboardPath);
-    return <Navigate to={dashboardPath} replace />;
-  }
-
-  return <>{children}</>;
 }
 
 function App() {
