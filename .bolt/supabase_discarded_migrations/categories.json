@@ -1,0 +1,422 @@
+{
+  "Food and Ingredients": {
+    "Fresh Produce": [
+      "Vegetables",
+      "Fruits",
+      "Herbs",
+      "Microgreens",
+      "Edible Flowers",
+      "Exotic Fruits",
+      "Baby Vegetables"
+    ],
+    "Meat and Poultry": {
+      "General": [
+        "Beef",
+        "Pork",
+        "Lamb",
+        "Chicken",
+        "Duck",
+        "Turkey",
+        "Venison",
+        "Rabbit",
+        "Offal"
+      ],
+      "South African Meats": [
+        "Biltong",
+        "Boerewors",
+        "Springbok",
+        "Kudu",
+        "Ostrich",
+        "Warthog",
+        "Eland"
+      ]
+    },
+    "Seafood": {
+      "General": [
+        "Fish",
+        "Shellfish",
+        "Crustaceans",
+        "Smoked and Cured Fish"
+      ],
+      "South African Seafood": [
+        "Hake",
+        "Snoek",
+        "Kingklip",
+        "Cape Salmon",
+        "West Coast Rock Lobster",
+        "Perlemoen (Abalone)",
+        "Mussels"
+      ]
+    },
+    "Dairy Products": [
+      "Milk",
+      "Cheese",
+      "Butter",
+      "Cream",
+      "Yogurt",
+      "Amasi (South African fermented milk)"
+    ],
+    "Dry Goods and Staples": [
+      "Grains and Rice",
+      "Flour",
+      "Pasta",
+      "Sugar",
+      "Salt",
+      "Spices",
+      "Legumes",
+      "Canned Goods",
+      "Teabags",
+      "Coffee Beans",
+      "Syrups",
+      "Maize Meal",
+      "Samp and Beans",
+      "Couscous",
+      "Lentils"
+    ],
+    "Frozen Foods": [
+      "Frozen Vegetables",
+      "Frozen Fruits",
+      "Frozen Meat",
+      "Frozen Seafood",
+      "Ice Cream and Desserts",
+      "Prepared Frozen Meals",
+      "Frozen Doughs and Pastries"
+    ],
+    "Breads and Bakery": [
+      "Loaves",
+      "Buns and Rolls",
+      "Pastries",
+      "Cakes",
+      "Croissants",
+      "Pita Bread",
+      "Roti",
+      "Tortillas",
+      "Vetkoek"
+    ],
+    "Snacks and Confectionery": [
+      "Chips",
+      "Nuts",
+      "Chocolate",
+      "Candy",
+      "Granola Bars",
+      "Dried Fruits",
+      "Popcorn",
+      "Biscuits",
+      "Rusks"
+    ],
+    "Condiments and Sauces": [
+      "Ketchup",
+      "Mustard",
+      "Hot Sauce",
+      "Soy Sauce",
+      "Vinegar",
+      "Dressings",
+      "Cooking Sauces",
+      "Chutney",
+      "Peri-Peri Sauce",
+      "Achar"
+    ],
+    "Oils and Fats": [
+      "Vegetable Oil",
+      "Olive Oil",
+      "Canola Oil",
+      "Butter",
+      "Lard",
+      "Sunflower Oil"
+    ],
+    "Plant-Based and Alternative Products": [
+      "Meat Substitutes",
+      "Dairy Alternatives",
+      "Egg Replacers",
+      "Gluten-Free Products",
+      "Tofu",
+      "Tempeh"
+    ]
+  },
+  "Beverages": {
+    "Non-Alcoholic Beverages": [
+      "Bottled Water",
+      "Sparkling Water",
+      "Fruit Juices",
+      "Soft Drinks",
+      "Teabags",
+      "Coffee Beans",
+      "Energy Drinks",
+      "Plant-Based Milks",
+      "Milkshakes",
+      "Cordials",
+      "Syrups",
+      "Smoothies"
+    ],
+    "Alcoholic Beverages": [
+      "Beer",
+      "Craft Beer",
+      "Wine",
+      "South African Wine",
+      "Spirits",
+      "Liqueurs",
+      "Cocktail Mixers",
+      "Ciders",
+      "Brandy",
+      "Mead"
+    ]
+  },
+  "Kitchen and Dining Equipment": {
+    "Cookware": [
+      "Pots and Pans",
+      "Roasting Trays",
+      "Stock Pots",
+      "Nonstick Pans",
+      "Dutch Ovens"
+    ],
+    "Utensils": [
+      "Knives",
+      "Spoons",
+      "Tongs",
+      "Whisks",
+      "Peelers",
+      "Measuring Cups",
+      "Thermometers"
+    ],
+    "Tableware": [
+      "Plates",
+      "Bowls",
+      "Cutlery",
+      "Glasses",
+      "Mugs",
+      "Serving Dishes"
+    ],
+    "Serving Equipment": [
+      "Trays",
+      "Pitchers",
+      "Chafing Dishes",
+      "Buffet Equipment",
+      "Serving Spoons"
+    ],
+    "Food Storage": [
+      "Containers",
+      "Plastic Wrap",
+      "Aluminum Foil",
+      "Storage Bags",
+      "Vacuum Seal Bags"
+    ],
+    "Small Appliances": [
+      "Blenders",
+      "Mixers",
+      "Microwaves",
+      "Toasters",
+      "Food Processors",
+      "Grinders"
+    ],
+    "Cooking Equipment": [
+      "Ovens",
+      "Stoves",
+      "Grills",
+      "Deep Fryers",
+      "Steamers",
+      "Combi Ovens"
+    ],
+    "Cleaning Supplies for Kitchen": [
+      "Dishwashing Liquid",
+      "Sponges",
+      "Sanitizers",
+      "Dish Towels",
+      "Degreasers"
+    ]
+  },
+  "Cleaning and Housekeeping Supplies": {
+    "Surface Cleaners": [
+      "Multipurpose Cleaners",
+      "Glass Cleaners",
+      "Disinfectants",
+      "Floor Cleaners"
+    ],
+    "Laundry Supplies": [
+      "Detergent",
+      "Fabric Softener",
+      "Bleach",
+      "Stain Removers"
+    ],
+    "Bathroom Supplies": [
+      "Toilet Bowl Cleaner",
+      "Air Fresheners",
+      "Hand Soap",
+      "Paper Towels",
+      "Toilet Paper"
+    ],
+    "Trash Management": [
+      "Trash Bags",
+      "Recycling Bins",
+      "Waste Bins",
+      "Compost Bins"
+    ],
+    "Housekeeping Equipment": [
+      "Mops",
+      "Brooms",
+      "Buckets",
+      "Vacuum Cleaners",
+      "Dustpans"
+    ]
+  },
+  "Linen and Guest Room Supplies": {
+    "Bed Linen": [
+      "Sheets",
+      "Pillowcases",
+      "Blankets",
+      "Mattress Protectors",
+      "Duvets"
+    ],
+    "Bathroom Linen": [
+      "Towels",
+      "Bath Mats",
+      "Washcloths",
+      "Hand Towels"
+    ],
+    "Guest Room Amenities": [
+      "Toiletries",
+      "Slippers",
+      "Robes",
+      "Hangers",
+      "Iron and Ironing Boards",
+      "Sewing Kits",
+      "Shower Caps"
+    ]
+  },
+  "Office and Administrative Supplies": {
+    "Stationery": [
+      "Paper",
+      "Pens and Pencils",
+      "Notebooks",
+      "Post-it Notes",
+      "Envelopes"
+    ],
+    "Office Equipment": [
+      "Printers",
+      "Scanners",
+      "Telephones",
+      "Laptops",
+      "Projectors"
+    ],
+    "Printing and Marketing": [
+      "Menus",
+      "Brochures",
+      "Signage",
+      "Business Cards",
+      "Flyers"
+    ]
+  },
+  "Furniture and Fixtures": {
+    "Restaurant Furniture": [
+      "Dining Tables",
+      "Chairs",
+      "Booths",
+      "Bar Stools"
+    ],
+    "Hotel Room Furniture": [
+      "Beds",
+      "Desks",
+      "Wardrobes",
+      "Nightstands"
+    ],
+    "Outdoor Furniture": [
+      "Patio Chairs",
+      "Umbrellas",
+      "Outdoor Tables",
+      "Benches"
+    ],
+    "Lighting Fixtures": [
+      "Chandeliers",
+      "Wall Lamps",
+      "Ceiling Lights",
+      "Table Lamps"
+    ]
+  },
+  "Technology and Electronics": {
+    "Point of Sale Systems": [
+      "POS Terminals",
+      "Receipt Printers",
+      "Cash Drawers"
+    ],
+    "Security Systems": [
+      "CCTV Cameras",
+      "Door Locks",
+      "Alarms"
+    ],
+    "Networking Equipment": [
+      "Routers",
+      "Switches",
+      "Access Points"
+    ],
+    "Entertainment Systems": [
+      "Televisions",
+      "Speakers",
+      "Media Players"
+    ]
+  },
+  "Uniforms and Staff Supplies": {
+    "Kitchen Staff Uniforms": [
+      "Chef Coats",
+      "Aprons",
+      "Kitchen Shoes",
+      "Hairnets"
+    ],
+    "Front of House Uniforms": [
+      "Shirts and Blouses",
+      "Trousers and Skirts",
+      "Name Tags",
+      "Vests and Jackets"
+    ],
+    "Hotel Staff Uniforms": [
+      "Housekeeping Uniforms",
+      "Bellhop Uniforms",
+      "Reception Uniforms"
+    ]
+  },
+  "Maintenance and Repair": {
+    "Tools and Hardware": [
+      "Wrenches",
+      "Screwdrivers",
+      "Hammers",
+      "Pliers"
+    ],
+    "Plumbing Supplies": [
+      "Pipes",
+      "Faucets",
+      "Sealants",
+      "Drain Cleaners"
+    ],
+    "Electrical Supplies": [
+      "Light Bulbs",
+      "Extension Cords",
+      "Power Strips",
+      "Batteries"
+    ],
+    "HVAC Supplies": [
+      "Air Filters",
+      "Thermostats",
+      "Fans",
+      "Heaters"
+    ]
+  },
+  "Miscellaneous": {
+    "Packaging Supplies": [
+      "Takeout Containers",
+      "Cutlery Packs",
+      "Paper Bags",
+      "Cups and Lids",
+      "Biodegradable Packaging"
+    ],
+    "Decorations": [
+      "Flowers",
+      "Seasonal Decor",
+      "Candles",
+      "Table Centerpieces",
+      "Wall Art"
+    ],
+    "Licenses and Subscriptions": [
+      "Music Licenses",
+      "Software Licenses",
+      "Streaming Services"
+    ]
+  }
+}
