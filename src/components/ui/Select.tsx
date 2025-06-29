@@ -9,7 +9,7 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options: { value: string; label: string }[];
 }
 
-export function Select({
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({
   label,
   error,
   helperText,
@@ -17,7 +17,7 @@ export function Select({
   className,
   id,
   ...props
-}: SelectProps) {
+}, ref) => {
   const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -32,6 +32,7 @@ export function Select({
       )}
       <div className="relative">
         <select
+          ref={ref}
           id={selectId}
           className={cn(
            'w-full px-3 py-2 border border-input rounded-lg text-sm appearance-none bg-background',
@@ -60,4 +61,6 @@ export function Select({
       )}
     </div>
   );
-}
+});
+
+Select.displayName = 'Select';

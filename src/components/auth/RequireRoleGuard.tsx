@@ -5,6 +5,7 @@ import { useAuthContext } from '../../App';
 /**
  * RequireRoleGuard ensures that all authenticated users have a role set.
  * If not, redirects to /select-role. Can be wrapped around all protected routes.
+ * Super admins have access to all pages.
  */
 export function RequireRoleGuard({ children, requiredRole }: { children?: React.ReactNode, requiredRole?: string }) {
   const { user, loading } = useAuthContext();
@@ -31,7 +32,13 @@ export function RequireRoleGuard({ children, requiredRole }: { children?: React.
     return <Navigate to="/select-role" replace />;
   }
 
-  // If requiredRole is set, enforce it
+  // Super admins have access to everything
+  if (appRole === 'super_admin') {
+    console.log('[RequireRoleGuard] Super admin detected, granting access');
+    return children ? <>{children}</> : <Outlet />;
+  }
+
+  // If requiredRole is set, enforce it (but not for super_admin)
   if (requiredRole && appRole !== requiredRole) {
     console.log('[RequireRoleGuard] User app role mismatch, redirecting to /unauthorized');
     return <Navigate to="/unauthorized" replace />;

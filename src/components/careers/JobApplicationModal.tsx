@@ -32,18 +32,19 @@ const jobApplicationSchema = z.object({
     .max(100, 'Full name must not exceed 100 characters')
     .regex(/^[a-zA-Z\s\-'\.]+$/, 'Full name contains invalid characters'),
   email: z.string()
+    .min(1, 'Email is required')
     .email('Please enter a valid email address')
     .max(255, 'Email must not exceed 255 characters'),
   phone: z.string()
-    .min(10, 'Phone number must be at least 10 digits')
+    .min(10, 'Phone number must be at least 10 digits')  
     .max(20, 'Phone number must not exceed 20 characters')
-    .regex(/^[\+]?[0-9\s\-\(\)]+$/, 'Please enter a valid phone number'),
+    .regex(/^[\+]?[0-9\s\-\(\)\.]+$/, 'Please enter a valid phone number'),
   currentLocation: z.string()
     .min(2, 'Location must be at least 2 characters')
     .max(100, 'Location must not exceed 100 characters'),
   
   // Professional Information
-  yearsExperience: z.number()
+  yearsExperience: z.coerce.number()
     .min(0, 'Years of experience cannot be negative')
     .max(50, 'Years of experience seems too high'),
   coverLetter: z.string()
@@ -54,20 +55,27 @@ const jobApplicationSchema = z.object({
   salaryExpectation: z.string()
     .max(50, 'Salary expectation must not exceed 50 characters')
     .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .transform(val => val || ''),
   
   // Optional Links
   linkedinUrl: z.string()
-    .url('Please enter a valid LinkedIn URL')
     .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .transform(val => val || '')
+    .refine(val => val === '' || z.string().url().safeParse(val).success, {
+      message: 'Please enter a valid LinkedIn URL'
+    }),
   portfolioUrl: z.string()
-    .url('Please enter a valid portfolio URL')
     .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .transform(val => val || '')
+    .refine(val => val === '' || z.string().url().safeParse(val).success, {
+      message: 'Please enter a valid portfolio URL'
+    }),
   
   // File upload (handled separately)
-  resume: z.instanceof(File, { message: 'Please upload your resume' })
+  resume: z.instanceof(File).optional()
 });
 
 type JobApplicationFormData = z.infer<typeof jobApplicationSchema>;
@@ -107,7 +115,7 @@ export function JobApplicationModal({ isOpen, onClose, jobPost }: JobApplication
       currentLocation: '',
       yearsExperience: 0,
       coverLetter: '',
-      availableStartDate: '',
+      availableStartDate: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
       salaryExpectation: '',
       linkedinUrl: '',
       portfolioUrl: ''
@@ -166,76 +174,37 @@ export function JobApplicationModal({ isOpen, onClose, jobPost }: JobApplication
   };
 
   const onSubmit = async (data: JobApplicationFormData) => {
-    if (!resumeFile) {
-      setSubmitError('Please upload your resume');
-      return;
-    }
-
     setIsSubmitting(true);
     setSubmitError(null);
-
+    let resumeUrl = '';
     try {
-      // Upload resume file
-      setResumeUploadProgress(25);
-      const resumeUrl = await handleFileUpload(resumeFile);
-      setResumeUploadProgress(50);
-
+      if (resumeFile) {
+        setResumeUploadProgress(25);
+        resumeUrl = await handleFileUpload(resumeFile);
+        setResumeUploadProgress(50);
+      }
       // Sanitize the form data
       const sanitizedData = sanitizeFormData(data);
-      setResumeUploadProgress(75);
-
+      setResumeUploadProgress(resumeFile ? 75 : 0);
       // Send email using the same service as contact form
       const emailData = {
         ...sanitizedData,
-        resumeUrl,
+        resumeUrl: resumeUrl || 'No resume uploaded',
         recipientEmail: 'careers@gastrohub.co.za',
         subject: `Job Application: ${jobPost.title} - ${sanitizedData.fullName}`,
-        message: `
-New job application received for ${jobPost.title}
-
-Applicant Information:
-- Name: ${sanitizedData.fullName}
-- Email: ${sanitizedData.email}
-- Phone: ${sanitizedData.phone}
-- Location: ${sanitizedData.currentLocation}
-- Years of Experience: ${sanitizedData.yearsExperience}
-- Available Start Date: ${sanitizedData.availableStartDate}
-- Salary Expectation: ${sanitizedData.salaryExpectation || 'Not specified'}
-
-Professional Links:
-- LinkedIn: ${sanitizedData.linkedinUrl || 'Not provided'}
-- Portfolio: ${sanitizedData.portfolioUrl || 'Not provided'}
-
-Cover Letter:
-${sanitizedData.coverLetter}
-
-Resume: ${resumeUrl}
-
-Job Details:
-- Position: ${jobPost.title}
-- Department: ${jobPost.department}
-- Location: ${jobPost.location}
-- Type: ${jobPost.type}
-
-Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
-        `.trim()
+        message: `\nNew job application received for ${jobPost.title}\n\nApplicant Information:\n- Name: ${sanitizedData.fullName}\n- Email: ${sanitizedData.email}\n- Phone: ${sanitizedData.phone}\n- Location: ${sanitizedData.currentLocation}\n- Years of Experience: ${sanitizedData.yearsExperience}\n- Available Start Date: ${sanitizedData.availableStartDate}\n- Salary Expectation: ${sanitizedData.salaryExpectation || 'Not specified'}\n\nProfessional Links:\n- LinkedIn: ${sanitizedData.linkedinUrl || 'Not provided'}\n- Portfolio: ${sanitizedData.portfolioUrl || 'Not provided'}\n\nCover Letter:\n${sanitizedData.coverLetter}\n\nResume: ${resumeUrl || 'No resume uploaded'}\n\nJob Details:\n- Position: ${jobPost.title}\n- Department: ${jobPost.department}\n- Location: ${jobPost.location}\n- Type: ${jobPost.type}\n\nApplication submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}`.trim()
       };
-
       const { data: result, error } = await supabase.functions.invoke('send-contact-email', {
         body: emailData
       });
-
       if (error) {
         console.error('Error sending job application:', error);
         throw new Error(error.message || 'Failed to send application');
       }
-
       if (result?.error) {
         throw new Error(result.error);
       }
-
-      setResumeUploadProgress(100);
-      
+      setResumeUploadProgress(resumeFile ? 100 : 0);
       // Success
       setIsSubmitted(true);
       reset();
@@ -255,28 +224,33 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      const allowedTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      ];
-      
-      if (!allowedTypes.includes(file.type)) {
-        setSubmitError('Please upload a PDF or Word document');
-        return;
-      }
+    try {
+      const file = e.target.files?.[0];
+      if (file) {
+        // Validate file type
+        const allowedTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+        
+        if (!allowedTypes.includes(file.type)) {
+          setSubmitError('Please upload a PDF or Word document');
+          return;
+        }
 
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        setSubmitError('File size must be less than 5MB');
-        return;
-      }
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          setSubmitError('File size must be less than 5MB');
+          return;
+        }
 
-      setResumeFile(file);
-      setSubmitError(null);
+        setResumeFile(file);
+        setSubmitError(null);
+      }
+    } catch (error) {
+      console.error('Error handling file change:', error);
+      setSubmitError('Error processing file. Please try again.');
     }
   };
 
@@ -532,7 +506,7 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
                 {...register('coverLetter')}
                 rows={6}
                 placeholder="Tell us why you're interested in this position and why you'd be a great fit for our team..."
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-foreground placeholder:text-muted-foreground ${
                   errors.coverLetter ? 'border-error-500' : 'border-neutral-300'
                 }`}
               />
@@ -540,7 +514,7 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
                 <p className="text-error-500 text-sm mt-1">{errors.coverLetter.message}</p>
               )}
               <p className="text-sm text-muted-foreground mt-2">
-                {watch('coverLetter')?.length || 0}/2000 characters
+                {(watch('coverLetter') || '').length}/2000 characters
               </p>
             </Card>
 
@@ -548,7 +522,7 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
                 <FileText className="w-5 h-5 mr-2" />
-                Resume Upload *
+                Resume Upload <span className="text-muted-foreground text-sm ml-1">(Optional)</span>
               </h3>
               <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center">
                 <input
@@ -561,7 +535,7 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
                 <label htmlFor="resume-upload" className="cursor-pointer">
                   <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-lg font-medium text-foreground mb-2">
-                    {resumeFile ? resumeFile.name : 'Upload your resume'}
+                    {resumeFile ? resumeFile.name : 'Upload your resume (optional)'}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     PDF, DOC, or DOCX format • Max 5MB
@@ -595,7 +569,7 @@ Application submitted on: ${new Date().toLocaleString('en-ZA', { timeZone: 'Afri
               </Button>
               <Button
                 type="submit"
-                disabled={isSubmitting || !resumeFile}
+                disabled={isSubmitting}
                 className="min-w-32"
               >
                 {isSubmitting ? (

@@ -255,7 +255,14 @@ function App() {
           <Router>
             <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<HomePage />} />
+            <Route 
+              path="/" 
+              element={
+                <PublicRoute>
+                  <HomePage />
+                </PublicRoute>
+              } 
+            />
             <Route 
               path="/login" 
               element={
@@ -324,7 +331,7 @@ function App() {
             <Route path="/articles/:id" element={<React.Suspense fallback={<div>Loading...</div>}><ArticlePage /></React.Suspense>} />
             <Route path="/create-article" element={
               <ProtectedRoute>
-                <RequireRoleGuard requiredRole="superadmin">
+                <RequireRoleGuard requiredRole="super_admin">
                   <React.Suspense fallback={<div>Loading...</div>}><CreateArticlePage /></React.Suspense>
                 </RequireRoleGuard>
               </ProtectedRoute>
