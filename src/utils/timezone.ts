@@ -75,4 +75,4 @@ export function getSASTOffset(): string {
   const offset = (sast.getTime() - utc.getTime()) / (1000 * 60 * 60);
   
   return offset > 0 ? `+${offset}` : `${offset}`;
-} 
+}

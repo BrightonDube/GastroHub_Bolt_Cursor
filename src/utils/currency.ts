@@ -359,6 +359,16 @@ export function removeVAT(amountIncludingVAT: number): number {
   return Math.round(baseAmount * 100) / 100;
 }
 
+// Utility for dual currency display
+export function formatDualCurrency(amount: number, primaryCurrency: 'USD' | 'ZAR'): string {
+  const primary = formatCurrency(amount, primaryCurrency);
+  const secondary = primaryCurrency === 'USD' 
+    ? formatCurrency(convertUSDToZAR(amount), 'ZAR')
+    : formatCurrency(convertZARToUSD(amount), 'USD');
+  
+  return `${primary} (~${secondary})`;
+}
+=======
 /**
  * Calculate VAT amount from base amount (excluding VAT)
  */

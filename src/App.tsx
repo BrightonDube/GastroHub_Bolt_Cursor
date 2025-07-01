@@ -84,9 +84,10 @@ export function useAuthContext() {
 
 import { supabase } from './lib/supabase';
 import { useAuth } from './hooks/useAuth';
-import { getDashboardPathByRole } from './utils/dashboardPaths';
 import { LocalizationProvider } from './context/LocalizationProvider';
 import { CartProvider } from './context/CartProvider';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { PublicRoute } from './components/auth/PublicRoute';
 
 // **MODERN AUTH PROVIDER - Following Supabase Best Practices**
 function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -205,45 +206,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuthContext();
-  
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
-      </div>
-    );
-  }
-  
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return children ? <>{children}</> : <Outlet />;
-}
-
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuthContext();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
-      </div>
-    );
-  }
-
-  if (user) {
-    // Redirect to role-specific dashboard
-    const role = user?.profiles?.role || user?.role;
-    const dashboardPath = getDashboardPathByRole(role as any);
-    return <Navigate to={dashboardPath} replace />;
-  }
-
-  return <>{children}</>;
-}
-
+feature/south-african-localization
 function App() {
   return (
     <ThemeProvider>

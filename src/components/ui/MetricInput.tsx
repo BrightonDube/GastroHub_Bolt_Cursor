@@ -145,4 +145,4 @@ export function convertMetricUnit(value: number, fromUnit: string, toUnit: strin
   }
   // If no conversion found, return original value
   return value;
-} 
+}
