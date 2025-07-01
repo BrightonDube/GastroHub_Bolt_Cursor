@@ -46,43 +46,32 @@ export function Header() {
     }
     return () => document.removeEventListener('mousedown', handleClick);
   }, [legalOpen, localizationOpen]);
-  console.log('[Header] Render');
+  
   const { user, signOut } = useAuthContext();
   const navigate = useNavigate();
-  console.log('[Header] user:', user);
-  if (user && isSuperAdmin(user)) {
-    console.log('[Header] Super Admin detected, showing all role UI and navigation.');
-  }
-  console.log('[Header] signOut from context:', signOut, typeof signOut);
 
   const handleSignOut = async () => {
-    console.log('[Header] handleSignOut called');
     try {
-      console.log('[Header] About to await signOut');
       const result = await signOut();
-      console.log('[Header] signOut result:', result);
       
       if (result.error) {
-        console.error('[Header] signOut error:', result.error);
+        console.error('[Auth] Logout error:', result.error);
         alert('Logout failed: ' + result.error);
         return;
       }
-      
-      console.log('[Header] signOut successful, navigating to login');
       
       // Give a brief moment for auth state to clear
       setTimeout(() => {
         try {
           navigate('/login', { replace: true });
-          console.log('[Header] Navigated to /login using navigate()');
         } catch (err) {
-          console.warn('[Header] navigate() failed, falling back to window.location.replace');
+          console.warn('[Auth] Navigate failed, using window.location');
           window.location.replace('/login');
         }
       }, 100);
       
     } catch (err) {
-      console.error('[Header] signOut exception:', err);
+      console.error('[Auth] Logout exception:', err);
       alert('Logout failed: ' + (err instanceof Error ? err.message : String(err)));
     }
   };

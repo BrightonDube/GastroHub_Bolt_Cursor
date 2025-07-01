@@ -50,7 +50,7 @@ export function CurrencyDisplay({
   
   return (
     <span className={className}>
-      {formatCurrency(amount, currentCurrency, sourceCurrency ? { value: amount, currency: sourceCurrency } : undefined)}
+      {formatCurrency(amount, currentCurrency, sourceCurrency ? { value: amount, currency: sourceCurrency } : undefined).formatted}
     </span>
   );
 }

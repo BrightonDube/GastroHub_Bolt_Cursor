@@ -29,9 +29,13 @@ import OrderDetailPage from './pages/supplier/OrderDetailPage';
 import SupplierMessagesPage from './pages/supplier/SupplierMessages';
 import DeliveryAnalyticsPage from './pages/delivery/AnalyticsPage';
 import SuperAdminAnalyticsPage from './pages/superAdmin/AnalyticsPage';
+import DeliveryManagementPage from './pages/super-admin/DeliveryManagementPage';
 import { CreateOrderPage } from './pages/orders/CreateOrderPage';
 import { OrderProcessingPage } from './pages/orders/OrderProcessingPage';
 import { OrderUpdatePage } from './pages/orders/OrderUpdatePage';
+import InvoiceListPage from './pages/invoices/InvoiceListPage';
+import InvoiceDetailPage from './pages/invoices/InvoiceDetailPage';
+import CreateInvoicePage from './pages/invoices/CreateInvoicePage';
 
 // Lazy-loaded public pages
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
@@ -44,6 +48,10 @@ const CreateArticlePage = React.lazy(() => import('./pages/CreateArticlePage'));
 const UnauthorizedPage = React.lazy(() => import('./pages/UnauthorizedPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
+// Lazy-loaded additional pages
+const MessagingPage = React.lazy(() => import('./pages/MessagingPage'));
+const DeliveryPage = React.lazy(() => import('./pages/DeliveryPage'));
+const SuppliersPage = React.lazy(() => import('./pages/SuppliersPage'));
 
 // Create a client
 const queryClient = new QueryClient({
@@ -70,9 +78,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function useAuthContext() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('AuthContext not found');
-  // Debug: log context value
-  console.log('[useAuthContext] called, context:', context);
+  if (!context) throw new Error('useAuthContext must be used within AuthProvider');
   return context;
 }
 
@@ -83,150 +89,124 @@ import { CartProvider } from './context/CartProvider';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { PublicRoute } from './components/auth/PublicRoute';
 
+// **MODERN AUTH PROVIDER - Following Supabase Best Practices**
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  console.log('[AuthProvider] Render');
   const [session, setSession] = useState<any>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [profileError, setProfileError] = useState<string | null>(null);
   const auth = useAuth();
 
-  // Helper to fetch and set user profile
-  const fetchAndSetUserProfile = async (session: any) => {
+  // Unified function to set user state from session
+  const setUserFromSession = async (session: any) => {
     if (!session?.user) {
-      console.warn('[fetchAndSetUserProfile] No session or user provided');
       setUser(null);
       return;
     }
-    
-    const { id, email, role } = session.user;
-    console.log('[fetchAndSetUserProfile] Fetching profile for user:', id);
+
+    const { id, email } = session.user;
     
     try {
       const result = await auth.fetchUserProfile(session.user);
+      
       if (result.error) {
-        console.error('[fetchAndSetUserProfile] Profile fetch error:', result.error);
-        setProfileError(result.error);
-        // Still set basic user info even if profile fetch fails
-        setUser({ id, email, role, profiles: null });
+        console.warn('[Auth] Profile fetch error:', result.error);
+        // Set basic user info even if profile fetch fails
+        setUser({ id, email, role: 'authenticated', profiles: null });
       } else {
-        console.log('[fetchAndSetUserProfile] Profile fetched successfully');
-        setProfileError(null);
-        setUser({ id, email, role, profiles: result.data });
+        // Use the role from profiles, not from session.user
+        const userRole = result.data?.role || 'authenticated';
+        setUser({ id, email, role: userRole, profiles: result.data });
       }
     } catch (err) {
-      console.error('[fetchAndSetUserProfile] Exception:', err);
-      setProfileError('Unexpected error fetching profile');
-      setUser({ id, email, role, profiles: null });
+      console.error('[Auth] Exception fetching profile:', err);
+      setUser({ id, email, role: 'authenticated', profiles: null });
     }
   };
 
-  // Debug: log state changes
-  React.useEffect(() => {
-    console.log('[AuthProvider] session changed:', session);
-  }, [session]);
-  React.useEffect(() => {
-    console.log('[AuthProvider] user changed:', user);
-  }, [user]);
-  React.useEffect(() => {
-    console.log('[AuthProvider] loading changed:', loading);
-  }, [loading]);
-
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-    setLoading(true);
-    setProfileError(null);
-    console.log('[AuthProvider] useEffect (mount): fetching initial session');
-    (async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session && session.user) {
-          console.log('[AuthProvider] Initial session found:', session);
-          setSession(session);
-          await fetchAndSetUserProfile(session);
-        } else {
-          console.log('[AuthProvider] No initial session');
-          setSession(null);
-          setUser(null);
+    // **CRITICAL: Use ONLY onAuthStateChange - no manual getSession()**
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        switch (event) {
+          case 'INITIAL_SESSION':
+            // Handle initial session on app load/refresh
+            setSession(session);
+            if (session) {
+              await setUserFromSession(session);
+            } else {
+              setUser(null);
+            }
+            setLoading(false);
+            break;
+
+          case 'SIGNED_IN':
+            setSession(session);
+            await setUserFromSession(session);
+            setLoading(false);
+            break;
+
+          case 'SIGNED_OUT':
+            setSession(null);
+            setUser(null);
+            setLoading(false);
+            // Clean up any stale auth data
+            try {
+              const authKeys = ["sb-access-token", "sb-refresh-token"];
+              authKeys.forEach(key => {
+                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
+              });
+            } catch (err) {
+              console.warn('[Auth] Storage cleanup failed:', err);
+            }
+            break;
+
+          case 'TOKEN_REFRESHED':
+            // Update session but don't refetch profile
+            setSession(session);
+            break;
+
+          case 'PASSWORD_RECOVERY':
+            // Handle password recovery if needed
+            console.log('[Auth] Password recovery event');
+            break;
+
+          case 'USER_UPDATED':
+            // Handle user updates
+            if (session) {
+              await setUserFromSession(session);
+            }
+            break;
+
+          default:
+            console.log('[Auth] Unhandled event:', event);
         }
-      } catch (e) {
-        setProfileError('Unexpected error fetching session');
-        setSession(null);
-        setUser(null);
-        console.error('[AuthProvider] Error in initial session fetch:', e);
-      } finally {
-        setLoading(false);
       }
-    })();
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('[AuthProvider] onAuthStateChange event:', event, 'session:', session);
-      try {
-        if (event === "SIGNED_IN" && session?.user) {
-          setLoading(true);
-          setSession(session);
-          await fetchAndSetUserProfile(session);
-        } else if (event === "SIGNED_OUT") {
-          console.log('[AuthProvider] SIGNED_OUT: clearing all auth state');
-          setLoading(true);
-          setSession(null);
-          setUser(null);
-          setProfileError(null);
-          
-          // Additional cleanup - clear any stale auth data
-          try {
-            localStorage.removeItem('sb-access-token');
-            localStorage.removeItem('sb-refresh-token');
-            sessionStorage.removeItem('sb-access-token');
-            sessionStorage.removeItem('sb-refresh-token');
-            console.log('[AuthProvider] SIGNED_OUT: cleaned up storage');
-          } catch (err) {
-            console.warn('[AuthProvider] Storage cleanup failed:', err);
-          }
-          
-          console.log('[AuthProvider] SIGNED_OUT: user and session cleared');
-        } else if (event === "TOKEN_REFRESHED" && session?.user) {
-          console.log('[AuthProvider] TOKEN_REFRESHED: updating session');
-          setSession(session);
-          // Don't refetch profile on token refresh, just update session
-        }
-      } catch (e) {
-        setProfileError('Unexpected error during auth state change');
-        setSession(null);
-        setUser(null);
-        console.error('[AuthProvider] Error in onAuthStateChange:', e);
-      } finally {
-        setLoading(false); // Always set loading to false
-      }
-    });
-    unsubscribe = () => {
-      console.log('[AuthProvider] Cleaning up onAuthStateChange listener');
-      listener?.subscription?.unsubscribe?.();
-    };
+    );
+
     return () => {
-      unsubscribe && unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
+  const contextValue: AuthContextType = {
+    session,
+    user,
+    loading,
+    signUp: auth.signUp,
+    signIn: auth.signIn,
+    signInWithGoogle: auth.signInWithGoogle,
+    signOut: auth.signOut,
+  };
+
   return (
-    <AuthContext.Provider value={{
-      session,
-      user,
-      loading,
-      signUp: auth.signUp,
-      signIn: auth.signIn,
-      signInWithGoogle: auth.signInWithGoogle,
-      signOut: auth.signOut,
-    }}>
-      {profileError && (
-        <div className="bg-red-100 text-red-800 px-4 py-2 mb-2 rounded text-center">
-          Error loading profile: {profileError}
-        </div>
-      )}
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+feature/south-african-localization
 function App() {
   return (
     <ThemeProvider>
@@ -238,7 +218,14 @@ function App() {
           <Router>
             <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<HomePage />} />
+            <Route 
+              path="/" 
+              element={
+                <PublicRoute>
+                  <HomePage />
+                </PublicRoute>
+              } 
+            />
             <Route 
               path="/login" 
               element={
@@ -296,6 +283,7 @@ function App() {
             {/* Super Admin Routes */}
             <Route path="/super-admin/dashboard" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminDashboard /></RequireRoleGuard></ProtectedRoute>} />
             <Route path="/super-admin/analytics" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><SuperAdminAnalyticsPage /></RequireRoleGuard></ProtectedRoute>} />
+            <Route path="/super-admin/delivery" element={<ProtectedRoute><RequireRoleGuard requiredRole="super_admin"><DeliveryManagementPage /></RequireRoleGuard></ProtectedRoute>} />
 
             {/* Onboarding: Role Profile Form */}
             <Route path="/onboarding/role-profile" element={<ProtectedRoute><RequireRoleGuard><RoleProfileForm /></RequireRoleGuard></ProtectedRoute>} />
@@ -306,7 +294,7 @@ function App() {
             <Route path="/articles/:id" element={<React.Suspense fallback={<div>Loading...</div>}><ArticlePage /></React.Suspense>} />
             <Route path="/create-article" element={
               <ProtectedRoute>
-                <RequireRoleGuard requiredRole="superadmin">
+                <RequireRoleGuard requiredRole="super_admin">
                   <React.Suspense fallback={<div>Loading...</div>}><CreateArticlePage /></React.Suspense>
                 </RequireRoleGuard>
               </ProtectedRoute>
@@ -333,26 +321,10 @@ function App() {
               } 
             />
             <Route 
-              path="/orders" 
-              element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/orders/new" 
               element={
                 <ProtectedRoute>
                   <CreateOrderPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/orders/:id" 
-              element={
-                <ProtectedRoute>
-                  <OrderDetailPage />
                 </ProtectedRoute>
               } 
             />
@@ -373,8 +345,118 @@ function App() {
               } 
             />
 
-            {/* Catch all - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Invoice Routes */}
+            <Route 
+              path="/invoices" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <InvoiceListPage />
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/invoices/new" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard requiredRole="supplier">
+                    <CreateInvoicePage />
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/invoices/:invoiceId" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <InvoiceDetailPage />
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* New Routes - Fix Navigation Issues */}
+            
+            {/* Cross-Role Portal Pages */}
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <div className="min-h-screen bg-background p-8">
+                        <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
+                        <div className="bg-card p-6 rounded-lg border">
+                          <p>Settings page - manage your profile and preferences here.</p>
+                        </div>
+                      </div>
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/messaging" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <MessagingPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/orders" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <div className="min-h-screen bg-background p-8">
+                        <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+                        <div className="bg-card p-6 rounded-lg border">
+                          <p>Orders page - view your order history here.</p>
+                        </div>
+                      </div>
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/deliveries" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <DeliveryPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/suppliers" 
+              element={
+                <ProtectedRoute>
+                  <RequireRoleGuard>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <SuppliersPage />
+                    </React.Suspense>
+                  </RequireRoleGuard>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Catch all - redirect intelligently based on auth state */}
+            <Route path="*" element={<CatchAllRedirect />} />
           </Routes>
         </Router>
             </AuthProvider>
@@ -383,6 +465,29 @@ function App() {
       </LocalizationProvider>
     </ThemeProvider>
   );
+}
+
+// Catch all component that intelligently redirects based on auth state
+function CatchAllRedirect() {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-900"></div>
+      </div>
+    );
+  }
+
+  if (user) {
+    // Redirect authenticated users to their dashboard
+    const role = user?.profiles?.role || user?.role;
+    const dashboardPath = getDashboardPathByRole(role as any);
+    return <Navigate to={dashboardPath} replace />;
+  }
+
+  // Redirect unauthenticated users to home
+  return <Navigate to="/" replace />;
 }
 
 export default App;

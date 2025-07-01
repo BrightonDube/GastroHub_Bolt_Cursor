@@ -2,19 +2,31 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../App';
 import { useCreateListing } from '../../hooks/useListings';
+import { useCategories } from '../../hooks/useCategories';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { ListingForm } from '../../components/forms/ListingForm';
 import { Button } from '../../components/ui/Button';
-import { CategorySelector } from '../../components/categories/CategorySelector';
+import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function NewListingPage() {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
+  const { user, loading: authLoading } = useAuthContext();
   const createListingMutation = useCreateListing();
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { data: categoriesData = [] } = useCategories();
+
+  // Show loading state while checking auth
+  if (authLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-96">
+          <LoadingSpinner size="lg" text="Loading..." />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   const handleSubmit = async (data: any) => {
     if (!user?.id) return;

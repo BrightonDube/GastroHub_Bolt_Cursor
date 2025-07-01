@@ -31,7 +31,7 @@ const orderTabs = [
 ];
 
 export function OrdersPage() {
-  const { user } = useAuthContext();
+  const { user, loading: authLoading } = useAuthContext();
   const [activeTab, setActiveTab] = useState<OrderStatus | ''>('');
   const [sortBy, setSortBy] = useState<'date' | 'amount' | 'status'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -110,11 +110,11 @@ export function OrdersPage() {
 
   const stats = getOrderStats();
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-96">
-          <LoadingSpinner size="lg" text="Loading orders..." />
+          <LoadingSpinner size="lg" text="Loading..." />
         </div>
       </DashboardLayout>
     );

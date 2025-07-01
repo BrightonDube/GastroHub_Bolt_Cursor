@@ -18,6 +18,7 @@ import {
   Mail
 } from 'lucide-react';
 import { useSuppliers } from '../hooks/useSuppliers';
+import { useCategories } from '../hooks/useCategories';
 
 export function SuppliersPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +26,6 @@ export function SuppliersPage() {
   const [locationFilter, setLocationFilter] = useState('');
 
   // Fetch categories from backend
-  import { useCategories } from '../hooks/useCategories';
   const { data: categoriesData = [], isLoading: categoriesLoading } = useCategories();
   function flattenCategories(nodes: any[]): { value: string; label: string }[] {
     let arr: { value: string; label: string }[] = [];

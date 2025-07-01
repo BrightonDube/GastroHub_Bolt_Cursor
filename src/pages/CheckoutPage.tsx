@@ -4,7 +4,7 @@ import { Header } from '../components/layout/Header';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { CurrencyDisplay, VATDisplay } from '../components/ui/CurrencyDisplay';
-import { calculateVAT, removeVAT } from '../utils/currency';
+import { calculateVATAmount, removeVAT } from '../utils/currency';
 import { useCart } from '../context/CartProvider';
 import { useAuthContext } from '../App';
 import { ShoppingBag, ArrowLeft, Truck, CreditCard } from 'lucide-react';
@@ -188,7 +188,7 @@ export function CheckoutPage() {
                 </div>
                 <div className="flex justify-between">
                   <span>VAT (15%)</span>
-                  <CurrencyDisplay amount={calculateVAT(removeVAT(cart.totalAmount))} />
+                  <CurrencyDisplay amount={calculateVATAmount(removeVAT(cart.totalAmount))} />
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Delivery</span>

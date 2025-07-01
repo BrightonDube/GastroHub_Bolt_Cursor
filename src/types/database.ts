@@ -242,6 +242,58 @@ export type Database = {
           },
         ]
       }
+      delivery_ratings: {
+        Row: {
+          buyer_id: string | null
+          comment: string | null
+          created_at: string | null
+          delivery_partner_id: string | null
+          id: string
+          order_id: string | null
+          rating: number | null
+        }
+        Insert: {
+          buyer_id?: string | null
+          comment?: string | null
+          created_at?: string | null
+          delivery_partner_id?: string | null
+          id?: string
+          order_id?: string | null
+          rating?: number | null
+        }
+        Update: {
+          buyer_id?: string | null
+          comment?: string | null
+          created_at?: string | null
+          delivery_partner_id?: string | null
+          id?: string
+          order_id?: string | null
+          rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_ratings_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_ratings_delivery_partner_id_fkey"
+            columns: ["delivery_partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_ratings_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "order"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_zone: {
         Row: {
           base_delivery_fee: number | null
@@ -253,6 +305,7 @@ export type Database = {
           is_active: boolean | null
           max_delivery_distance: number | null
           postal_codes: string[] | null
+          province_id: string | null
           supplier_id: string | null
           updated_at: string | null
           zone_name: string
@@ -267,6 +320,7 @@ export type Database = {
           is_active?: boolean | null
           max_delivery_distance?: number | null
           postal_codes?: string[] | null
+          province_id?: string | null
           supplier_id?: string | null
           updated_at?: string | null
           zone_name: string
@@ -281,11 +335,20 @@ export type Database = {
           is_active?: boolean | null
           max_delivery_distance?: number | null
           postal_codes?: string[] | null
+          province_id?: string | null
           supplier_id?: string | null
           updated_at?: string | null
           zone_name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "delivery_zone_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: false
+            referencedRelation: "provinces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       favorite: {
         Row: {
@@ -535,11 +598,19 @@ export type Database = {
       }
       order: {
         Row: {
+          assigned_at: string | null
           buyer_id: string | null
           created_at: string | null
+          delivered_at: string | null
+          delivery_address: string | null
+          delivery_fee: number | null
+          delivery_notes: string | null
+          delivery_partner_id: string | null
           estimated_delivery_date: string | null
           id: string
           payment_status: string | null
+          picked_up_at: string | null
+          pickup_address: string | null
           status: string
           supplier_id: string | null
           total_amount: number | null
@@ -547,11 +618,19 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          assigned_at?: string | null
           buyer_id?: string | null
           created_at?: string | null
+          delivered_at?: string | null
+          delivery_address?: string | null
+          delivery_fee?: number | null
+          delivery_notes?: string | null
+          delivery_partner_id?: string | null
           estimated_delivery_date?: string | null
           id?: string
           payment_status?: string | null
+          picked_up_at?: string | null
+          pickup_address?: string | null
           status: string
           supplier_id?: string | null
           total_amount?: number | null
@@ -559,18 +638,34 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          assigned_at?: string | null
           buyer_id?: string | null
           created_at?: string | null
+          delivered_at?: string | null
+          delivery_address?: string | null
+          delivery_fee?: number | null
+          delivery_notes?: string | null
+          delivery_partner_id?: string | null
           estimated_delivery_date?: string | null
           id?: string
           payment_status?: string | null
+          picked_up_at?: string | null
+          pickup_address?: string | null
           status?: string
           supplier_id?: string | null
           total_amount?: number | null
           tracking_number?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "order_delivery_partner_id_fkey"
+            columns: ["delivery_partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_item: {
         Row: {
@@ -699,6 +794,39 @@ export type Database = {
           id?: string
           phone?: string | null
           role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      provinces: {
+        Row: {
+          capital_city: string
+          code: string
+          created_at: string | null
+          id: string
+          major_cities: string[] | null
+          name: string
+          postal_code_ranges: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          capital_city: string
+          code: string
+          created_at?: string | null
+          id?: string
+          major_cities?: string[] | null
+          name: string
+          postal_code_ranges?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          capital_city?: string
+          code?: string
+          created_at?: string | null
+          id?: string
+          major_cities?: string[] | null
+          name?: string
+          postal_code_ranges?: string[] | null
           updated_at?: string | null
         }
         Relationships: []

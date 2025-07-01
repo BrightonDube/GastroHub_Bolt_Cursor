@@ -213,8 +213,8 @@ export const DicedHeroSection: React.FC<DicedHeroSectionProps> = ({
               : 'flex-start',
           }}
         >
-          <Button>
-            <b>Get Started Free</b>
+          <Button onClick={onMainButtonClick}>
+            <b>{buttonText}</b>
           </Button>
         </motion.div>
       </div>
